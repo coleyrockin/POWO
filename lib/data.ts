@@ -78,8 +78,9 @@ export const weekData: WeekData = {
     { date: '2026-04-08', reps: 30 },
     { date: '2026-04-10', reps: 20 },
     { date: '2026-04-11', reps: 40 },
+    { date: '2026-04-12', reps: 20 },
   ],
-  pushups_weekly_total: 120,
+  pushups_weekly_total: 140,
 }
 
 export const ACTIVITY_ICONS: Record<string, string> = {

@@ -10,12 +10,14 @@ const DAY_LABELS: Record<string, string> = {
   '2026-04-08': 'Tue Apr 8',
   '2026-04-10': 'Thu Apr 10',
   '2026-04-11': 'Fri Apr 11',
+  '2026-04-12': 'Sat Apr 12',
 }
 const DAY_NOTES: Record<string, string> = {
   '2026-04-06': 'Rest day',
   '2026-04-08': 'High output',
   '2026-04-10': 'Moderate',
   '2026-04-11': 'Best set',
+  '2026-04-12': 'Quick set',
 }
 
 export default function PushupLog({ pushups, total }: Props) {
@@ -46,7 +48,7 @@ export default function PushupLog({ pushups, total }: Props) {
         >
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)', marginBottom: '8px' }}>Weekly Total</div>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '64px', lineHeight: 1, color: 'var(--color-wolf)' }}>{total}</div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)', marginTop: '6px' }}>4 sessions</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)', marginTop: '6px' }}>5 sessions</div>
         </motion.div>
       </div>
     </section>

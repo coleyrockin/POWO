@@ -83,15 +83,3 @@ export const weekData: WeekData = {
   pushups_weekly_total: 140,
 }
 
-export const ACTIVITY_ICONS: Record<string, string> = {
-  'Walking':          '🚶',
-  'Running':          '🏃',
-  'Weight Training':  '🏋️',
-  'Golf':             '⛳',
-  'Hiking':           '🥾',
-  'Yoga':             '🧘',
-  'Core Training':    '💪',
-  'Stair Climbing':   '🪜',
-  'Skating':          '⛸️',
-  'Unknown Activity': '❓',
-}

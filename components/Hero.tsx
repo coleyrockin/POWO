@@ -71,13 +71,23 @@ export default function Hero({ data }: Props) {
       </motion.div>
 
       {/* KPIs */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px 28px', marginTop: '28px', paddingTop: '28px', borderTop: '1px solid var(--color-border)' }}>
-        {kpis.map((k, i) => (
-          <motion.div key={k.label} {...fadeUp(0.2 + i * 0.06)} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: '38px', lineHeight: 1, color: 'var(--color-wolf)' }}>{k.val}</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)' }}>{k.label}</span>
-          </motion.div>
-        ))}
+      <div style={{ marginTop: '28px', paddingTop: '28px', borderTop: '1px solid var(--color-border)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px 0' }}>
+          {kpis.slice(0, 3).map((k, i) => (
+            <motion.div key={k.label} {...fadeUp(0.2 + i * 0.06)} style={{ display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'center' }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: '38px', lineHeight: 1, color: 'var(--color-wolf)' }}>{k.val}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)' }}>{k.label}</span>
+            </motion.div>
+          ))}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '48px', marginTop: '24px' }}>
+          {kpis.slice(3).map((k, i) => (
+            <motion.div key={k.label} {...fadeUp(0.38 + i * 0.06)} style={{ display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'center' }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: '38px', lineHeight: 1, color: 'var(--color-wolf)' }}>{k.val}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)' }}>{k.label}</span>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </header>
   )

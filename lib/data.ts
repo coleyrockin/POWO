@@ -79,19 +79,6 @@ export const weekData: WeekData = {
     { date: '2026-04-11', reps: 40 },
   ],
   pushups_weekly_total: 120,
-
-  fiat_top10: [
-    { rank: 1,  code: 'EUR', name: 'Euro',              usd_per_unit: 1.0821, change_24h:  0.12, change_7d:  0.34 },
-    { rank: 2,  code: 'JPY', name: 'Japanese Yen',      usd_per_unit: 0.0067, change_24h: -0.08, change_7d: -0.51 },
-    { rank: 3,  code: 'GBP', name: 'British Pound',     usd_per_unit: 1.2743, change_24h:  0.05, change_7d:  0.22 },
-    { rank: 4,  code: 'CNY', name: 'Chinese Yuan',      usd_per_unit: 0.1381, change_24h: -0.02, change_7d: -0.09 },
-    { rank: 5,  code: 'AUD', name: 'Australian Dollar', usd_per_unit: 0.6452, change_24h:  0.31, change_7d:  0.87 },
-    { rank: 6,  code: 'CAD', name: 'Canadian Dollar',   usd_per_unit: 0.7218, change_24h: -0.14, change_7d: -0.43 },
-    { rank: 7,  code: 'CHF', name: 'Swiss Franc',       usd_per_unit: 1.1062, change_24h:  0.07, change_7d:  0.18 },
-    { rank: 8,  code: 'HKD', name: 'Hong Kong Dollar',  usd_per_unit: 0.1284, change_24h:  0.01, change_7d:  0.03 },
-    { rank: 9,  code: 'SEK', name: 'Swedish Krona',     usd_per_unit: 0.0934, change_24h: -0.19, change_7d:  0.61 },
-    { rank: 10, code: 'NZD', name: 'New Zealand Dollar',usd_per_unit: 0.5891, change_24h:  0.23, change_7d:  0.74 },
-  ],
 }
 
 export const ACTIVITY_ICONS: Record<string, string> = {

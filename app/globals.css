@@ -54,3 +54,13 @@ body::after {
 /* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Section rhythm ── */
+section {
+  padding-top: 0;
+}
+
+/* ── Table hover ── */
+tbody tr:hover {
+  background: #141414 !important;
+}

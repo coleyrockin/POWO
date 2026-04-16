@@ -9,7 +9,7 @@ export default function WeeklySummary({ summary: s }: Props) {
   const tiles = [
     { label: 'Total Steps',      val: s.steps_total.toLocaleString(),          unit: 'steps',    delta: `↑ ${s.steps_avg_per_day.toLocaleString()} avg/day`, color: 'var(--color-wolf)' },
     { label: 'Active Calories',  val: s.active_calories_total.toLocaleString(), unit: 'kcal',     delta: `↑ ${s.active_calories_avg_per_day} avg/day`,        color: 'var(--color-wolf)' },
-    { label: 'Resting Calories', val: s.resting_calories_total.toLocaleString(),unit: 'kcal BMR', delta: `~${s.resting_calories_avg_per_day}/day`,             color: 'var(--color-white)' },
+    { label: 'Resting Calories', val: s.resting_calories_total.toLocaleString(),unit: 'kcal BMR', delta: `~${s.resting_calories_avg_per_day.toLocaleString()}/day`, color: 'var(--color-white)' },
     { label: 'Total Calories',   val: s.total_calories.toLocaleString(),        unit: 'kcal',     delta: 'active + resting',                                  color: 'var(--color-amber)' },
     { label: 'Exercise Time',    val: s.exercise_minutes_total.toString(),      unit: 'minutes',  delta: `${s.exercise_minutes_avg_per_day} avg/day`,          color: 'var(--color-wolf)' },
     { label: 'Avg Resting HR',   val: s.rhr_avg.toString(),                    unit: 'bpm avg',  delta: 'range 55–75',                                       color: 'var(--color-wolf)' },

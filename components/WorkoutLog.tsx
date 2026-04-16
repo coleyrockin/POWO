@@ -12,11 +12,12 @@ function fmtDate(iso: string) {
 }
 
 export default function WorkoutLog({ workouts }: Props) {
+  const top = [...workouts].sort((a, b) => b.calories - a.calories).slice(0, 6)
   return (
     <section>
-      <SectionHeader label="All Workouts" meta={`${workouts.length} sessions`} />
+      <SectionHeader label="Top Workouts" meta={`${workouts.length} total`} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
-        {workouts.map((w, i) => {
+        {top.map((w, i) => {
           const highlight = w.calories >= 300
           return (
             <motion.div
@@ -36,7 +37,7 @@ export default function WorkoutLog({ workouts }: Props) {
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '6px', color: highlight ? 'var(--color-wolf)' : 'var(--color-white)' }}>
                   {(() => { const Icon = ACTIVITY_SVG_ICONS[w.activity] ?? ACTIVITY_SVG_ICONS['Unknown Activity']; return <Icon size={16} />; })()}
-                  {w.activity === 'Unknown Activity' ? 'Activity' : w.activity}
+                  {w.activity === 'Weight Training' ? 'Weights' : w.activity === 'Unknown Activity' ? 'Activity' : w.activity}
                 </div>
                 <div style={{
                   fontFamily: 'var(--font-mono)', fontSize: '10px', padding: '2px 6px', flexShrink: 0,

@@ -9,7 +9,7 @@ const AWARDS = [
   { Icon: IconHeartPulse, title: 'HRV RECOVERY SURGE',      desc: 'HRV climbed from 25 ms (Apr 8) to 71 ms by week\'s end — a 3× improvement signaling strong cardiovascular recovery.' },
   { Icon: IconFlame,      title: '10K STEP DAY',            desc: 'Apr 8 hit 10,445 steps — the week\'s high — combined with 140 minutes of exercise and two workout sessions.' },
   { Icon: IconBicep,      title: '120 PUSHUPS THIS WEEK',   desc: '4 sessions, best set at 40 reps on Apr 11. Building consistency in upper body work.' },
-  { Icon: IconLightning,  title: '18 WORKOUT SESSIONS',     desc: 'Golf, weight training, walking, running — 18 logged sessions across 6 active days.' },
+  { Icon: IconLightning,  title: '19 WORKOUT SESSIONS',     desc: 'Golf, weight training, walking, yoga, running — 19 logged sessions across 7 active days.' },
 ]
 
 export default function Awards() {

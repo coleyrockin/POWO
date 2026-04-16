@@ -17,7 +17,7 @@ export const weekData: WeekData = {
     total_calories: 20711,
     exercise_minutes_total: 616,
     exercise_minutes_avg_per_day: 88,
-    workout_sessions: 18,
+    workout_sessions: 19,
     vo2_max: 38.33,
     vo2_max_unit: 'mL/kg/min',
     rhr_avg: 65,
@@ -53,6 +53,7 @@ export const weekData: WeekData = {
     { date: '2026-04-13', activity: 'Weight Training',  duration_min: 12,  calories: 88,   distance_mi: null },
     { date: '2026-04-13', activity: 'Weight Training',  duration_min: 5,   calories: 30,   distance_mi: null },
     { date: '2026-04-13', activity: 'Golf',             duration_min: 51,  calories: 328,  distance_mi: 0.65 },
+    { date: '2026-04-14', activity: 'Yoga',             duration_min: 17,  calories: 48,   distance_mi: null },
   ],
 
   sleep: [

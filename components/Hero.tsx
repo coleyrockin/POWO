@@ -19,7 +19,7 @@ export default function Hero({ data }: Props) {
   }
 
   const kpis = [
-    { val: s.vo2_max.toFixed(1),                    label: 'VO₂ MAX · mL/kg/min' },
+    { val: s.vo2_max.toFixed(1),                    label: 'VO₂ MAX' },
     { val: (s.steps_total / 1000).toFixed(0) + 'K', label: 'STEPS THIS WEEK' },
     { val: s.active_calories_total.toLocaleString(), label: 'ACTIVE CAL' },
     { val: s.exercise_minutes_total.toString(),      label: 'EXERCISE MIN' },

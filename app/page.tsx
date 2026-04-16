@@ -8,6 +8,7 @@ import VO2Chart from '@/components/VO2Chart'
 import SleepAnalysis from '@/components/SleepAnalysis'
 import PushupLog from '@/components/PushupLog'
 import Awards from '@/components/Awards'
+import FiatCurrencies from '@/components/FiatCurrencies'
 import Footer from '@/components/Footer'
 
 export default function Page() {
@@ -23,6 +24,7 @@ export default function Page() {
         <VO2Chart trend={d.vo2_max_trend} />
         <SleepAnalysis sleep={d.sleep} />
         <PushupLog pushups={d.pushups} total={d.pushups_weekly_total} />
+        <FiatCurrencies currencies={d.fiat_top10} />
         <Awards />
       </div>
       <Footer generated={d.generated} week={d.week} />

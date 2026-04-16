@@ -60,6 +60,15 @@ export interface WeeklySummary {
   hrv_avg_ms: number
 }
 
+export interface FiatCurrency {
+  rank: number
+  code: string
+  name: string
+  usd_per_unit: number
+  change_24h: number
+  change_7d: number
+}
+
 export interface WeekData {
   athlete: string
   week: string
@@ -72,4 +81,5 @@ export interface WeekData {
   vo2_max_trend: VO2Point[]
   pushups: Pushup[]
   pushups_weekly_total: number
+  fiat_top10: FiatCurrency[]
 }

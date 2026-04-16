@@ -1,5 +1,6 @@
 'use client'
 import { motion } from 'framer-motion'
+import CountUp from './CountUp'
 import type { WeekData } from '@/lib/types'
 
 interface Props { data: WeekData }
@@ -19,11 +20,11 @@ export default function Hero({ data }: Props) {
   }
 
   const kpis = [
-    { val: s.vo2_max.toFixed(1),                    label: 'VO₂ MAX',          color: 'var(--accent-blue)' },
-    { val: (s.steps_total / 1000).toFixed(0) + 'K', label: 'STEPS THIS WEEK',  color: 'var(--accent-green)' },
-    { val: s.active_calories_total.toLocaleString(), label: 'ACTIVE CAL',       color: 'var(--accent-amber)' },
-    { val: s.exercise_minutes_total.toString(),      label: 'EXERCISE MIN',     color: 'var(--accent-purple)' },
-    { val: s.workout_sessions.toString(),            label: 'WORKOUT SESSIONS', color: 'var(--accent-coral)' },
+    { node: <CountUp value={s.vo2_max} decimals={1} />, label: 'VO₂ MAX', color: 'var(--accent-blue)' },
+    { node: <CountUp value={s.steps_total / 1000} decimals={0} suffix="K" />, label: 'STEPS THIS WEEK', color: 'var(--accent-green)' },
+    { node: <CountUp value={s.active_calories_total} />, label: 'ACTIVE CAL', color: 'var(--accent-amber)' },
+    { node: <CountUp value={s.exercise_minutes_total} />, label: 'EXERCISE MIN', color: 'var(--accent-purple)' },
+    { node: <CountUp value={s.workout_sessions} />, label: 'WORKOUT SESSIONS', color: 'var(--accent-coral)' },
   ]
 
   return (
@@ -41,15 +42,25 @@ export default function Hero({ data }: Props) {
         POWO
       </div>
 
-      {/* Apple Health badge */}
+      {/* Apple Health badge with live pulse */}
       <motion.div {...fadeUp(0.05)} style={{
-        display: 'inline-flex', alignItems: 'center', gap: '6px',
+        display: 'inline-flex', alignItems: 'center', gap: '8px',
         background: 'var(--accent-green)', color: 'var(--color-black)',
         fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 500,
         letterSpacing: '0.14em', textTransform: 'uppercase',
         padding: '5px 12px', marginBottom: '20px',
+        position: 'relative',
       }}>
-        <span style={{ fontSize: '11px' }}>✓</span> Apple Health Verified
+        <span aria-hidden style={{ position: 'relative', width: '7px', height: '7px', display: 'inline-block' }}>
+          <span style={{
+            position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--color-black)',
+            animation: 'powo-pulse 2s ease-out infinite',
+          }} />
+          <span style={{
+            position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--color-black)',
+          }} />
+        </span>
+        Apple Health Verified
       </motion.div>
 
       {/* Title */}
@@ -64,10 +75,21 @@ export default function Hero({ data }: Props) {
       </motion.h1>
 
       {/* Subtitle */}
-      <motion.div {...fadeUp(0.15)} style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-white)', letterSpacing: '0.04em', marginTop: '16px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        COLEY &nbsp;·&nbsp;{' '}
+      <motion.div {...fadeUp(0.15)} style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-white)', letterSpacing: '0.04em', marginTop: '16px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+        <span>COLEY</span>
+        <span style={{ color: 'var(--color-dim)' }}>·</span>
         <span style={{ color: 'var(--color-wolf2)' }}>{fmtDate(weekStart)} – {fmtDate(weekEnd)}, 2026</span>
-        &nbsp;·&nbsp; WEEK 15
+        <span style={{ color: 'var(--color-dim)' }}>·</span>
+        <span style={{
+          display: 'inline-block',
+          border: '1px solid var(--accent-blue)',
+          color: 'var(--accent-blue)',
+          padding: '1px 6px',
+          letterSpacing: '0.12em',
+          fontSize: '9px',
+        }}>
+          WK 15 / 52
+        </span>
       </motion.div>
 
       {/* KPIs */}
@@ -75,7 +97,7 @@ export default function Hero({ data }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px 0' }}>
           {kpis.slice(0, 3).map((k, i) => (
             <motion.div key={k.label} {...fadeUp(0.2 + i * 0.06)} style={{ display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'center' }}>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: '38px', lineHeight: 1, color: k.color }}>{k.val}</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: '38px', lineHeight: 1, color: k.color }}>{k.node}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-white)' }}>{k.label}</span>
             </motion.div>
           ))}
@@ -83,7 +105,7 @@ export default function Hero({ data }: Props) {
         <div style={{ display: 'flex', justifyContent: 'center', gap: '48px', marginTop: '24px' }}>
           {kpis.slice(3).map((k, i) => (
             <motion.div key={k.label} {...fadeUp(0.38 + i * 0.06)} style={{ display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'center' }}>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: '38px', lineHeight: 1, color: k.color }}>{k.val}</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: '38px', lineHeight: 1, color: k.color }}>{k.node}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-white)' }}>{k.label}</span>
             </motion.div>
           ))}

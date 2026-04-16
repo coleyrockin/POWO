@@ -1,4 +1,5 @@
 import { weekData } from '@/lib/data'
+import ScrollProgress from '@/components/ScrollProgress'
 import Hero from '@/components/Hero'
 import ActivityRings from '@/components/ActivityRings'
 import WeeklySummary from '@/components/WeeklySummary'
@@ -15,6 +16,7 @@ export default function Page() {
   const d = weekData
   return (
     <main style={{ maxWidth: '430px', margin: '0 auto', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <ScrollProgress />
       <Hero data={d} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', padding: '0 0 28px' }}>
         <ActivityRings summary={d.weekly_summary} daily={d.daily} workouts={d.workouts} />

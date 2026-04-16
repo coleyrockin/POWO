@@ -24,6 +24,7 @@ export default function Awards() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.07 }}
+            className="powo-lift"
             style={{ background: 'var(--color-card)', padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: '6px' }}
           >
             <span style={{ color: a.color }}><a.Icon size={20} /></span>

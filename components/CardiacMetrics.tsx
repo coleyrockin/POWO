@@ -48,6 +48,7 @@ export default function CardiacMetrics({ daily }: Props) {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.06 }}
+            className="powo-lift"
             style={{ background: 'var(--color-card)', padding: '14px 12px' }}
           >
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-white)', marginBottom: '6px' }}>{v.label}</div>

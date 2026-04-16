@@ -34,16 +34,25 @@ export default function VO2Chart({ trend }: Props) {
         viewport={{ once: true }}
         style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '24px 20px' }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '16px', gap: '12px' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)', marginBottom: '6px' }}>Cardio Fitness Score</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              Cardio Fitness Score
+              <span style={{
+                fontFamily: 'var(--font-mono)', fontSize: '8px', letterSpacing: '0.18em',
+                color: 'var(--color-black)', background: 'var(--accent-amber)',
+                padding: '1px 5px', borderRadius: '2px', fontWeight: 600,
+              }}>
+                PR
+              </span>
+            </div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '48px', lineHeight: 1, color: 'var(--color-wolf)' }}>
               {current.toFixed(1)}
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: 'var(--color-mid)', marginLeft: '8px' }}>mL/kg/min</span>
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-wolf)' }}>+14.7% in 10 weeks</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-wolf)' }}>↑ +14.7%</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)' }}>33.4 → {current.toFixed(2)}</div>
           </div>
         </div>

@@ -28,6 +28,7 @@ export default function WeeklySummary({ summary: s }: Props) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.04 }}
+            className="powo-lift"
             style={{ background: 'var(--color-card)', padding: '16px 14px' }}
           >
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-white)', marginBottom: '8px' }}>{t.label}</div>

@@ -23,6 +23,8 @@ export default function SleepAnalysis({ sleep }: Props) {
         {sleep.map((s, i) => {
           const h = Math.floor(s.total_min / 60)
           const m = s.total_min % 60
+          const efficiency = Math.round(((s.total_min - s.awake_min) / s.total_min) * 100)
+          const effColor = efficiency >= 92 ? 'var(--accent-green)' : efficiency >= 88 ? 'var(--accent-amber)' : 'var(--accent-coral)'
           const stages = [
             { label: 'Deep',  min: s.deep_min,  color: 'var(--color-blue)', max: MAX_MIN },
             { label: 'REM',   min: s.rem_min,   color: 'var(--color-amber)', max: MAX_MIN },
@@ -35,9 +37,13 @@ export default function SleepAnalysis({ sleep }: Props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
+              className="powo-lift"
               style={{ background: 'var(--color-card)', padding: '18px 16px' }}
             >
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', color: 'var(--color-mid)', marginBottom: '10px' }}>{fmtNight(s.night)}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', color: 'var(--color-mid)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                <span>{fmtNight(s.night)}</span>
+                <span style={{ color: effColor, fontSize: '9px' }}>{efficiency}%</span>
+              </div>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: '34px', lineHeight: 1, marginBottom: '4px' }}>{h}h {m}m</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', marginBottom: '14px' }}>{s.bedtime} → {s.wake_time}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>

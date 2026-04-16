@@ -64,7 +64,7 @@ export default function PushupLog({ pushups, total }: Props) {
         >
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)', marginBottom: '8px' }}>Weekly Total</div>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '64px', lineHeight: 1, color: 'var(--color-wolf)' }}>{total}</div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)', marginTop: '6px' }}>5 sessions</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)', marginTop: '6px' }}>{pushups.length} sessions</div>
         </motion.div>
       </div>
     </section>

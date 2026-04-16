@@ -52,16 +52,16 @@ export default function VO2Chart({ trend }: Props) {
           <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: '90px' }} preserveAspectRatio="none">
             <defs>
               <linearGradient id="vo2grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#248bf5" stopOpacity="0.2" />
-                <stop offset="100%" stopColor="#248bf5" stopOpacity="0" />
+                <stop offset="0%" stopColor="var(--color-wolf)" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="var(--color-wolf)" stopOpacity="0" />
               </linearGradient>
             </defs>
             <polygon points={area} fill="url(#vo2grad)" />
-            <polyline points={polyline} fill="none" stroke="#248bf5" strokeWidth="2" strokeLinejoin="round" />
+            <polyline points={polyline} fill="none" stroke="var(--color-wolf)" strokeWidth="2" strokeLinejoin="round" />
             {coords.map((p, i) => (
               <g key={i}>
-                <circle cx={p.x} cy={p.y} r="4" fill="#080808" stroke="#248bf5" strokeWidth="2" />
-                <text x={p.x} y={p.y - 10} textAnchor="middle" fill="#248bf5" fontFamily="DM Mono, monospace" fontSize="9">
+                <circle cx={p.x} cy={p.y} r="4" fill="#080808" stroke="var(--color-wolf)" strokeWidth="2" />
+                <text x={p.x} y={p.y - 10} textAnchor="middle" fill="var(--color-wolf)" fontFamily="DM Mono, monospace" fontSize="9">
                   {trend[i].value}
                 </text>
               </g>

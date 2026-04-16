@@ -3,8 +3,6 @@
 @theme {
   --color-black:  #080808;
   --color-white:  #f0ede6;
-  --color-wolf:   #248bf5;
-  --color-wolf2:  #1a6fc2;
   --color-card:   #111111;
   --color-border: #1c1c1c;
   --color-mid:    #c0c0c0;
@@ -12,6 +10,17 @@
   --color-red:    #ff4444;
   --color-blue:   #4488ff;
   --color-amber:  #ffaa22;
+
+  /* Accent palette — per-KPI variety over iMessage blue base */
+  --accent-blue:     #248bf5;
+  --accent-blue-dim: #1a6fc2;
+  --color-wolf:      #248bf5; /* legacy alias — do not use in new code */
+  --color-wolf2:     #1a6fc2; /* legacy alias — do not use in new code */
+  --accent-green:    #34c759;
+  --accent-coral:    #ff6b6b;
+  --accent-amber:    #ffaa22;
+  --accent-purple:   #b366ff;
+  --accent-teal:     #00d4aa;
 
   --font-display: 'Bebas Neue', sans-serif;
   --font-mono:    'DM Mono', monospace;

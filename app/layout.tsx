@@ -1,13 +1,27 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
+const SITE_URL = 'https://proof-of-workout-next.vercel.app'
+
 export const metadata: Metadata = {
-  title: 'POWO — COLEY',
-  description: 'Apple Health verified weekly fitness data for Coley. Week of Apr 8–14, 2026.',
+  metadataBase: new URL(SITE_URL),
+  title: 'POWO — Proof of Workout',
+  description:
+    'A week of Apple Health data, rendered into a mobile-first fitness dashboard. Cardiac metrics, sleep stages, VO₂ trends, and workouts — all from real data.',
+  keywords: ['Apple Health', 'fitness dashboard', 'Next.js', 'data visualization', 'HealthKit'],
+  authors: [{ name: 'Coley Roberts' }],
+  creator: 'Coley Roberts',
   openGraph: {
-    title: 'POWO — COLEY',
-    description: 'Apple Health verified. Week of Apr 8–14, 2026.',
+    title: 'POWO — Proof of Workout',
+    description: 'Apple Health verified. A week in data.',
+    url: SITE_URL,
+    siteName: 'POWO',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'POWO — Proof of Workout',
+    description: 'Apple Health verified. A week in data.',
   },
 }
 
@@ -15,6 +29,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
+  themeColor: '#080808',
+  colorScheme: 'dark',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

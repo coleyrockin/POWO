@@ -19,11 +19,11 @@ export default function Hero({ data }: Props) {
   }
 
   const kpis = [
-    { val: s.vo2_max.toFixed(1),                    label: 'VO₂ MAX',          color: '#248bf5' },
-    { val: (s.steps_total / 1000).toFixed(0) + 'K', label: 'STEPS THIS WEEK',  color: '#34c759' },
-    { val: s.active_calories_total.toLocaleString(), label: 'ACTIVE CAL',       color: '#ffaa22' },
-    { val: s.exercise_minutes_total.toString(),      label: 'EXERCISE MIN',     color: '#b366ff' },
-    { val: s.workout_sessions.toString(),            label: 'WORKOUT SESSIONS', color: '#ff6b6b' },
+    { val: s.vo2_max.toFixed(1),                    label: 'VO₂ MAX',          color: 'var(--accent-blue)' },
+    { val: (s.steps_total / 1000).toFixed(0) + 'K', label: 'STEPS THIS WEEK',  color: 'var(--accent-green)' },
+    { val: s.active_calories_total.toLocaleString(), label: 'ACTIVE CAL',       color: 'var(--accent-amber)' },
+    { val: s.exercise_minutes_total.toString(),      label: 'EXERCISE MIN',     color: 'var(--accent-purple)' },
+    { val: s.workout_sessions.toString(),            label: 'WORKOUT SESSIONS', color: 'var(--accent-coral)' },
   ]
 
   return (
@@ -44,7 +44,7 @@ export default function Hero({ data }: Props) {
       {/* Apple Health badge */}
       <motion.div {...fadeUp(0.05)} style={{
         display: 'inline-flex', alignItems: 'center', gap: '6px',
-        background: '#34c759', color: 'var(--color-black)',
+        background: 'var(--accent-green)', color: 'var(--color-black)',
         fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 500,
         letterSpacing: '0.14em', textTransform: 'uppercase',
         padding: '5px 12px', marginBottom: '20px',

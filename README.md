@@ -16,6 +16,14 @@ Zero UI libraries. Every card, chart, icon, and animation — built from scratch
 
 </div>
 
+<div align="center">
+
+<img src="public/screenshot-hero.png" width="32%" alt="Hero — KPIs and weekly summary" />
+<img src="public/screenshot-cardiac.png" width="32%" alt="Workouts and cardiac metrics" />
+<img src="public/screenshot-awards.png" width="32%" alt="Sleep, pushups, and achievements" />
+
+</div>
+
 ---
 
 ## The Product

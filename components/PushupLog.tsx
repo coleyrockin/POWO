@@ -1,75 +1,65 @@
 'use client'
 import { motion } from 'framer-motion'
 import SectionHeader from './SectionHeader'
-import type { Pushup } from '@/lib/types'
+import type { PushupData } from '@/lib/types'
 
-interface Props { pushups: Pushup[], total: number }
+interface Props { pushups: PushupData }
 
-const DAY_LABELS: Record<string, string> = {
-  '2026-04-13': 'Mon Apr 13',
-  '2026-04-14': 'Tue Apr 14',
-  '2026-04-15': 'Wed Apr 15',
-  '2026-04-17': 'Fri Apr 17',
-}
-const DAY_NOTES: Record<string, string> = {
-  '2026-04-13': 'Century day',
-  '2026-04-14': 'Follow-up',
-  '2026-04-15': 'Quick set',
-  '2026-04-17': 'Strong finish',
+function fmtRange(week: string) {
+  const [s, e] = week.split('/')
+  const fmt = (iso: string) => new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return `${fmt(s)} – ${fmt(e)}`
 }
 
-export default function PushupLog({ pushups, total }: Props) {
-  const bestReps = Math.max(...pushups.map(p => p.reps))
+export default function PushupLog({ pushups }: Props) {
+  const weeks = pushups.weeks
+  const total = weeks.reduce((a, w) => a + w.total, 0)
+  const bestWeek = weeks.reduce((a, b) => (b.total > a.total ? b : a))
+  const max = bestWeek.total
+
   return (
-    <section>
-      <SectionHeader label="Pushup Log" meta="Week of Apr 13–19" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
-        {pushups.map((p, i) => {
-          const isBest = p.reps === bestReps
-          return (
-            <motion.div
-              key={p.date}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.07 }}
-              className="powo-lift"
-              style={{ background: 'var(--color-card)', padding: '20px 16px', textAlign: 'center', position: 'relative' }}
-            >
-              {isBest && (
-                <div style={{
-                  position: 'absolute', top: '8px', right: '8px',
-                  fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em',
-                  color: 'var(--color-black)', background: 'var(--accent-amber)',
-                  padding: '2px 6px', borderRadius: '2px', fontWeight: 700,
-                }}>
-                  PR
+    <section id="pushups">
+      <SectionHeader label="Pushup Log" meta={`${total} reps · ${weeks.length} weeks`} />
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {weeks.map((w, i) => {
+            const isBest = w.total === max
+            const pct = (w.total / max) * 100
+            return (
+              <motion.div key={w.week}
+                initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                style={{ position: 'relative', padding: '12px 12px', border: isBest ? '1px solid #5a4218' : '1px solid var(--color-border)', borderRadius: '4px', background: isBest ? 'linear-gradient(180deg, #1f1605 0%, #120c02 100%)' : 'rgba(255,255,255,0.02)', boxShadow: isBest ? 'inset 0 1px 0 rgba(255,170,34,0.18), 0 0 24px rgba(255,170,34,0.08)' : 'none' }}
+              >
+                {isBest && (
+                  <span style={{ position: 'absolute', top: '10px', right: '12px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-black)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700 }}>PEAK</span>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{fmtRange(w.week)}</span>
+                  <span className={isBest ? 'powo-glow-amber' : ''} style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: isBest ? 'var(--accent-amber)' : 'var(--color-white)' }}>{w.total}<span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-mid)', marginLeft: '6px', textShadow: 'none' }}>reps</span></span>
                 </div>
-              )}
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)', marginBottom: '8px' }}>{DAY_LABELS[p.date]}</div>
-              <div className={isBest ? 'powo-glow-amber' : 'powo-glow-blue'} style={{ fontFamily: 'var(--font-display)', fontSize: '52px', lineHeight: 1, color: isBest ? 'var(--accent-amber)' : 'var(--accent-blue)' }}>{p.reps}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)', marginTop: '6px' }}>{DAY_NOTES[p.date]}</div>
-            </motion.div>
-          )
-        })}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.28 }}
-          className="powo-lift"
-          style={{
-            background: 'linear-gradient(180deg, #0e2a14 0%, #07140a 100%)',
-            border: '1px solid #1a5c2a',
-            boxShadow: 'inset 0 1px 0 rgba(52,199,89,0.25), 0 0 24px rgba(52,199,89,0.10)',
-            margin: '-1px', padding: '20px 16px', textAlign: 'center',
-            gridColumn: 'span 2',
-          }}
-        >
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-mid)', marginBottom: '8px' }}>Weekly Total</div>
-          <div className="powo-glow-blue" style={{ fontFamily: 'var(--font-display)', fontSize: '64px', lineHeight: 1, color: 'var(--accent-blue)' }}>{total}</div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)', marginTop: '6px' }}>{pushups.length} sessions</div>
-        </motion.div>
+                <div style={{ height: '6px', borderRadius: '3px', background: 'linear-gradient(180deg, #2e2e2e, #3e3e3e)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)' }}>
+                  <motion.div initial={{ width: 0 }} whileInView={{ width: `${pct}%` }} viewport={{ once: true }} transition={{ duration: 0.7, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }} style={{ height: '6px', borderRadius: '3px', background: isBest ? 'linear-gradient(180deg, #ffc764, var(--accent-amber))' : 'linear-gradient(180deg, #6f6f6f, #4a4a4a)', boxShadow: isBest ? '0 0 8px rgba(255,170,34,0.5)' : 'none' }} />
+                </div>
+                {w.sessions.length > 0 && (
+                  <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {w.sessions.map((s, j) => (
+                      <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', padding: '2px 6px', background: '#0a0a0a', border: '1px solid #161616', color: 'var(--color-white)', borderRadius: '2px' }}>
+                        <span style={{ color: 'var(--color-mid)' }}>{new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                        <span style={{ color: 'var(--color-mid)' }}> · </span>
+                        {s.reps}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {w.notes && (
+                  <div style={{ marginTop: '8px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.45 }}>
+                    <span style={{ color: 'var(--accent-blue-dim)' }}>NOTE</span> · {w.notes}
+                  </div>
+                )}
+              </motion.div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )

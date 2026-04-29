@@ -7,13 +7,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: 'POWO — Proof of Workout',
   description:
-    'Proof of Workout — a week of Apple Health data turned into a mobile-first dashboard. VO₂, sleep stages, cardiac trends, and every session. Built from scratch.',
-  keywords: ['Apple Health', 'fitness dashboard', 'Next.js', 'data visualization', 'HealthKit'],
+    'Proof of Workout — 91 days of Apple Health turned into a mobile-first dashboard. VO₂ trajectory, sleep stages, cardiac trends, 160 workouts, and AI-generated rest + training recommendations.',
+  keywords: ['Apple Health', 'fitness dashboard', 'Next.js', 'data visualization', 'HealthKit', 'VO2 max', 'recovery'],
   authors: [{ name: 'Coley Roberts' }],
   creator: 'Coley Roberts',
   openGraph: {
     title: 'POWO — Proof of Workout',
-    description: 'Apple Health verified. A week in data.',
+    description: '91 days of Apple Health, distilled.',
     url: SITE_URL,
     siteName: 'POWO',
     type: 'website',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'POWO — Proof of Workout',
-    description: 'Apple Health verified. A week in data.',
+    description: '91 days of Apple Health, distilled.',
   },
 }
 

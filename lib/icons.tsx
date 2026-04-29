@@ -195,6 +195,19 @@ export function IconPickleball({ size = 20, color = 'currentColor', strokeWidth 
   )
 }
 
+export function IconPaddle({ size = 20, color = 'currentColor', strokeWidth = 1.5, label }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" {...base(size, strokeWidth, label)} style={iconStyle(color)}>
+      {/* Kayak paddle: two teardrop blades + shaft running diagonally */}
+      <line x1="4.5" y1="15.5" x2="15.5" y2="4.5" />
+      <ellipse cx="3" cy="17" rx="2" ry="1.1" transform="rotate(-45 3 17)" />
+      <ellipse cx="17" cy="3" rx="2" ry="1.1" transform="rotate(-45 17 3)" />
+      {/* Water ripple */}
+      <path d="M 2 11 Q 4 10 6 11 T 10 11" opacity="0.5" />
+    </svg>
+  )
+}
+
 export const ACTIVITY_SVG_ICONS: Record<string, React.ComponentType<IconProps>> = {
   'Walking':          IconWalking,
   'Running':          IconRunning,
@@ -206,6 +219,7 @@ export const ACTIVITY_SVG_ICONS: Record<string, React.ComponentType<IconProps>> 
   'Stair Climbing':   IconStairs,
   'Skating':          IconSkating,
   'Pickleball':       IconPickleball,
+  'Paddling':         IconPaddle,
   'Unknown Activity': IconActivity,
 }
 

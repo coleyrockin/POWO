@@ -1,6 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import CountUp from './CountUp'
+import Sparkline from './Sparkline'
 import { fmtShort } from '@/lib/helpers'
 import type { HealthData } from '@/lib/types'
 
@@ -12,19 +13,41 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
 })
 
+function rolling(values: number[], window: number): number[] {
+  if (values.length === 0) return []
+  const out: number[] = []
+  for (let i = 0; i < values.length; i++) {
+    const start = Math.max(0, i - window + 1)
+    const slice = values.slice(start, i + 1)
+    out.push(slice.reduce((a, b) => a + b, 0) / slice.length)
+  }
+  return out
+}
+
 export default function Hero({ data }: Props) {
   const t = data.summary.period_totals
   const v = data.summary.vo2_max_progression
   const a = data.summary.averages
   const since = ((v.peak.value - v.first.value) / v.first.value) * 100
 
+  // Sparkline series — smoothed where the raw signal is jagged
+  const stepsSeries  = rolling(data.daily.map(d => d.steps), 5)
+  const kcalSeries   = rolling(data.daily.map(d => d.active_kcal ?? 0), 5)
+  const distSeries   = rolling(data.daily.map(d => d.distance_m / 1000), 5)
+  const exMinSeries  = rolling(data.daily.map(d => d.exercise_min ?? 0), 5)
+  const vo2Series    = data.vo2_max.map(p => p.value)
+  // Workouts per day, smoothed
+  const workoutByDay = new Map<string, number>()
+  for (const w of data.workouts) workoutByDay.set(w.date, (workoutByDay.get(w.date) ?? 0) + 1)
+  const workoutSeries = rolling(data.daily.map(d => workoutByDay.get(d.date) ?? 0), 7)
+
   const kpis = [
-    { node: <CountUp value={v.current.value} decimals={1} />, label: 'VO₂ MAX',  color: 'var(--accent-teal)'   },
-    { node: <CountUp value={t.total_steps / 1000} decimals={0} suffix="K" />, label: 'STEPS', color: 'var(--accent-green)'  },
-    { node: <CountUp value={t.total_active_kcal / 1000} decimals={1} suffix="K" />, label: 'KCAL', color: 'var(--accent-amber)'  },
-    { node: <CountUp value={t.total_workouts} />,             label: 'WORKOUTS',  color: 'var(--accent-coral)'  },
-    { node: <CountUp value={Math.round(t.total_distance_km)} suffix=" KM" />, label: 'DISTANCE', color: 'var(--accent-purple)' },
-    { node: <CountUp value={t.total_exercise_min} />,         label: 'EX·MIN',  color: 'var(--accent-blue)'   },
+    { node: <CountUp value={v.current.value} decimals={1} />,                 label: 'VO₂ MAX',  color: 'var(--accent-teal)',   spark: vo2Series },
+    { node: <CountUp value={t.total_steps / 1000} decimals={0} suffix="K" />, label: 'STEPS',    color: 'var(--accent-green)',  spark: stepsSeries },
+    { node: <CountUp value={t.total_active_kcal / 1000} decimals={1} suffix="K" />, label: 'KCAL', color: 'var(--accent-amber)', spark: kcalSeries },
+    { node: <CountUp value={t.total_workouts} />,                              label: 'WORKOUTS', color: 'var(--accent-coral)',  spark: workoutSeries },
+    { node: <CountUp value={Math.round(t.total_distance_km)} suffix=" KM" />, label: 'DISTANCE', color: 'var(--accent-purple)', spark: distSeries },
+    { node: <CountUp value={t.total_exercise_min} />,                          label: 'EX·MIN',   color: 'var(--accent-blue)',   spark: exMinSeries },
   ]
 
   return (
@@ -69,8 +92,8 @@ export default function Hero({ data }: Props) {
         Apple Health · 91-Day Snapshot
       </motion.div>
 
-      <motion.h1 {...fadeUp(0.1)} style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', fontSize: 'clamp(72px, 22vw, 106px)', marginBottom: '6px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-        <span className="powo-glow-blue" style={{ color: 'var(--accent-blue)' }}>PO</span><span className="powo-glow-white" style={{ color: 'var(--color-white)' }}>WO</span>
+      <motion.h1 {...fadeUp(0.1)} className="powo-wordmark" style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', fontSize: 'clamp(72px, 22vw, 106px)', marginBottom: '6px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        POWO
       </motion.h1>
 
       <motion.div {...fadeUp(0.15)} style={{
@@ -136,20 +159,45 @@ export default function Hero({ data }: Props) {
         </div>
       </motion.div>
 
-      {/* KPI grid */}
+      {/* KPI grid — stat trophies */}
       <div style={{ width: '100%', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--color-border)', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderRadius: '6px', overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '6px' }}>
           {kpis.map((k, i) => (
-            <motion.div key={k.label} {...fadeUp(0.22 + i * 0.05)} style={{ minHeight: '80px', padding: '14px 4px 12px', background: 'linear-gradient(180deg, rgba(24,24,27,0.7), rgba(13,13,15,0.96))', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', textAlign: 'center' }}>
-              <span className={
-                k.color === 'var(--accent-blue)'   ? 'powo-glow-blue'   :
-                k.color === 'var(--accent-green)'  ? 'powo-glow-green'  :
-                k.color === 'var(--accent-amber)'  ? 'powo-glow-amber'  :
-                k.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
-                k.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
-                k.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
-              } style={{ fontFamily: 'var(--font-display)', fontSize: '31px', lineHeight: 1, color: k.color }}>{k.node}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)' }}>{k.label}</span>
+            <motion.div
+              key={k.label}
+              {...fadeUp(0.22 + i * 0.05)}
+              className="powo-trophy"
+              style={{
+                ['--trophy-color' as string]: k.color,
+                borderRadius: '8px',
+                minHeight: '104px',
+                padding: '12px 6px 8px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '4px',
+                textAlign: 'center',
+                isolation: 'isolate',
+              }}
+            >
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-mid)', position: 'relative', zIndex: 2 }}>{k.label}</span>
+              <span
+                className={
+                  k.color === 'var(--accent-blue)'   ? 'powo-glow-blue'   :
+                  k.color === 'var(--accent-green)'  ? 'powo-glow-green'  :
+                  k.color === 'var(--accent-amber)'  ? 'powo-glow-amber'  :
+                  k.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
+                  k.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
+                  k.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
+                }
+                style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: k.color, position: 'relative', zIndex: 2 }}
+              >
+                {k.node}
+              </span>
+              <div style={{ width: '78px', height: '18px', position: 'relative', zIndex: 2 }}>
+                <Sparkline values={k.spark} color={k.color} delay={0.35 + i * 0.06} />
+              </div>
             </motion.div>
           ))}
         </div>

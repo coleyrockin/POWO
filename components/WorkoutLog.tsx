@@ -74,8 +74,19 @@ export default function WorkoutLog({ workouts, workoutSummary }: Props) {
                       <span style={{ color }}>{w.sessions}</span> sessions · {hours}h
                     </span>
                   </div>
-                  <div style={{ height: '5px', borderRadius: '3px', background: 'linear-gradient(180deg, #2e2e2e, #3e3e3e)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)' }}>
-                    <motion.div initial={{ width: 0 }} whileInView={{ width: `${pct}%` }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.7, ease: [0.16, 1, 0.3, 1] }} style={{ height: '5px', borderRadius: '3px', background: `linear-gradient(180deg, color-mix(in srgb, ${color} 100%, white 18%), ${color})`, boxShadow: `0 0 8px color-mix(in srgb, ${color} 60%, transparent)` }} />
+                  <div style={{ height: '6px', borderRadius: '3px', background: 'linear-gradient(180deg, #1a1a1d, #242429)', overflow: 'visible', position: 'relative', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                    <motion.div
+                      className="powo-comet"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${pct}%` }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.06, duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                      style={{
+                        ['--bar-color' as string]: color,
+                        height: '6px',
+                        borderRadius: '3px',
+                      }}
+                    />
                   </div>
                 </div>
                 <span style={{ fontFamily: 'var(--font-display)', fontSize: '15px', color, letterSpacing: '0.5px', minWidth: '52px', textAlign: 'right' }}>{Math.round(w.total_calories).toLocaleString()}</span>

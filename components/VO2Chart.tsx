@@ -115,17 +115,30 @@ export default function VO2Chart({ trend }: Props) {
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
-              <linearGradient id="vo2FillRise" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--accent-teal)" stopOpacity="0.32" />
-                <stop offset="100%" stopColor="var(--accent-teal)" stopOpacity="0.01" />
+              {/* Horizontal "story" fill — green ascent, amber peak, coral decline */}
+              <linearGradient id="vo2StoryFill" gradientUnits="userSpaceOnUse" x1={PAD_L} y1="0" x2={W - PAD_R} y2="0">
+                <stop offset="0%" stopColor="var(--accent-teal)" stopOpacity="0.05" />
+                <stop offset={`${((peakCoord.x - PAD_L) / DRAW_W) * 100}%`} stopColor="var(--accent-amber)" stopOpacity="0.42" />
+                <stop offset="100%" stopColor="var(--accent-coral)" stopOpacity="0.05" />
               </linearGradient>
-              <linearGradient id="vo2FillFall" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--accent-coral)" stopOpacity="0.26" />
-                <stop offset="100%" stopColor="var(--accent-coral)" stopOpacity="0.01" />
+              <linearGradient id="vo2StoryFillVert" gradientUnits="userSpaceOnUse" x1="0" y1={PAD_T} x2="0" y2={BASE_Y}>
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.10" />
+                <stop offset="100%" stopColor="#000000" stopOpacity="0" />
               </linearGradient>
-              <linearGradient id="vo2LineRise" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="vo2LineRise" gradientUnits="userSpaceOnUse" x1={PAD_L} y1="0" x2={peakCoord.x} y2="0">
                 <stop offset="0%" stopColor="#5fe7c7" />
-                <stop offset="100%" stopColor="var(--accent-teal)" />
+                <stop offset="60%" stopColor="var(--accent-teal)" />
+                <stop offset="100%" stopColor="var(--accent-amber)" />
+              </linearGradient>
+              <linearGradient id="vo2LineFall" gradientUnits="userSpaceOnUse" x1={peakCoord.x} y1="0" x2={W - PAD_R} y2="0">
+                <stop offset="0%" stopColor="var(--accent-amber)" />
+                <stop offset="100%" stopColor="var(--accent-coral)" />
+              </linearGradient>
+              {/* Vertical light beam at peak — soft amber column */}
+              <linearGradient id="vo2PeakBeam" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="var(--accent-amber)" stopOpacity="0" />
+                <stop offset="50%" stopColor="var(--accent-amber)" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="var(--accent-amber)" stopOpacity="0" />
               </linearGradient>
               <filter id="vo2lineGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="1.4" result="b" />
@@ -134,6 +147,9 @@ export default function VO2Chart({ trend }: Props) {
               <filter id="vo2peakGlow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="3" result="b" />
                 <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+              <filter id="vo2beamBlur" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" />
               </filter>
             </defs>
 
@@ -148,19 +164,74 @@ export default function VO2Chart({ trend }: Props) {
               )
             })}
 
-            {/* Vertical guide at peak — subtle */}
-            <line x1={peakCoord.x} x2={peakCoord.x} y1={PAD_T - 6} y2={BASE_Y} stroke="var(--accent-amber)" strokeWidth="1" strokeDasharray="2 4" opacity="0.35" />
+            {/* Peak beam — soft vertical light column behind the line */}
+            <motion.rect
+              x={peakCoord.x - 22}
+              y={PAD_T - 8}
+              width={44}
+              height={BASE_Y - PAD_T + 8}
+              fill="url(#vo2PeakBeam)"
+              filter="url(#vo2beamBlur)"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.0, delay: 0.25 }}
+            />
+
+            {/* Vertical guide at peak — sharp dashed accent on top of beam */}
+            <line x1={peakCoord.x} x2={peakCoord.x} y1={PAD_T - 6} y2={BASE_Y} stroke="var(--accent-amber)" strokeWidth="1" strokeDasharray="2 4" opacity="0.55" />
 
             {/* Baseline */}
             <line x1={PAD_L} x2={W - PAD_R} y1={BASE_Y} y2={BASE_Y} stroke="rgba(255,255,255,0.09)" strokeWidth="1" />
 
-            {/* Pre-peak: rise (teal) */}
-            <path d={smoothArea(preCoords)} fill="url(#vo2FillRise)" />
-            <path d={smoothLine(preCoords)} fill="none" stroke="url(#vo2LineRise)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" filter="url(#vo2lineGlow)" />
+            {/* Unified story fill — green ascent through amber peak to coral decline */}
+            <motion.path
+              d={smoothArea(coords)}
+              fill="url(#vo2StoryFill)"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            />
+            <motion.path
+              d={smoothArea(coords)}
+              fill="url(#vo2StoryFillVert)"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, delay: 0.15 }}
+            />
 
-            {/* Post-peak: decline (coral, dashed for "rest signal") */}
-            <path d={smoothArea(postCoords)} fill="url(#vo2FillFall)" />
-            <path d={smoothLine(postCoords)} fill="none" stroke="var(--accent-coral)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" strokeDasharray="4 3" filter="url(#vo2lineGlow)" />
+            {/* Pre-peak line: rise gradient teal → amber */}
+            <motion.path
+              d={smoothLine(preCoords)}
+              fill="none"
+              stroke="url(#vo2LineRise)"
+              strokeWidth="2.2"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              filter="url(#vo2lineGlow)"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            />
+
+            {/* Post-peak line: decline gradient amber → coral, dashed */}
+            <motion.path
+              d={smoothLine(postCoords)}
+              fill="none"
+              stroke="url(#vo2LineFall)"
+              strokeWidth="2.2"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              strokeDasharray="4 3"
+              filter="url(#vo2lineGlow)"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            />
 
             {/* Reading dots — subtle cadence breadcrumbs along the line */}
             {coords.map((p, i) => (
@@ -169,10 +240,16 @@ export default function VO2Chart({ trend }: Props) {
               )
             ))}
 
-            {/* Peak marker — star halo */}
+            {/* Peak marker — pulsing halo */}
             <g>
-              <circle cx={peakCoord.x} cy={peakCoord.y} r="14" fill="var(--accent-amber)" opacity="0.10" />
-              <circle cx={peakCoord.x} cy={peakCoord.y} r="7" fill="var(--accent-amber)" opacity="0.28" filter="url(#vo2peakGlow)" />
+              <motion.circle
+                cx={peakCoord.x}
+                cy={peakCoord.y}
+                fill="var(--accent-amber)"
+                animate={{ r: [12, 18, 12], opacity: [0.18, 0.04, 0.18] }}
+                transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <circle cx={peakCoord.x} cy={peakCoord.y} r="7" fill="var(--accent-amber)" opacity="0.34" filter="url(#vo2peakGlow)" />
               <circle cx={peakCoord.x} cy={peakCoord.y} r="4" fill="#0d0d0d" stroke="var(--accent-amber)" strokeWidth="2" />
               {/* Label box positioned above the dot, with leader space */}
               <g transform={`translate(${peakCoord.x}, ${peakCoord.y - 20})`}>

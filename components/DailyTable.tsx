@@ -86,8 +86,16 @@ export default function DailyTable({ daily, workouts }: Props) {
                   </td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-display)', fontSize: '15px', color: stepsLeader ? 'var(--accent-green)' : 'var(--color-white)' }}>{d.steps.toLocaleString()}</td>
                   <td style={{ padding: '11px 4px', minWidth: '40px' }}>
-                    <div style={{ height: '4px', borderRadius: '3px', background: 'linear-gradient(180deg, #2e2e2e, #3e3e3e)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)' }}>
-                      <div style={{ height: '4px', borderRadius: '3px', background: 'linear-gradient(180deg, #6fdb88, var(--accent-green))', boxShadow: '0 0 8px rgba(52,199,89,0.45)', width: `${pct}%` }} />
+                    <div style={{ height: '5px', borderRadius: '3px', background: '#0a0a0a', overflow: 'visible', position: 'relative', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                      <div
+                        className="powo-comet"
+                        style={{
+                          ['--bar-color' as string]: stepsLeader ? 'var(--accent-amber)' : 'var(--accent-green)',
+                          height: '5px',
+                          borderRadius: '3px',
+                          width: `${pct}%`,
+                        }}
+                      />
                     </div>
                   </td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', color: calLeader ? 'var(--accent-amber)' : 'var(--color-white)', fontWeight: calLeader ? 600 : 500 }}>{Math.round(cal).toLocaleString()}</td>

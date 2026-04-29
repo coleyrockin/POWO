@@ -2,16 +2,16 @@
 import { useEffect, useRef, useState } from 'react'
 
 const SECTIONS = [
-  { id: 'period',     label: 'Period'   },
-  { id: 'week-change',label: 'WoW'      },
-  { id: 'vo2',        label: 'VO₂'      },
-  { id: 'cardiac',    label: 'Cardiac'  },
-  { id: 'sleep',      label: 'Sleep'    },
-  { id: 'workouts',   label: 'Workouts' },
-  { id: 'pushups',    label: 'Pushups'  },
-  { id: 'rest',       label: 'Rest'     },
-  { id: 'training',   label: 'Train'    },
-  { id: 'awards',     label: 'Awards'   },
+  { id: 'period',     label: 'Period',   tint: 'rgba(10, 132, 255, 0.20)',  tint2: 'rgba(52, 199, 89, 0.06)'  },
+  { id: 'week-change',label: 'WoW',      tint: 'rgba(179, 102, 255, 0.20)', tint2: 'rgba(10, 132, 255, 0.06)' },
+  { id: 'vo2',        label: 'VO₂',      tint: 'rgba(0, 212, 170, 0.22)',   tint2: 'rgba(255, 170, 34, 0.10)' },
+  { id: 'cardiac',    label: 'Cardiac',  tint: 'rgba(255, 107, 107, 0.20)', tint2: 'rgba(52, 199, 89, 0.06)'  },
+  { id: 'sleep',      label: 'Sleep',    tint: 'rgba(179, 102, 255, 0.22)', tint2: 'rgba(0, 212, 170, 0.06)'  },
+  { id: 'workouts',   label: 'Workouts', tint: 'rgba(255, 170, 34, 0.20)',  tint2: 'rgba(10, 132, 255, 0.06)' },
+  { id: 'pushups',    label: 'Pushups',  tint: 'rgba(255, 107, 107, 0.22)', tint2: 'rgba(255, 170, 34, 0.06)' },
+  { id: 'rest',       label: 'Rest',     tint: 'rgba(0, 212, 170, 0.20)',   tint2: 'rgba(179, 102, 255, 0.06)'},
+  { id: 'training',   label: 'Train',    tint: 'rgba(52, 199, 89, 0.20)',   tint2: 'rgba(10, 132, 255, 0.06)' },
+  { id: 'awards',     label: 'Awards',   tint: 'rgba(255, 170, 34, 0.22)',  tint2: 'rgba(255, 107, 107, 0.06)'},
 ]
 
 export default function SectionNav() {
@@ -21,17 +21,27 @@ export default function SectionNav() {
   const manualActiveRef = useRef<string | null>(null)
   const manualTimerRef = useRef<number | null>(null)
 
+  const applyTint = (id: string) => {
+    const s = SECTIONS.find(x => x.id === id)
+    if (!s) return
+    const root = document.documentElement
+    root.style.setProperty('--ambient-tint', s.tint)
+    root.style.setProperty('--ambient-tint-2', s.tint2)
+  }
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
         if (manualActiveRef.current) {
           setActive(manualActiveRef.current)
+          applyTint(manualActiveRef.current)
           return
         }
         const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top)
         if (visible.length > 0) {
           const id = visible[0].target.id
           setActive(id)
+          applyTint(id)
           const btn = buttonsRef.current[id]
           if (btn && stripRef.current) {
             const stripRect = stripRef.current.getBoundingClientRect()
@@ -55,6 +65,7 @@ export default function SectionNav() {
 
   const onClick = (id: string) => {
     setActive(id)
+    applyTint(id)
     manualActiveRef.current = id
     if (manualTimerRef.current !== null) window.clearTimeout(manualTimerRef.current)
     manualTimerRef.current = window.setTimeout(() => {

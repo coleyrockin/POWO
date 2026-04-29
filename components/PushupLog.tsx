@@ -37,8 +37,19 @@ export default function PushupLog({ pushups }: Props) {
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{fmtRange(w.week)}</span>
                   <span className={isBest ? 'powo-glow-amber' : ''} style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: isBest ? 'var(--accent-amber)' : 'var(--color-white)' }}>{w.total}<span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-mid)', marginLeft: '6px', textShadow: 'none' }}>reps</span></span>
                 </div>
-                <div style={{ height: '6px', borderRadius: '3px', background: 'linear-gradient(180deg, #2e2e2e, #3e3e3e)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)' }}>
-                  <motion.div initial={{ width: 0 }} whileInView={{ width: `${pct}%` }} viewport={{ once: true }} transition={{ duration: 0.7, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }} style={{ height: '6px', borderRadius: '3px', background: isBest ? 'linear-gradient(180deg, #ffc764, var(--accent-amber))' : 'linear-gradient(180deg, #6f6f6f, #4a4a4a)', boxShadow: isBest ? '0 0 8px rgba(255,170,34,0.5)' : 'none' }} />
+                <div style={{ height: '7px', borderRadius: '3px', background: '#0a0a0a', overflow: 'visible', position: 'relative', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                  <motion.div
+                    className="powo-comet"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${pct}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.85, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                    style={{
+                      ['--bar-color' as string]: isBest ? 'var(--accent-amber)' : '#6a7484',
+                      height: '7px',
+                      borderRadius: '3px',
+                    }}
+                  />
                 </div>
                 {w.sessions.length > 0 && (
                   <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>

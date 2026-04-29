@@ -16,6 +16,14 @@ Zero UI libraries. Every card, chart, animation, and visualization — built fro
 
 </div>
 
+<div align="center">
+
+<img src="public/screenshot-hero.png" width="32%" alt="Hero — KPI trophy tiles and headline" />
+<img src="public/screenshot-cardiac.png" width="32%" alt="VO₂ trajectory and cardiac metrics" />
+<img src="public/screenshot-awards.png" width="32%" alt="Achievements and footer" />
+
+</div>
+
 ---
 
 ## The Product

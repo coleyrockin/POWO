@@ -42,7 +42,7 @@ export default function DailyTable({ daily, workouts }: Props) {
     <section>
       <SectionHeader label="Daily Breakdown" meta="last 14 days" />
       <div style={{ overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none', border: '1px solid var(--color-border)', borderTop: 'none' }} className="no-scrollbar">
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'auto' }}>
           <caption style={srOnly}>Daily fitness breakdown, last 14 days</caption>
           <thead>
             <tr>
@@ -50,7 +50,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                 <th key={i} scope="col" style={{
                   background: 'var(--color-card)', fontFamily: 'var(--font-mono)', fontSize: '10px',
                   letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-white)',
-                  borderBottom: '1px solid var(--color-border)', padding: '11px 4px',
+                  borderBottom: '1px solid var(--color-border)', padding: '12px 4px', height: '40px',
                   textAlign: i === 0 ? 'left' : 'right', whiteSpace: 'nowrap',
                   ...(i === 0 ? { paddingLeft: '10px' } : {}),
                 }}>
@@ -70,7 +70,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                 <motion.tr
                   key={d.date}
                   initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.03 }}
-                  style={{ background: '#0a0a0a', borderBottom: '1px solid #161616' }}
+                  style={{ background: '#0a0a0a', borderBottom: '1px solid rgba(255,255,255,0.055)', height: '44px' }}
                 >
                   <td style={{ padding: '11px 4px 11px 10px', textAlign: 'left', fontFamily: 'var(--font-sans)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap', color: calLeader ? 'var(--accent-amber)' : stepsLeader ? 'var(--accent-green)' : 'var(--color-white)' }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>

@@ -62,7 +62,7 @@ export default function RestRecommendation({ data }: Props) {
         {/* Gauge */}
         <div style={{ position: 'relative', width: '160px', height: '90px' }}>
           <svg viewBox="0 0 160 90" style={{ width: '100%', height: '100%' }}>
-            <path d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 1 1 ${fullEnd.x} ${fullEnd.y}`} stroke="#1c1c1c" strokeWidth="10" fill="none" strokeLinecap="round" />
+            <path d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 1 1 ${fullEnd.x} ${fullEnd.y}`} stroke="rgba(255,255,255,0.08)" strokeWidth="10" fill="none" strokeLinecap="round" />
             <motion.path
               initial={{ pathLength: 0 }} whileInView={{ pathLength: F / 100 }} viewport={{ once: true }} transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
               d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 ${largeArc} 1 ${end.x} ${end.y}`}
@@ -85,11 +85,11 @@ export default function RestRecommendation({ data }: Props) {
       </motion.div>
 
       {/* Rationale signals grid */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '10px' }}>Recovery Signals</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px 16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px 16px' }}>
           {signals.map(sg => (
-            <div key={sg.k} style={{ display: 'flex', justifyContent: 'space-between', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', borderBottom: '1px dashed #1c1c1c', padding: '4px 0' }}>
+            <div key={sg.k} style={{ display: 'flex', justifyContent: 'space-between', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', borderBottom: '1px dashed rgba(255,255,255,0.08)', padding: '5px 0' }}>
               <span style={{ color: 'var(--color-mid)' }}>{sg.k}</span>
               <span style={{ color: toneColor(sg.tone), fontWeight: 600 }}>{sg.v}</span>
             </div>
@@ -102,13 +102,13 @@ export default function RestRecommendation({ data }: Props) {
       </div>
 
       {/* Daily protocol */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '10px' }}>Daily Protocol</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {rec.daily_protocol.map((p, i) => (
             <motion.div key={p.label}
               initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-              style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '10px', padding: '6px 0', borderBottom: '1px dashed #1c1c1c' }}
+              style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '10px', padding: '7px 0', borderBottom: '1px dashed rgba(255,255,255,0.08)' }}
             >
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: theme.accent, fontWeight: 600, letterSpacing: '0.05em' }}>{p.label}</span>
               <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.45 }}>{p.detail}</span>
@@ -118,8 +118,8 @@ export default function RestRecommendation({ data }: Props) {
       </div>
 
       {/* Do / Avoid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
-        <div style={{ background: 'var(--color-card)', padding: '14px 14px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+        <div style={{ background: 'var(--color-card)', padding: '16px 14px', height: '100%' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-green)', textTransform: 'uppercase', marginBottom: '8px' }}>✓ Do</div>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '5px' }}>
             {rec.do.map(d => (
@@ -130,7 +130,7 @@ export default function RestRecommendation({ data }: Props) {
             ))}
           </ul>
         </div>
-        <div style={{ background: 'var(--color-card)', padding: '14px 14px' }}>
+        <div style={{ background: 'var(--color-card)', padding: '16px 14px', height: '100%' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-coral)', textTransform: 'uppercase', marginBottom: '8px' }}>✕ Avoid</div>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '5px' }}>
             {rec.avoid.map(d => (
@@ -144,7 +144,7 @@ export default function RestRecommendation({ data }: Props) {
       </div>
 
       {/* Living return criteria */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '6px', marginBottom: '10px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: theme.accent, textTransform: 'uppercase' }}>Return-to-Train · Live</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)' }}>{rec.return_criteria.filter(c => c.met).length}/{rec.return_criteria.length} ready</div>
@@ -153,7 +153,7 @@ export default function RestRecommendation({ data }: Props) {
           {rec.return_criteria.map(c => (
             <motion.div key={c.label}
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-              style={{ display: 'grid', gridTemplateColumns: '18px 1fr auto', gap: '8px', alignItems: 'flex-start', padding: '6px 0', borderBottom: '1px dashed #1c1c1c' }}
+              style={{ display: 'grid', gridTemplateColumns: '18px 1fr auto', gap: '8px', alignItems: 'flex-start', padding: '7px 0', borderBottom: '1px dashed rgba(255,255,255,0.08)' }}
             >
               {c.met ? (
                 <span style={{ width: '14px', height: '14px', borderRadius: '3px', background: 'var(--accent-green)', color: 'var(--color-black)', fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px' }}>✓</span>

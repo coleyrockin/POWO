@@ -27,8 +27,8 @@ export default function WeekChange({ data }: Props) {
   return (
     <section id="week-change">
       <SectionHeader label="Week-Over-Week" meta={`${fmt(start)} – ${fmt(end)} vs prior 7d`} />
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '8px' }}>
           {wc.map((m, i) => {
             const delta = m.deltaPct ?? 0
             const { arrow, color } = ArrowFor(delta, m.goodDirection)
@@ -41,9 +41,9 @@ export default function WeekChange({ data }: Props) {
             return (
               <motion.div key={m.label}
                 initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-                style={{ display: 'flex', flexDirection: 'column', gap: '2px', textAlign: 'center', padding: '8px 4px', background: 'rgba(255,255,255,0.02)', borderRadius: '3px' }}
+                style={{ minHeight: '82px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '3px', textAlign: 'center', padding: '10px 4px', background: 'rgba(255,255,255,0.035)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '5px' }}
               >
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{m.label}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{m.label}</div>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--color-white)', lineHeight: 1, marginTop: '4px' }}>{main}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color, fontWeight: 600, marginTop: '4px' }}>
                   {arrow} {m.deltaPct !== null ? `${Math.abs(m.deltaPct).toFixed(0)}%` : '—'}
@@ -52,7 +52,7 @@ export default function WeekChange({ data }: Props) {
             )
           })}
         </div>
-        <div style={{ marginTop: '12px', padding: '8px 10px', borderTop: '1px dashed #1c1c1c', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>
+        <div style={{ marginTop: '12px', padding: '10px 10px 0', borderTop: '1px dashed rgba(255,255,255,0.08)', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>
           <span style={{ color: 'var(--color-mid)', fontWeight: 600, letterSpacing: '0.08em' }}>READ</span> · {(() => {
             const stepsDelta = wc[0].deltaPct ?? 0
             const rhrDelta = wc[3].deltaPct ?? 0

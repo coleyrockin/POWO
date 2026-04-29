@@ -66,7 +66,7 @@ export default function CardiacMetrics({ data }: Props) {
   return (
     <section id="cardiac">
       <SectionHeader label="Cardiac Metrics" meta="91-day baseline · 14-day trend" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map((v, i) => {
           const dirArrow = v.delta === null ? '' : v.delta > 0 ? '↑' : v.delta < 0 ? '↓' : '·'
           const deltaStr = v.delta !== null ? `${dirArrow} ${Math.abs(v.delta).toFixed(v.decimals)}` : '—'
@@ -74,7 +74,7 @@ export default function CardiacMetrics({ data }: Props) {
             <motion.div key={v.label}
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
               className="powo-lift"
-              style={{ background: 'var(--color-card)', padding: '14px 12px' }}
+              style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '154px', height: '100%', display: 'flex', flexDirection: 'column' }}
             >
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-white)', marginBottom: '6px' }}>{v.label}</div>
               <div className={

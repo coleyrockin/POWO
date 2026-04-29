@@ -20,7 +20,7 @@ export default function PushupLog({ pushups }: Props) {
   return (
     <section id="pushups">
       <SectionHeader label="Pushup Log" meta={`${total} reps · ${weeks.length} weeks`} />
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {weeks.map((w, i) => {
             const isBest = w.total === max
@@ -28,7 +28,7 @@ export default function PushupLog({ pushups }: Props) {
             return (
               <motion.div key={w.week}
                 initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-                style={{ position: 'relative', padding: '12px 12px', border: isBest ? '1px solid #5a4218' : '1px solid var(--color-border)', borderRadius: '4px', background: isBest ? 'linear-gradient(180deg, #1f1605 0%, #120c02 100%)' : 'rgba(255,255,255,0.02)', boxShadow: isBest ? 'inset 0 1px 0 rgba(255,170,34,0.18), 0 0 24px rgba(255,170,34,0.08)' : 'none' }}
+                style={{ position: 'relative', padding: '14px 14px', border: isBest ? '1px solid rgba(255,170,34,0.42)' : '1px solid var(--color-border)', borderRadius: '6px', background: isBest ? 'linear-gradient(180deg, #1f1605 0%, #120c02 100%)' : 'rgba(255,255,255,0.035)', boxShadow: isBest ? 'inset 0 1px 0 rgba(255,170,34,0.18), 0 0 24px rgba(255,170,34,0.08)' : 'inset 0 1px 0 rgba(255,255,255,0.035)' }}
               >
                 {isBest && (
                   <span style={{ position: 'absolute', top: '10px', right: '12px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-black)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700 }}>PEAK</span>
@@ -43,7 +43,7 @@ export default function PushupLog({ pushups }: Props) {
                 {w.sessions.length > 0 && (
                   <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {w.sessions.map((s, j) => (
-                      <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', padding: '2px 6px', background: '#0a0a0a', border: '1px solid #161616', color: 'var(--color-white)', borderRadius: '2px' }}>
+                      <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', padding: '2px 6px', background: '#0a0a0a', border: '1px solid var(--color-border)', color: 'var(--color-white)', borderRadius: '2px' }}>
                         <span style={{ color: 'var(--color-mid)' }}>{new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                         <span style={{ color: 'var(--color-mid)' }}> · </span>
                         {s.reps}

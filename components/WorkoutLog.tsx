@@ -53,7 +53,7 @@ export default function WorkoutLog({ workouts, workoutSummary }: Props) {
       <SectionHeader label="Workout Library" meta={`${totalSessions} sessions · ${Math.round(totalCal).toLocaleString()} kcal`} />
 
       {/* Activity breakdown */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '12px' }}>By Activity Type</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {workoutSummary.map((w, i) => {
@@ -87,7 +87,7 @@ export default function WorkoutLog({ workouts, workoutSummary }: Props) {
 
       {/* Top single sessions */}
       <SectionHeader label="Top Sessions" meta="all 91 days" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {top.map((w, i) => {
           const highlight = w.calories >= 500
           const isBest = i === 0
@@ -101,7 +101,9 @@ export default function WorkoutLog({ workouts, workoutSummary }: Props) {
               initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.35, delay: (i % 6) * 0.04 }}
               className="powo-lift"
               style={{
-                padding: '14px 12px',
+                padding: '16px 14px',
+                minHeight: '158px',
+                height: '100%',
                 display: 'flex', flexDirection: 'column', gap: '8px',
                 background: highlight ? `linear-gradient(180deg, color-mix(in srgb, ${color} 14%, #0a0a0a), color-mix(in srgb, ${color} 6%, #0a0a0a))` : 'var(--color-card)',
                 position: 'relative',

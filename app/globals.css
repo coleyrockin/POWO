@@ -3,10 +3,12 @@
 @theme {
   --color-black:  #080808;
   --color-white:  #f0ede6;
-  --color-card:   #111111;
-  --color-border: #1c1c1c;
-  --color-mid:    #c0c0c0;
-  --color-dim:    #2a2a2a;
+  --color-card:   #111113;
+  --color-panel:  #0d0d0f;
+  --color-raised: #18181b;
+  --color-border: #242428;
+  --color-mid:    #b9b9bd;
+  --color-dim:    #37373d;
   --color-red:    #ff4444;
   --color-blue:   #4488ff;
   --color-amber:  #ffaa22;
@@ -27,6 +29,14 @@
   --font-sans:    'DM Sans', sans-serif;
 }
 
+:root {
+  --radius-card: 6px;
+  --shadow-card:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 12px 34px rgba(0, 0, 0, 0.28);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -39,7 +49,9 @@ html {
 }
 
 body {
-  background: var(--color-black);
+  background:
+    linear-gradient(90deg, #050505 0%, #080808 20%, #0b0b0c 50%, #080808 80%, #050505 100%),
+    var(--color-black);
   color: var(--color-white);
   font-family: var(--font-sans);
   overflow-x: hidden;
@@ -74,14 +86,14 @@ a {
   text-decoration: none;
 }
 
-/* Ambient backdrop — soft blue spotlight from top, faint warm pool at bottom */
+/* Ambient backdrop — editorial center column glow, kept subtle behind the phone shell */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 90% 55% at 50% -5%, rgba(10, 132, 255, 0.09), transparent 60%),
-    radial-gradient(ellipse 50% 35% at 50% 105%, rgba(255, 170, 34, 0.04), transparent 60%);
+    linear-gradient(90deg, transparent 0%, rgba(10, 132, 255, 0.06) 44%, rgba(255, 170, 34, 0.035) 50%, rgba(10, 132, 255, 0.06) 56%, transparent 100%),
+    linear-gradient(180deg, rgba(10, 132, 255, 0.08) 0%, transparent 34%, rgba(255, 255, 255, 0.018) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -100,6 +112,42 @@ body::after {
 /* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── App shell ── */
+.powo-shell {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(180deg, rgba(16, 16, 18, 0.94), rgba(8, 8, 8, 0.98) 42%, #080808 100%);
+  border-inline: 1px solid rgba(255, 255, 255, 0.055);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.65),
+    0 28px 90px rgba(0, 0, 0, 0.55);
+}
+
+.powo-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.035), transparent 18%, transparent 82%, rgba(255,255,255,0.025)),
+    linear-gradient(180deg, rgba(10,132,255,0.055), transparent 260px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.powo-panel {
+  background:
+    linear-gradient(180deg, rgba(24, 24, 27, 0.78), rgba(12, 12, 14, 0.96));
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+}
 
 /* ── Section rhythm ── */
 section {
@@ -120,11 +168,11 @@ tbody tr:hover {
 
 /* ── Card depth — gradient surface + inset highlight + outer shadow ── */
 .powo-lift {
-  background: linear-gradient(180deg, #181818 0%, #0d0d0d 100%) !important;
+  background: linear-gradient(180deg, #18181b 0%, #0f0f11 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
     inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 1px 2px rgba(0, 0, 0, 0.4);
+    0 1px 2px rgba(0, 0, 0, 0.44);
   transition:
     transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 220ms ease,
@@ -134,7 +182,7 @@ tbody tr:hover {
 }
 .powo-lift:hover {
   transform: translateY(-2px);
-  background: linear-gradient(180deg, #1d1d1d 0%, #101010 100%) !important;
+  background: linear-gradient(180deg, #202026 0%, #111114 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     inset 0 -1px 0 rgba(0, 0, 0, 0.5),

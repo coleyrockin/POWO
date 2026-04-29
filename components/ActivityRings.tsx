@@ -27,7 +27,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
   return (
     <section>
       <SectionHeader label="14-Day Burn" meta={`${Math.round(totalCal).toLocaleString()} kcal`} />
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '20px 12px 18px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '20px 14px 18px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(14, 1fr)', gap: '3px', alignItems: 'flex-end' }}>
           {last14.map((d, i) => {
             const cal = d.active_kcal ?? 0

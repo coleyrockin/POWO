@@ -34,8 +34,8 @@ export default function CountUp({
     if (!inView) return
     const reduced = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
     if (reduced) {
-      setDisplay(value)
-      return
+      const frame = requestAnimationFrame(() => setDisplay(value))
+      return () => cancelAnimationFrame(frame)
     }
     const start = performance.now()
     let frame = 0

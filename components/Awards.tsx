@@ -34,13 +34,13 @@ export default function Awards({ data }: Props) {
   return (
     <section id="awards">
       <SectionHeader label="Achievements" meta="91-day highlights" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {AWARDS.map((a, i) => (
           <motion.div
             key={a.title}
             initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
             className="powo-lift"
-            style={{ background: 'var(--color-card)', padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}
+            style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '168px', height: '100%', display: 'flex', flexDirection: 'column', gap: '9px' }}
           >
             <span style={{ color: a.color, lineHeight: 0 }}><a.Icon size={20} /></span>
             <span className={

@@ -19,11 +19,11 @@ import Footer from '@/components/Footer'
 export default function Page() {
   const d = healthData
   return (
-    <main style={{ maxWidth: '430px', margin: '0 auto', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <main className="powo-shell">
       <ScrollProgress />
       <Hero data={d} />
       <SectionNav />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', padding: '0 0 28px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', padding: '0 14px 30px' }}>
         <ActivityRings daily={d.daily} workouts={d.workouts} />
         <WeeklySummary data={d} />
         <WeekChange data={d} />

@@ -54,7 +54,7 @@ export default function WorkoutRecommendation({ data }: Props) {
           <motion.div key={day.day}
             initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
             className="powo-lift"
-            style={{ background: 'var(--color-card)', padding: '14px 14px' }}
+            style={{ background: 'var(--color-card)', padding: '16px 14px' }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
               <div>
@@ -87,7 +87,7 @@ export default function WorkoutRecommendation({ data }: Props) {
               })}
             </div>
 
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5, paddingTop: '8px', borderTop: '1px dashed #1c1c1c' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5, paddingTop: '8px', borderTop: '1px dashed rgba(255,255,255,0.08)' }}>
               <span style={{ color: 'var(--accent-teal)', opacity: 0.8 }}>WHY</span> · {day.rationale}
             </div>
             {day.cites && day.cites.length > 0 && (
@@ -102,7 +102,7 @@ export default function WorkoutRecommendation({ data }: Props) {
       </div>
 
       {/* Guardrails */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-coral)', textTransform: 'uppercase', marginBottom: '8px' }}>Guardrails</div>
         <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {rec.guardrails.map(g => (

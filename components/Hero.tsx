@@ -28,17 +28,27 @@ export default function Hero({ data }: Props) {
   ]
 
   return (
-    <header style={{ position: 'relative', overflow: 'hidden', borderBottom: '1px solid var(--color-border)', padding: '52px 24px 36px' }}>
-      <div aria-hidden style={{ position: 'absolute', top: '-80px', left: '-60px', width: '320px', height: '320px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(36,139,245,0.18), transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
-      <div aria-hidden style={{ position: 'absolute', bottom: '-60px', right: '-40px', width: '260px', height: '260px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,170,34,0.10), transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
-      <div aria-hidden style={{ position: 'absolute', top: '40%', right: '20%', width: '180px', height: '180px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(179,102,255,0.08), transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
-
+    <header style={{
+      position: 'relative',
+      overflow: 'hidden',
+      borderBottom: '1px solid var(--color-border)',
+      padding: '46px 24px 36px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      background:
+        'linear-gradient(180deg, rgba(10,132,255,0.09) 0%, rgba(8,8,8,0) 42%), linear-gradient(90deg, rgba(10,132,255,0.08), transparent 32%, transparent 68%, rgba(255,170,34,0.055))',
+    }}>
       <div
         style={{
-          position: 'absolute', right: '-16px', top: '-8px',
+          position: 'absolute', left: '50%', top: '10px',
+          transform: 'translateX(-50%)',
           fontFamily: 'var(--font-display)', lineHeight: 1, userSelect: 'none', pointerEvents: 'none',
-          fontSize: 'clamp(96px, 30vw, 220px)',
-          WebkitTextStroke: '1px #1a1a1a', color: 'transparent', letterSpacing: '-4px',
+          fontSize: 'clamp(110px, 31vw, 162px)',
+          WebkitTextStroke: '1px rgba(240,237,230,0.055)', color: 'transparent', letterSpacing: '1px',
+          opacity: 0.95,
+          whiteSpace: 'nowrap',
+          zIndex: 0,
         }}
         aria-hidden
       >
@@ -50,7 +60,7 @@ export default function Hero({ data }: Props) {
         background: 'linear-gradient(180deg, #3ddb6a 0%, #2bb04c 100%)', color: 'var(--color-black)',
         fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600,
         letterSpacing: '0.14em', textTransform: 'uppercase',
-        padding: '5px 12px', marginBottom: '20px', borderRadius: '2px', position: 'relative',
+        padding: '5px 12px', marginBottom: '18px', borderRadius: '4px', position: 'relative', zIndex: 1,
       }}>
         <span aria-hidden style={{ position: 'relative', width: '7px', height: '7px', display: 'inline-block' }}>
           <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--color-black)', animation: 'powo-pulse 2s ease-out infinite' }} />
@@ -59,47 +69,78 @@ export default function Hero({ data }: Props) {
         Apple Health · 91-Day Snapshot
       </motion.div>
 
-      <motion.h1 {...fadeUp(0.1)} style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', fontSize: 'clamp(56px, 18vw, 120px)', marginBottom: '6px' }}>
+      <motion.h1 {...fadeUp(0.1)} style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', fontSize: 'clamp(72px, 22vw, 106px)', marginBottom: '6px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
         <span className="powo-glow-blue" style={{ color: 'var(--accent-blue)' }}>PO</span><span className="powo-glow-white" style={{ color: 'var(--color-white)' }}>WO</span>
       </motion.h1>
 
-      <motion.div {...fadeUp(0.15)} style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-white)', letterSpacing: '0.04em', marginTop: '16px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
-        <span>{data.meta.owner.toUpperCase()}</span>
-        <span style={{ color: 'var(--color-dim)' }}>·</span>
-        <span style={{ color: 'var(--color-mid)' }}>{fmtShort(data.meta.period.start)} – {fmtShort(data.meta.period.end)}, 2026</span>
-        <span style={{ color: 'var(--color-dim)' }}>·</span>
-        <span style={{ display: 'inline-block', border: '1px solid var(--accent-blue)', color: 'var(--accent-blue)', padding: '2px 7px', letterSpacing: '0.12em', fontSize: '11px', fontWeight: 600 }}>
+      <motion.div {...fadeUp(0.15)} style={{
+        fontFamily: 'var(--font-mono)',
+        fontSize: '10px',
+        color: 'var(--color-white)',
+        letterSpacing: '0.09em',
+        marginTop: '18px',
+        display: 'inline-flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '0',
+        lineHeight: 1,
+        position: 'relative',
+        zIndex: 1,
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: '6px',
+        background: 'rgba(8,8,9,0.42)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.035)',
+        overflow: 'hidden',
+      }}>
+        <span style={{ padding: '8px 10px', color: 'var(--color-white)', fontWeight: 600 }}>{data.meta.owner.toUpperCase()}</span>
+        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.07)' }} />
+        <span style={{ padding: '8px 10px', color: 'var(--color-mid)', whiteSpace: 'nowrap' }}>{fmtShort(data.meta.period.start)} – {fmtShort(data.meta.period.end)}, 2026</span>
+        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.07)' }} />
+        <span style={{ display: 'inline-block', color: 'var(--accent-blue)', padding: '8px 10px', letterSpacing: '0.12em', fontSize: '10px', fontWeight: 700, background: 'rgba(10,132,255,0.09)' }}>
           {data.meta.period.days} DAYS
         </span>
       </motion.div>
 
       {/* Profile strip */}
-      <motion.div {...fadeUp(0.2)} style={{ marginTop: '20px', padding: '12px 14px', border: '1px solid var(--color-border)', background: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px 16px' }}>
-          <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '3px' }}>Goal</div>
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500, color: 'var(--color-white)' }}>{data.profile.primary_goal}</div>
+      <motion.div {...fadeUp(0.2)} style={{
+        width: '100%',
+        marginTop: '18px',
+        padding: '0',
+        border: '1px solid var(--color-border)',
+        background: 'linear-gradient(180deg, rgba(24,24,27,0.72), rgba(13,13,15,0.94))',
+        borderRadius: '6px',
+        boxShadow: 'var(--shadow-card)',
+        position: 'relative',
+        zIndex: 1,
+        overflow: 'hidden',
+      }}>
+        <div aria-hidden style={{ height: '2px', background: 'linear-gradient(90deg, var(--accent-blue), rgba(0,212,170,0.42), rgba(255,170,34,0.18))' }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
+          <div style={{ minHeight: '66px', padding: '13px 14px 12px', borderRight: '1px solid rgba(255,255,255,0.055)', borderBottom: '1px solid rgba(255,255,255,0.055)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--accent-blue)', textTransform: 'uppercase', marginBottom: '6px' }}>Goal</div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.primary_goal}</div>
           </div>
-          <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '3px' }}>Weight</div>
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500, color: 'var(--color-white)' }}>{data.profile.weight_lbs} lb · {data.profile.weight_kg} kg</div>
+          <div style={{ minHeight: '66px', padding: '13px 14px 12px', borderBottom: '1px solid rgba(255,255,255,0.055)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Weight</div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.weight_lbs} lb <span style={{ color: 'var(--color-dim)', fontWeight: 500 }}>·</span> {data.profile.weight_kg} kg</div>
           </div>
-          <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '3px' }}>Focus</div>
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500, color: 'var(--color-white)' }}>{data.profile.training_focus}</div>
+          <div style={{ minHeight: '76px', padding: '13px 14px 12px', borderRight: '1px solid rgba(255,255,255,0.055)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Focus</div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.training_focus}</div>
           </div>
-          <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '3px' }}>Lifestyle</div>
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500, color: 'var(--color-white)' }}>{data.profile.active_lifestyle.join(' · ')}</div>
+          <div style={{ minHeight: '76px', padding: '13px 14px 12px' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Lifestyle</div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.active_lifestyle.join(' · ')}</div>
           </div>
         </div>
       </motion.div>
 
       {/* KPI grid */}
-      <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--color-border)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px 0' }}>
+      <div style={{ width: '100%', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--color-border)', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderRadius: '6px', overflow: 'hidden' }}>
           {kpis.map((k, i) => (
-            <motion.div key={k.label} {...fadeUp(0.22 + i * 0.05)} style={{ display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'center' }}>
+            <motion.div key={k.label} {...fadeUp(0.22 + i * 0.05)} style={{ minHeight: '80px', padding: '14px 4px 12px', background: 'linear-gradient(180deg, rgba(24,24,27,0.7), rgba(13,13,15,0.96))', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', textAlign: 'center' }}>
               <span className={
                 k.color === 'var(--accent-blue)'   ? 'powo-glow-blue'   :
                 k.color === 'var(--accent-green)'  ? 'powo-glow-green'  :
@@ -107,8 +148,8 @@ export default function Hero({ data }: Props) {
                 k.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
                 k.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
                 k.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
-              } style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: k.color }}>{k.node}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-white)' }}>{k.label}</span>
+              } style={{ fontFamily: 'var(--font-display)', fontSize: '31px', lineHeight: 1, color: k.color }}>{k.node}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)' }}>{k.label}</span>
             </motion.div>
           ))}
         </div>
@@ -116,10 +157,12 @@ export default function Hero({ data }: Props) {
 
       {/* Headline insight */}
       <motion.div {...fadeUp(0.55)} style={{
-        marginTop: '24px', padding: '14px 14px 12px',
+        width: '100%', marginTop: '24px', padding: '15px 15px 14px',
         border: '1px solid #1f2a24', background: 'linear-gradient(180deg, #0f1815 0%, #080f0d 100%)',
         boxShadow: 'inset 0 1px 0 rgba(0,212,170,0.10), 0 0 24px rgba(0,212,170,0.06)',
-        borderRadius: '4px',
+        borderRadius: '6px',
+        position: 'relative',
+        zIndex: 1,
       }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: 'var(--accent-teal)', textTransform: 'uppercase', marginBottom: '6px' }}>Headline</div>
         <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.55, color: 'var(--color-white)' }}>

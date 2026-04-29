@@ -142,8 +142,8 @@ export default function VO2Chart({ trend }: Props) {
               const y = py(g)
               return (
                 <g key={g}>
-                  <line x1={PAD_L} x2={W - PAD_R} y1={y} y2={y} stroke="#1a1a1a" strokeWidth="1" strokeDasharray="2 5" />
-                  <text x={PAD_L - 6} y={y + 3} textAnchor="end" fill="#555" fontFamily="DM Mono, monospace" fontSize="9">{g}</text>
+                  <line x1={PAD_L} x2={W - PAD_R} y1={y} y2={y} stroke="rgba(255,255,255,0.09)" strokeWidth="1" strokeDasharray="2 5" />
+                  <text x={PAD_L - 6} y={y + 3} textAnchor="end" fill="#8b8b92" fontFamily="DM Mono, monospace" fontSize="9.5">{g}</text>
                 </g>
               )
             })}
@@ -152,7 +152,7 @@ export default function VO2Chart({ trend }: Props) {
             <line x1={peakCoord.x} x2={peakCoord.x} y1={PAD_T - 6} y2={BASE_Y} stroke="var(--accent-amber)" strokeWidth="1" strokeDasharray="2 4" opacity="0.35" />
 
             {/* Baseline */}
-            <line x1={PAD_L} x2={W - PAD_R} y1={BASE_Y} y2={BASE_Y} stroke="#1c1c1c" strokeWidth="1" />
+            <line x1={PAD_L} x2={W - PAD_R} y1={BASE_Y} y2={BASE_Y} stroke="rgba(255,255,255,0.09)" strokeWidth="1" />
 
             {/* Pre-peak: rise (teal) */}
             <path d={smoothArea(preCoords)} fill="url(#vo2FillRise)" />
@@ -193,12 +193,12 @@ export default function VO2Chart({ trend }: Props) {
 
             {/* Month labels anchored to first reading of each month */}
             {monthAnchors.map((m, i) => (
-              <text key={`m${i}`} x={m.x} y={H - 8} textAnchor="middle" fill="#666" fontFamily="DM Mono, monospace" fontSize="9.5" letterSpacing="1">{m.label}</text>
+              <text key={`m${i}`} x={m.x} y={H - 8} textAnchor="middle" fill="#8b8b92" fontFamily="DM Mono, monospace" fontSize="9.5" letterSpacing="1">{m.label}</text>
             ))}
           </svg>
         </div>
 
-        <div style={{ marginTop: '14px', padding: '10px 12px', border: '1px solid var(--color-border)', background: 'rgba(255,255,255,0.02)', borderRadius: '4px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+        <div style={{ marginTop: '14px', padding: '12px 12px', border: '1px solid var(--color-border)', background: 'rgba(255,255,255,0.035)', borderRadius: '6px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
           <div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--accent-amber)', textTransform: 'uppercase' }}>First → Peak</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--accent-amber)' }}>+{(((peak.value - first.value) / first.value) * 100).toFixed(1)}%</div>
@@ -209,7 +209,7 @@ export default function VO2Chart({ trend }: Props) {
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: fromPeak < 0 ? 'var(--accent-coral)' : 'var(--accent-green)' }}>{fromPeak.toFixed(1)}%</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>19-day decline · rest signal</div>
           </div>
-          <div style={{ gridColumn: '1 / -1', borderTop: '1px dashed #1c1c1c', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ gridColumn: '1 / -1', borderTop: '1px dashed rgba(255,255,255,0.08)', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', letterSpacing: '0.12em' }}>FIRST → TODAY</span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: sinceFirst >= 0 ? 'var(--accent-green)' : 'var(--accent-coral)', fontWeight: 600 }}>{sinceFirst >= 0 ? '+' : ''}{sinceFirst.toFixed(1)}%</span>
           </div>

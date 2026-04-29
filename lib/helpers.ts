@@ -420,9 +420,8 @@ export interface WorkoutRecommendation {
 }
 
 export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendation {
-  // Recovery-led 7-day cycle starting after rest period
-  const today = new Date()
-  const start = new Date(today)
+  // Recovery-led 7-day cycle anchored to the dataset, not render time.
+  const start = new Date(`${data.meta.period.end}T00:00:00`)
   start.setDate(start.getDate() + 1)
   const end = new Date(start)
   end.setDate(end.getDate() + 6)

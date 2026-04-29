@@ -40,13 +40,13 @@ export default function WeeklySummary({ data }: Props) {
   return (
     <section id="period">
       <SectionHeader label="Period Summary" meta="91 days · Q1 2026" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map((t, i) => (
           <motion.div
             key={t.label}
             initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.03 }}
             className="powo-lift"
-            style={{ background: 'var(--color-card)', padding: '14px 12px' }}
+            style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '126px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
           >
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-white)', marginBottom: '6px' }}>{t.label}</div>
             <div className={
@@ -64,9 +64,9 @@ export default function WeeklySummary({ data }: Props) {
       </div>
 
       {/* Monthly breakdown */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-blue-dim)', textTransform: 'uppercase', marginBottom: '10px' }}>Monthly Breakdown</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '52px 1fr 1fr 1fr 1fr', gap: '8px 10px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '48px 1fr 1fr 1fr 1fr', gap: '10px 8px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px', lineHeight: 1.45 }}>
           <div style={{ color: 'var(--color-mid)', fontSize: '10px', letterSpacing: '0.12em' }}>MO</div>
           <div style={{ color: 'var(--color-mid)', fontSize: '10px', letterSpacing: '0.12em' }}>STEPS</div>
           <div style={{ color: 'var(--color-mid)', fontSize: '10px', letterSpacing: '0.12em' }}>KCAL</div>
@@ -88,7 +88,7 @@ export default function WeeklySummary({ data }: Props) {
       </div>
 
       {/* Weekly aggregates */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-blue-dim)', textTransform: 'uppercase', marginBottom: '10px' }}>Weekly Heatmap · Active kcal</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           {weekly.map((w, i) => {

@@ -36,14 +36,14 @@ export default function SleepAnalysis({ sleep }: Props) {
       </div>
 
       {/* Summary stat strip */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {[
           { label: 'Avg Total',  val: s.avg_total_hours.toFixed(2),  unit: 'hrs',  color: 'var(--accent-blue)'   },
           { label: 'Avg Deep',   val: s.avg_deep_pct.toFixed(1) + '%', unit: 'of TST', color: 'var(--accent-coral)' },
           { label: 'Avg REM',    val: s.avg_rem_pct.toFixed(1) + '%',  unit: 'of TST', color: 'var(--accent-amber)' },
           { label: 'Stdev',      val: '±' + s.stdev_hours.toFixed(2), unit: 'consistency', color: 'var(--accent-purple)' },
         ].map(t => (
-          <div key={t.label} className="powo-lift" style={{ background: 'var(--color-card)', padding: '12px 10px', textAlign: 'center' }}>
+          <div key={t.label} className="powo-lift" style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '92px', height: '100%', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>{t.label}</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '22px', color: t.color, lineHeight: 1 }}>{t.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', marginTop: '3px' }}>{t.unit}</div>
@@ -52,7 +52,7 @@ export default function SleepAnalysis({ sleep }: Props) {
       </div>
 
       {/* Per-night stage bars */}
-      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '14px 14px' }}>
+      <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>Stage Composition · Mar 31 → Apr 15</div>
         <div style={{ display: 'flex', gap: '12px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginBottom: '10px' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-coral)', borderRadius: '2px' }} /> Deep</span>

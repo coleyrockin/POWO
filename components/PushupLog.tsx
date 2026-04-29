@@ -37,7 +37,7 @@ export default function PushupLog({ pushups }: Props) {
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{fmtRange(w.week)}</span>
                   <span className={isBest ? 'powo-glow-amber' : ''} style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: isBest ? 'var(--accent-amber)' : 'var(--color-white)' }}>{w.total}<span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-mid)', marginLeft: '6px', textShadow: 'none' }}>reps</span></span>
                 </div>
-                <div style={{ height: '7px', borderRadius: '3px', background: '#0a0a0a', overflow: 'visible', position: 'relative', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                <div style={{ height: '7px', borderRadius: '3px', background: '#0a0a0a', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
                   <motion.div
                     className="powo-comet"
                     initial={{ width: 0 }}

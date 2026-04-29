@@ -24,6 +24,9 @@ export default function WeekChange({ data }: Props) {
   const end = last7[last7.length - 1]?.date
   const fmt = (iso: string) => new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 
+  const METRIC_COLORS = ['var(--accent-green)', 'var(--accent-amber)', 'var(--accent-blue)', 'var(--accent-coral)', 'var(--accent-teal)']
+  const GLOW_CLASSES = ['powo-glow-green', 'powo-glow-amber', 'powo-glow-blue', 'powo-glow-coral', 'powo-glow-teal']
+
   return (
     <section id="week-change">
       <SectionHeader label="Week-Over-Week" meta={`${fmt(start)} – ${fmt(end)} vs prior 7d`} />
@@ -32,6 +35,8 @@ export default function WeekChange({ data }: Props) {
           {wc.map((m, i) => {
             const delta = m.deltaPct ?? 0
             const { arrow, color } = ArrowFor(delta, m.goodDirection)
+            const accentColor = METRIC_COLORS[i]
+            const glowClass = GLOW_CLASSES[i]
             const main = m.current !== null
               ? (m.label === 'Steps' ? Math.round(m.current).toLocaleString()
                 : m.label === 'Active kcal' ? Math.round(m.current).toLocaleString()
@@ -39,13 +44,26 @@ export default function WeekChange({ data }: Props) {
                 : m.current.toFixed(1))
               : '—'
             return (
-              <motion.div key={m.label}
+              <motion.div
+                key={m.label}
                 initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-                style={{ minHeight: '82px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '3px', textAlign: 'center', padding: '10px 4px', background: 'rgba(255,255,255,0.035)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '5px' }}
+                className="powo-trophy"
+                style={{
+                  ['--trophy-color' as string]: accentColor,
+                  minHeight: '88px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  gap: '3px',
+                  textAlign: 'center',
+                  padding: '10px 4px',
+                  borderRadius: '6px',
+                  isolation: 'isolate',
+                }}
               >
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{m.label}</div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--color-white)', lineHeight: 1, marginTop: '4px' }}>{main}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color, fontWeight: 600, marginTop: '4px' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)', textTransform: 'uppercase', position: 'relative', zIndex: 2 }}>{m.label}</div>
+                <div className={glowClass} style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: accentColor, lineHeight: 1, marginTop: '4px', position: 'relative', zIndex: 2 }}>{main}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color, fontWeight: 600, marginTop: '4px', position: 'relative', zIndex: 2 }}>
                   {arrow} {m.deltaPct !== null ? `${Math.abs(m.deltaPct).toFixed(0)}%` : '—'}
                 </div>
               </motion.div>

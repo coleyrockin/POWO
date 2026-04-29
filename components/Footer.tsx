@@ -14,8 +14,8 @@ export default function Footer({ generated, period }: { generated: string; perio
       </div>
 
       <div style={{ marginTop: '28px', paddingTop: '22px', borderTop: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', letterSpacing: '4px', color: 'var(--color-white)', lineHeight: 1 }}>
-          <span style={{ color: 'var(--accent-blue)' }}>PO</span>WO
+        <div className="powo-wordmark" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', letterSpacing: '4px', lineHeight: 1 }}>
+          POWO
         </div>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span>Proof of Workout</span>

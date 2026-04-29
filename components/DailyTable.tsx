@@ -86,7 +86,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                   </td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-display)', fontSize: '15px', color: stepsLeader ? 'var(--accent-green)' : 'var(--color-white)' }}>{d.steps.toLocaleString()}</td>
                   <td style={{ padding: '11px 4px', minWidth: '40px' }}>
-                    <div style={{ height: '5px', borderRadius: '3px', background: '#0a0a0a', overflow: 'visible', position: 'relative', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                    <div style={{ height: '5px', borderRadius: '3px', background: '#0a0a0a', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
                       <div
                         className="powo-comet"
                         style={{

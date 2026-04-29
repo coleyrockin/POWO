@@ -160,7 +160,7 @@ export default function Hero({ data }: Props) {
       </motion.div>
 
       {/* KPI grid — stat trophies */}
-      <div style={{ width: '100%', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--color-border)', position: 'relative', zIndex: 1 }}>
+      <div style={{ width: '100%', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--color-border)', position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '6px' }}>
           {kpis.map((k, i) => (
             <motion.div

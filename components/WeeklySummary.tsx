@@ -103,7 +103,7 @@ export default function WeeklySummary({ data }: Props) {
                 style={{ display: 'grid', gridTemplateColumns: '92px 1fr 64px', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px' }}
               >
                 <span style={{ color: isBest || isWorst ? color : 'var(--color-mid)', fontWeight: isBest || isWorst ? 600 : 400 }}>{fmtRange(w.weekStart, w.weekEnd)}</span>
-                <div style={{ height: '7px', borderRadius: '3px', background: '#0a0a0a', overflow: 'visible', position: 'relative', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                <div style={{ height: '7px', borderRadius: '3px', background: '#0a0a0a', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
                   <motion.div
                     className="powo-comet"
                     initial={{ width: 0 }}

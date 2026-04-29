@@ -74,7 +74,7 @@ export default function WorkoutLog({ workouts, workoutSummary }: Props) {
                       <span style={{ color }}>{w.sessions}</span> sessions · {hours}h
                     </span>
                   </div>
-                  <div style={{ height: '6px', borderRadius: '3px', background: 'linear-gradient(180deg, #1a1a1d, #242429)', overflow: 'visible', position: 'relative', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                  <div style={{ height: '6px', borderRadius: '3px', background: 'linear-gradient(180deg, #1a1a1d, #242429)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
                     <motion.div
                       className="powo-comet"
                       initial={{ width: 0 }}

@@ -34,15 +34,25 @@ export default function Awards({ data }: Props) {
   return (
     <section id="awards">
       <SectionHeader label="Achievements" meta="91-day highlights" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '8px', padding: '10px', background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {AWARDS.map((a, i) => (
           <motion.div
             key={a.title}
             initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-            className="powo-lift"
-            style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '168px', height: '100%', display: 'flex', flexDirection: 'column', gap: '9px' }}
+            className="powo-trophy"
+            style={{
+              ['--trophy-color' as string]: a.color,
+              padding: '15px 13px',
+              minHeight: '158px',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '9px',
+              borderRadius: '8px',
+              isolation: 'isolate',
+            }}
           >
-            <span style={{ color: a.color, lineHeight: 0 }}><a.Icon size={20} /></span>
+            <span style={{ color: a.color, lineHeight: 0, position: 'relative', zIndex: 2 }}><a.Icon size={20} /></span>
             <span className={
               a.color === 'var(--accent-blue)'   ? 'powo-glow-blue'   :
               a.color === 'var(--accent-green)'  ? 'powo-glow-green'  :
@@ -50,8 +60,8 @@ export default function Awards({ data }: Props) {
               a.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
               a.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
               a.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
-            } style={{ fontFamily: 'var(--font-display)', fontSize: '14px', letterSpacing: '0.5px', color: a.color, lineHeight: 1.15 }}>{a.title}</span>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--color-mid)', lineHeight: 1.55 }}>{a.desc}</span>
+            } style={{ fontFamily: 'var(--font-display)', fontSize: '14px', letterSpacing: '0.5px', color: a.color, lineHeight: 1.15, position: 'relative', zIndex: 2 }}>{a.title}</span>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--color-mid)', lineHeight: 1.55, position: 'relative', zIndex: 2 }}>{a.desc}</span>
           </motion.div>
         ))}
       </div>

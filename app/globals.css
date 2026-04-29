@@ -293,29 +293,16 @@ tbody tr:hover {
 
 /* ── Comet-tipped progress bar fill ── */
 .powo-comet {
-  position: relative;
   background:
     linear-gradient(90deg,
-      color-mix(in srgb, var(--bar-color) 50%, #0a0a0a) 0%,
-      var(--bar-color) 60%,
-      color-mix(in srgb, var(--bar-color) 100%, white 32%) 92%,
-      #ffffff 100%);
+      color-mix(in srgb, var(--bar-color) 40%, #0a0a0a) 0%,
+      var(--bar-color) 55%,
+      color-mix(in srgb, var(--bar-color) 100%, white 40%) 88%,
+      rgba(255, 255, 255, 0.92) 100%);
   box-shadow:
-    0 0 8px color-mix(in srgb, var(--bar-color) 60%, transparent),
-    0 0 18px color-mix(in srgb, var(--bar-color) 30%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-.powo-comet::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: -2px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  transform: translateY(-50%);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, color-mix(in srgb, var(--bar-color) 60%, transparent) 45%, transparent 75%);
-  pointer-events: none;
+    0 0 6px color-mix(in srgb, var(--bar-color) 55%, transparent),
+    0 0 14px color-mix(in srgb, var(--bar-color) 22%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 /* ── Apple Health badge glow ── */

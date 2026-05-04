@@ -385,7 +385,7 @@ const baseHealthData: HealthData = {
       { date: '2026-04-14', total_sleep_hours: 7.21, core_hours: 4.20, deep_hours: 0.90, rem_hours: 2.11, deep_pct: 12.5, rem_pct: 29.3 },
       { date: '2026-04-15', total_sleep_hours: 8.04, core_hours: 4.62, deep_hours: 0.55, rem_hours: 2.87, deep_pct: 6.8,  rem_pct: 35.7 },
     ],
-    coverage_note: 'Sleep stage data covers Mar 31 – Apr 15, 2026 only (14 nights). Apple HealthKit returned no sleep samples for late Jan – Mar 30 and Apr 16-27 in this query window; likely a sync gap.',
+    coverage_note: 'Sleep stage data covers Mar 31 – Apr 15, 2026 only (13 nights). Apple HealthKit returned no sleep samples for Feb 1 – Mar 30 and Apr 16 – May 2 in this query window; likely a sync gap.',
     summary: {
       nights_with_data: 13,
       avg_total_hours: 8.52,

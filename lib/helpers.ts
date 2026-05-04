@@ -426,6 +426,19 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
   const end = new Date(start)
   end.setDate(end.getDate() + 6)
   const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  const recovery = analyzeRecovery(data)
+  const sleep = analyzeSleep(data)
+  const vo2 = vo2Recent(data.vo2_max)
+  const golf = data.workout_summary.find(workout => workout.type === 'Golf')
+  const pickleball = data.workout_summary.find(workout => workout.type === 'Pickleball')
+  const golfSessions = data.workouts.filter(workout => workout.type === 'Golf')
+  const bestGolfSession = golfSessions.length > 0
+    ? golfSessions.reduce((best, workout) => (workout.calories > best.calories ? workout : best))
+    : null
+  const latestPushupWeek = data.pushups.weeks[data.pushups.weeks.length - 1]
+  const priorPushupWeek = data.pushups.weeks[data.pushups.weeks.length - 2]
+  const golfHours = golf ? (golf.total_duration_min / 60).toFixed(1) : null
+  const pickleballMinutes = pickleball ? Math.round(pickleball.total_duration_min).toLocaleString() : null
 
   const days: WorkoutDay[] = [
     {
@@ -435,7 +448,7 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
       duration_min: 50,
       shoulder_safe: true,
       rationale: 'Re-set autonomic balance. Move blood, no metabolic stress.',
-      cites: ['VO₂ −5.9% off Apr 8 peak', `RHR +${(analyzeRecovery(data).rhrDelta ?? 0).toFixed(1)} bpm above baseline`],
+      cites: [`VO₂ ${recovery.vo2DeltaPct.toFixed(1)}% off ${fmt(new Date(`${vo2.peak.date}T00:00:00`))} peak`, `RHR +${(recovery.rhrDelta ?? 0).toFixed(1)} bpm above baseline`],
       blocks: [
         { name: 'Walk — outdoor', detail: '40 min · Z1 · sun on skin first 20 min', intensity: 'low' },
         { name: 'Mobility flow', detail: 'Shoulder CARs · thoracic openers · 90/90 hip · couch stretch', intensity: 'low' },
@@ -464,7 +477,7 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
       duration_min: 75,
       shoulder_safe: true,
       rationale: 'Pickleball is your highest-frequency court activity. Train it, but cap intensity to spare shoulder.',
-      cites: ['24 pickleball sessions logged this period (1,004 min)', 'Honors: left shoulder — drilling only, no slams'],
+      cites: pickleball ? [`${pickleball.sessions} pickleball sessions logged this period (${pickleballMinutes} min)`, 'Honors: left shoulder — drilling only, no slams'] : ['Honors: left shoulder — drilling only, no slams'],
       blocks: [
         { name: 'Pickleball (drilling)', detail: '45 min · dink rallies · third-shot drops · no slams', intensity: 'mod' },
         { name: 'Walk cooldown',         detail: '20 min · Z1 · breathe nasal-only', intensity: 'low' },
@@ -478,7 +491,7 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
       duration_min: 50,
       shoulder_safe: true,
       rationale: 'Build pulling strength to balance posture. Avoid loaded internal rotation entirely.',
-      cites: ['Honors: left shoulder internal rotation pain — no overhead pressing', 'Pushup volume reduced this week (100 vs 190 prior)'],
+      cites: latestPushupWeek && priorPushupWeek ? ['Honors: left shoulder internal rotation pain — no overhead pressing', `Pushup volume reduced this week (${latestPushupWeek.total} vs ${priorPushupWeek.total} prior)`] : ['Honors: left shoulder internal rotation pain — no overhead pressing'],
       blocks: [
         { name: 'Bent-over row',     sets: '4 × 8',  detail: '44 lb barbell · pull to lower ribs · pause 1 sec', intensity: 'mod' },
         { name: 'Floor press',       sets: '3 × 8',  detail: 'Neutral grip · floor protects shoulder ROM', intensity: 'mod' },
@@ -494,7 +507,7 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
       duration_min: 60,
       shoulder_safe: true,
       rationale: 'Parasympathetic day. Drives HRV up before weekend output.',
-      cites: [`Deep sleep ${analyzeSleep(data).avgDeepPct.toFixed(1)}% — below 13% target`, 'Sleep stdev ±1.01h — consistency erratic'],
+      cites: [`Deep sleep ${sleep.avgDeepPct.toFixed(1)}% — below 13% target`, `Sleep stdev ±${sleep.variability.toFixed(2)}h — consistency ${sleep.consistency}`],
       blocks: [
         { name: 'Yoga flow',  detail: '30 min · slow pace · hold poses 5 breaths · hip + thoracic focus', intensity: 'low' },
         { name: 'Walk',       detail: '30 min · outdoor · phone-free', intensity: 'low' },
@@ -506,8 +519,8 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
       zone: 'Z2 · 100–130 bpm',
       duration_min: 180,
       shoulder_safe: true,
-      rationale: 'Golf has been your top calorie engine (8,617 kcal across 20 rounds). Walk the course.',
-      cites: ['20 rounds · 8,617 kcal · 22.6 hrs played', 'Highest single-day burn was a 1,330 kcal round (Apr 12)'],
+      rationale: golf ? `Golf has been your top calorie engine (${Math.round(golf.total_calories).toLocaleString()} kcal across ${golf.sessions} rounds). Walk the course.` : 'Golf has been your top calorie engine. Walk the course.',
+      cites: golf && bestGolfSession ? [`${golf.sessions} rounds · ${Math.round(golf.total_calories).toLocaleString()} kcal · ${golfHours} hrs played`, `Highest single-day burn was a ${Math.round(bestGolfSession.calories).toLocaleString()} kcal round (${fmt(new Date(`${bestGolfSession.date}T00:00:00`))})`] : [],
       blocks: [
         { name: 'Walking 18',     detail: '~10k steps · push cart > riding · keep effort steady', intensity: 'mod' },
         { name: 'Hydration',      detail: '24 oz water + electrolytes per 9', intensity: 'low' },
@@ -520,7 +533,7 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
       duration_min: 50,
       shoulder_safe: true,
       rationale: 'Re-introduce a power stimulus. Short, sharp, fully recovered between sets.',
-      cites: ['Re-test VO₂ next reading — looking for rebound from 36.08'],
+      cites: [`Re-test VO₂ next reading — looking for rebound from ${vo2.current.value.toFixed(2)}`],
       blocks: [
         { name: 'Front squat',         sets: '4 × 6',  detail: 'Slightly heavier than goblet · clean elbows', intensity: 'high' },
         { name: 'Single-leg RDL',      sets: '3 × 6/leg', detail: 'Balance challenge · light load', intensity: 'mod' },

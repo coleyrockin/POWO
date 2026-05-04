@@ -21,13 +21,14 @@ export default function SleepAnalysis({ sleep }: Props) {
   const s = sleep.summary
   const longest = nights.reduce((a, b) => (b.total_sleep_hours > a.total_sleep_hours ? b : a))
   const shortest = nights.reduce((a, b) => (b.total_sleep_hours < a.total_sleep_hours ? b : a))
+  const rangeLabel = `${fmtDate(nights[0].date)} → ${fmtDate(nights[nights.length - 1].date)}`
 
   // Per-night composition bars (proportional to total)
   const maxTotal = Math.max(...nights.map(n => n.total_sleep_hours))
 
   return (
     <section id="sleep">
-      <SectionHeader label="Sleep Analysis" meta={`${nights.length} nights · stages tracked`} />
+      <SectionHeader label="Sleep Analysis" meta={`${s.nights_with_data} nights · stages tracked`} />
 
       {/* Coverage note — moved to top so reader sees the gap before the data */}
       <div style={{ background: 'linear-gradient(180deg, #1a1505 0%, #0d0a02 100%)', border: '1px solid #5c4214', borderTop: 'none', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
@@ -53,7 +54,7 @@ export default function SleepAnalysis({ sleep }: Props) {
 
       {/* Per-night stage bars */}
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>Stage Composition · Mar 31 → Apr 15</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>Stage Composition · {rangeLabel}</div>
         <div style={{ display: 'flex', gap: '12px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginBottom: '10px' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-coral)', borderRadius: '2px' }} /> Deep</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-amber)', borderRadius: '2px' }} /> REM</span>

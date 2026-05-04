@@ -63,7 +63,7 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 
 **Mobile-first, capped at 430 px.** No breakpoints — the design intentionally lives on the phone.
 
-**Static data, real data.** `lib/data.ts` is a typed export of a real 91-day Apple Health snapshot. No API, no database, no client fetch. Fast by construction.
+**Static data, real data.** `lib/data.ts` composes a source-controlled base snapshot with the latest curated import patch from `lib/imported-health-export.ts` via `lib/normalize-health-export.ts`. No API, no database, no client-side data fetch.
 
 ## Features
 
@@ -85,11 +85,11 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 
 ## What This Demonstrates
 
-- **Component architecture without a framework.** 17 components, clear single responsibilities, all typed.
+- **Component architecture without a framework.** Small typed components with clear rendering responsibilities and shared data helpers.
 - **Data visualization from primitives.** Polylines, paths, gradients, `motion.path`, stacked rects — zero chart libraries.
 - **Design-system thinking.** CSS `@property` registered animations, six-color accent palette, typography stack (Bebas Neue / DM Sans / DM Mono), consistent spacing.
 - **Accessibility.** Semantic HTML, ARIA on every icon, structured table markup, `prefers-reduced-motion` guards on every animation.
-- **Performance.** Fully static, font preconnect, no runtime JS for data, no icon library bundle.
+- **Performance.** Fully static output, no client-side data fetch, and no icon library bundle.
 - **Shipping discipline.** MIT license, CI on PR, error boundaries, custom not-found, OG image, rich metadata.
 
 ## Local Development
@@ -131,7 +131,7 @@ components/
   WeeklySummary.tsx       Period totals + heatmap
   WeekChange.tsx          Week-over-week delta tiles
   DailyTable.tsx          14-day daily breakdown table
-  VO2Chart.tsx            91-day VO₂ trajectory (SVG, Framer Motion)
+  VO2Chart.tsx            VO₂ trajectory (SVG, Framer Motion)
   CardiacMetrics.tsx      RHR, HRV, walking HR sparklines
   SleepAnalysis.tsx       Sleep stage stacked bars
   WorkoutLog.tsx          Activity breakdown + top sessions
@@ -147,8 +147,10 @@ components/
   CountUp.tsx             Viewport-triggered count-up animation
 
 lib/
-  types.ts                Typed data model (91-day schema v2)
-  data.ts                 91-day Apple Health export (real data)
+  types.ts                Typed dashboard data model
+  data.ts                 Base snapshot + normalized export composition
+  imported-health-export.ts  Curated latest import patch
+  normalize-health-export.ts Data normalization and recomputation
   helpers.ts              Stat helpers, recovery engine, weekly aggregates
   icons.tsx               16 SVG icon components + activity color maps
 

@@ -18,6 +18,7 @@ export default function WeeklySummary({ data }: Props) {
   const bestStepMultiplier = b.max_steps.value / a.avg_daily_steps
   const bestBurnMultiplier = b.max_active_kcal.value / a.avg_active_kcal
   const totalExerciseHours = Math.round(t.total_exercise_min / 60)
+  const firstVo2Month = new Date(`${v.first.date}T00:00:00`).toLocaleDateString('en-US', { month: 'short' })
 
   const tiles = [
     { label: 'Total Steps',      val: t.total_steps.toLocaleString(),                    unit: `${data.meta.period.days} days`, delta: `↑ ${a.avg_daily_steps.toLocaleString()} avg/day`,                                                  color: 'var(--accent-green)'  },
@@ -26,7 +27,7 @@ export default function WeeklySummary({ data }: Props) {
     { label: 'Exercise Time',    val: t.total_exercise_min.toLocaleString(),             unit: 'minutes',                      delta: `${Math.round(a.avg_exercise_min)} min/day · ${totalExerciseHours} hrs total`,                       color: 'var(--accent-blue)'   },
     { label: 'Workouts Logged',  val: t.total_workouts.toString(),                       unit: 'sessions',                     delta: `${activityTypeCount} activity types`,                                                               color: 'var(--accent-coral)'  },
     { label: 'Flights Climbed',  val: t.total_flights_climbed.toLocaleString(),          unit: 'floors',                       delta: `≈ ${esbCount}× Empire State`,                                                                       color: 'var(--accent-purple)' },
-    { label: 'VO₂ Max',          val: v.current.value.toFixed(2),                        unit: 'mL/kg/min · current',          delta: `peak ${v.peak.value.toFixed(2)} · +${since.toFixed(1)}% since Feb`,                                color: 'var(--accent-teal)'   },
+    { label: 'VO₂ Max',          val: v.current.value.toFixed(2),                        unit: 'mL/kg/min · current',          delta: `peak ${v.peak.value.toFixed(2)} · +${since.toFixed(1)}% since ${firstVo2Month}`,                   color: 'var(--accent-teal)'   },
     { label: 'Avg Resting HR',   val: a.avg_resting_hr.toFixed(1),                       unit: 'bpm',                          delta: 'period baseline',                                                                                  color: 'var(--accent-coral)'  },
     { label: 'Avg HRV',          val: a.avg_hrv_ms.toFixed(1),                           unit: 'ms SDNN',                      delta: 'period baseline',                                                                                  color: 'var(--accent-green)'  },
     { label: 'Best Day · Steps', val: b.max_steps.value.toLocaleString(),                unit: new Date(b.max_steps.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), delta: `${bestStepMultiplier.toFixed(1)}× daily average`, color: 'var(--accent-amber)'  },

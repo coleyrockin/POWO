@@ -61,6 +61,7 @@ export default function DailyTable({ daily, workouts }: Props) {
           </thead>
           <tbody>
             {last14.map((d, i) => {
+              const isPartial = d.active_kcal === null
               const cal = d.active_kcal ?? 0
               const stepsLeader = d.steps === maxSteps
               const calLeader = cal === maxCal && cal > 0
@@ -98,7 +99,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                       />
                     </div>
                   </td>
-                  <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', color: calLeader ? 'var(--accent-amber)' : 'var(--color-white)', fontWeight: calLeader ? 600 : 500 }}>{Math.round(cal).toLocaleString()}</td>
+                  <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', color: calLeader ? 'var(--accent-amber)' : isPartial ? 'var(--color-dim)' : 'var(--color-white)', fontWeight: calLeader ? 600 : 500 }}>{isPartial ? '—' : Math.round(cal).toLocaleString()}</td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: 'var(--color-white)' }}>{d.exercise_min ?? '—'}</td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: d.resting_hr !== null && d.resting_hr <= 60 ? 'var(--accent-green)' : d.resting_hr !== null && d.resting_hr >= 70 ? 'var(--accent-coral)' : 'var(--color-white)' }}>{d.resting_hr ?? '—'}</td>
                   <td style={{ padding: '11px 10px 11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: d.hrv_ms !== null && d.hrv_ms >= 60 ? 'var(--accent-green)' : 'var(--color-white)' }}>{d.hrv_ms !== null ? Math.round(d.hrv_ms) : '—'}</td>

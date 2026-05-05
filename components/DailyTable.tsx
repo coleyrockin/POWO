@@ -101,7 +101,14 @@ export default function DailyTable({ daily, workouts }: Props) {
                       />
                     </div>
                   </td>
-                  <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', color: calLeader ? 'var(--accent-amber)' : cal === null ? 'var(--color-dim)' : 'var(--color-white)', fontWeight: calLeader ? 600 : 500 }}>{cal === null ? '—' : Math.round(cal).toLocaleString()}</td>
+                  <td style={{ padding: '9px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', color: calLeader ? 'var(--accent-amber)' : cal === null ? 'var(--color-dim)' : 'var(--color-white)', fontWeight: calLeader ? 600 : 500 }}>
+                    {cal === null ? (
+                      <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px', lineHeight: 1 }}>
+                        <span>—</span>
+                        <span style={{ fontSize: '7px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent-amber)' }}>partial</span>
+                      </span>
+                    ) : Math.round(cal).toLocaleString()}
+                  </td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: 'var(--color-white)' }}>{d.exercise_min ?? '—'}</td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: d.resting_hr !== null && d.resting_hr <= 60 ? 'var(--accent-green)' : d.resting_hr !== null && d.resting_hr >= 70 ? 'var(--accent-coral)' : 'var(--color-white)' }}>{d.resting_hr ?? '—'}</td>
                   <td style={{ padding: '11px 10px 11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: d.hrv_ms !== null && d.hrv_ms >= 60 ? 'var(--accent-green)' : 'var(--color-white)' }}>{d.hrv_ms !== null ? Math.round(d.hrv_ms) : '—'}</td>

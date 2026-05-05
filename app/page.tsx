@@ -2,6 +2,7 @@ import { healthData } from '@/lib/data'
 import ScrollProgress from '@/components/ScrollProgress'
 import SectionNav from '@/components/SectionNav'
 import Hero from '@/components/Hero'
+import HealthCommandStrip from '@/components/HealthCommandStrip'
 import ActivityRings from '@/components/ActivityRings'
 import WeeklySummary from '@/components/WeeklySummary'
 import WeekChange from '@/components/WeekChange'
@@ -25,6 +26,7 @@ export default function Page() {
     <main className="powo-shell">
       <ScrollProgress />
       <Hero data={d} />
+      <HealthCommandStrip data={d} partialDate={partialDay?.date} />
       <SectionNav />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', padding: '0 14px 30px' }}>
         <ActivityRings daily={d.daily} workouts={d.workouts} />

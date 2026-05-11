@@ -8,7 +8,7 @@ on:
 
 jobs:
   verify:
-    name: Lint, Typecheck, Build
+    name: Lint, Test, Typecheck, Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,6 +23,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Test
+        run: npm run test
 
       - name: Typecheck
         run: npx tsc --noEmit

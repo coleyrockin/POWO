@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/normalize-health-export.test.mts",
+    "verify": "npm run lint && npm run test && npx tsc --noEmit && npm run build"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",

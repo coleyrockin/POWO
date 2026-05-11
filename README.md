@@ -26,7 +26,7 @@ Zero UI libraries. Every card, chart, animation, and visualization — built fro
 
 ## The Product
 
-POWO ingests 91 days of Apple HealthKit data for a single athlete and renders it across fifteen composed sections: a hero KPI grid with per-metric sparklines, a 14-day calorie burn chart, period totals, week-over-week deltas, a daily breakdown table, a VO₂ max trajectory chart, cardiac metrics, sleep-stage analysis, a workout library, a pushup log, rest and training recommendations, achievements, and an Apple Health verification footer.
+POWO ingests 91 days of Apple HealthKit data for a single athlete and renders it across sixteen composed sections: a hero KPI grid with per-metric sparklines, a data-quality and coach-takeaway strip, a 14-day calorie burn chart, period totals, week-over-week deltas, a daily breakdown table, a VO₂ max trajectory chart, cardiac metrics, sleep-stage analysis, a workout library, a pushup log, rest and training recommendations, achievements, and an Apple Health verification footer.
 
 The entire experience is a **430 px-wide, dark-mode column** optimized for a 375 px iPhone viewport. It runs entirely statically — no client-side data fetching, no runtime API.
 
@@ -41,7 +41,7 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 | Icons            | **Custom monoline SVG system** — no icon library |
 | Charts           | **Hand-rolled SVG** — no charting library        |
 | Deployment       | **Vercel** — push-to-`main` auto-deploy         |
-| CI               | **GitHub Actions** — lint, typecheck, build      |
+| CI               | **GitHub Actions** — lint, test, typecheck, build |
 
 ## Design Decisions
 
@@ -67,7 +67,7 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 
 ## Features
 
-- **15 composed sections** — Hero, 14-Day Burn, Period Summary, WoW Delta, Daily Breakdown, VO₂ Trajectory, Cardiac Metrics, Sleep Analysis, Workout Library, Top Sessions, Pushup Log, Rest Recommendation, Training Plan, Achievements, Footer
+- **16 composed sections** — Hero, Data Quality + Coach Takeaway, 14-Day Burn, Period Summary, WoW Delta, Daily Breakdown, VO₂ Trajectory, Cardiac Metrics, Sleep Analysis, Workout Library, Top Sessions, Pushup Log, Rest Recommendation, Training Plan, Achievements, Footer
 - **Stat trophy tiles** — hero KPIs each get a sparkline, radial halo, gradient accent border, and count-up animation
 - **VO₂ story gradient** — single horizontal fill transitions green (rise) → amber (peak) → coral (decline), with animated draw-on lines and a pulsing PR dot
 - **Ambient backdrop tinting** — the page background glow reacts to whichever section is in view, animating via `@property --ambient-tint`
@@ -111,6 +111,8 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run build`   | Production build (static)                 |
 | `npm run start`   | Serve production build                    |
 | `npm run lint`    | ESLint (Next.js config)                   |
+| `npm run test`    | Regression test for health export normalization |
+| `npm run verify`  | Lint, test, typecheck, and production build |
 | `npx tsc --noEmit`| Typecheck without emitting files          |
 
 ## Project Structure
@@ -118,7 +120,7 @@ Open [http://localhost:3000](http://localhost:3000).
 ```
 app/
   layout.tsx              Root layout, fonts, metadata, viewport
-  page.tsx                Composition of all fifteen sections
+  page.tsx                Composition of all sixteen sections
   globals.css             Design system — tokens, @property animations, utilities
   opengraph-image.tsx     Dynamic OG image (next/og)
   twitter-image.tsx       Re-export of OG for Twitter cards
@@ -127,6 +129,7 @@ app/
 
 components/
   Hero.tsx                Header KPIs, trophy tiles, wordmark shimmer
+  HealthCommandStrip.tsx  Data quality chips + coach takeaway
   ActivityRings.tsx       14-day calorie burn bar chart
   WeeklySummary.tsx       Period totals + heatmap
   WeekChange.tsx          Week-over-week delta tiles
@@ -154,7 +157,11 @@ lib/
   helpers.ts              Stat helpers, recovery engine, weekly aggregates
   icons.tsx               16 SVG icon components + activity color maps
 
-.github/workflows/ci.yml  Lint, typecheck, build on PR
+scripts/
+  normalize-health-export.test.mts  Normalizer regression coverage
+
+.github/workflows/ci.yml  Lint, test, typecheck, build on PR
+SECURITY.md               Vulnerability reporting policy
 ```
 
 ## License

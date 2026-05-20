@@ -47,7 +47,7 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 
 **No UI library.** Every surface is written in plain React with inline styles driven by CSS custom-property tokens. `globals.css` defines the full design system: colors, shadows, motion utilities, glow helpers, and registered `@property` animations. No shadcn, no Radix, no Chakra.
 
-**No charting library.** The VO₂ trajectory uses `motion.path` with `pathLength` for a draw-on reveal, a unified horizontal "story gradient" fill (teal → amber → coral), and a vertical light beam pinned at the personal record. Cardiac sparklines are hand-rolled SVG polylines. Sleep stages are stacked `rect` elements. All chart components are under 220 lines each.
+**No charting library.** The VO₂ trajectory uses `motion.path` with `pathLength` for a draw-on reveal, a unified horizontal "story gradient" fill (teal → amber → coral), and a vertical light beam pinned at the personal record. Cardiac sparklines are hand-rolled SVG polylines. Sleep stages are stacked `rect` elements. Most chart components stay under 220 lines; `VO2Chart` is the exception at ~300, since it inlines gradients, beams, dots, and labels in one file.
 
 **Custom SVG icon system.** Sixteen icons (`IconWalking`, `IconDumbbell`, `IconHeartPulse`, …) each a 20×20 viewBox, `stroke="currentColor"`, `strokeWidth=1.5`. A factory `base()` function enforces accessibility defaults: `role="img"` + `aria-label` when labeled, `aria-hidden` when decorative.
 

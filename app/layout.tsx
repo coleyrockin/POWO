@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Bebas_Neue, DM_Mono, DM_Sans } from 'next/font/google'
+import MotionRoot from '@/components/MotionRoot'
 import './globals.css'
 
 const SITE_URL = 'https://proof-of-workout-next.vercel.app'
@@ -59,7 +60,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable}`}>
-      <body>{children}</body>
+      <body>
+        <MotionRoot>{children}</MotionRoot>
+      </body>
     </html>
   )
 }

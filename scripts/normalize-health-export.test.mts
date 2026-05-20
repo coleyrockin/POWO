@@ -194,3 +194,49 @@ assert.equal(
 
 assert.equal(normalized.summary.period_totals.total_workouts, 3)
 assert.equal(normalized.meta.period.days, 3)
+
+// Regression: `withShiftedSignals` must promote next-day HR/HRV/kcal onto
+// the carried base day, but only for days >= shiftedSignalStart (2026-02-19).
+// The block above already exercises the >= path with uniform values, which
+// is silent. Run a second normalization with distinct day N vs N+1 values
+// and assert the shift is applied. Also assert pre-shift behavior is preserved.
+const shiftBase: HealthData = {
+  ...base,
+  daily: [
+    { ...baseDay('2026-02-18', 7000), active_kcal: 100, resting_hr: 50, hrv_ms: 30, avg_hr: 70 },
+    { ...baseDay('2026-02-19', 8000), active_kcal: 200, resting_hr: 55, hrv_ms: 40, avg_hr: 75 },
+    { ...baseDay('2026-02-20', 9000), active_kcal: 300, resting_hr: 60, hrv_ms: 50, avg_hr: 80 },
+    { ...baseDay('2026-02-21', 9500), active_kcal: 400, resting_hr: 65, hrv_ms: 60, avg_hr: 85 },
+  ],
+  workouts: [],
+}
+const shiftLatest: ImportedHealthExport = {
+  ...latest,
+  period: { start: '2026-02-18', end: '2026-02-21' },
+  dailyOverrides: [
+    {
+      date: '2026-02-21',
+      steps: 9500,
+      active_calories_kcal: 400,
+      resting_calories_kcal: 1800,
+      walking_running_distance_km: 5,
+      exercise_minutes: 45,
+      heart_rate_avg_bpm: 85,
+      resting_heart_rate_bpm: 65,
+      hrv_sdnn_ms: 60,
+      walking_hr_avg_bpm: 90,
+      blood_oxygen_pct: 96,
+    },
+  ],
+  workouts: [],
+}
+const shifted = normalizeHealthExport(shiftBase, shiftLatest)
+const feb18 = shifted.daily.find(d => d.date === '2026-02-18')
+const feb19 = shifted.daily.find(d => d.date === '2026-02-19')
+const feb20 = shifted.daily.find(d => d.date === '2026-02-20')
+assert.equal(feb18?.resting_hr, 50, 'pre-shiftedSignalStart day must keep its own signals')
+assert.equal(feb18?.hrv_ms, 30, 'pre-shiftedSignalStart day HRV unchanged')
+assert.equal(feb19?.resting_hr, 60, 'Feb 19 (== shiftedSignalStart) must adopt next day resting_hr')
+assert.equal(feb19?.hrv_ms, 50, 'Feb 19 must adopt next day HRV')
+assert.equal(feb19?.active_kcal, 300, 'Feb 19 active_kcal must come from next day')
+assert.equal(feb20?.resting_hr, 65, 'Feb 20 must adopt Feb 21 resting_hr')

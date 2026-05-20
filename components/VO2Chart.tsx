@@ -53,6 +53,7 @@ function smoothArea(pts: Pt[]): string {
 }
 
 export default function VO2Chart({ trend }: Props) {
+  if (trend.length === 0) return null
   const baseMs = new Date(trend[0].date + 'T00:00:00').getTime()
   const endMs = new Date(trend[trend.length - 1].date + 'T00:00:00').getTime()
   const totalDays = Math.max(1, Math.round((endMs - baseMs) / 86400000))

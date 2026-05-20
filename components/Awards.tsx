@@ -31,7 +31,7 @@ export default function Awards({ data }: Props) {
     { Icon: IconBicep,      color: 'var(--accent-purple)', title: `${pushupTotal}+ PUSHUPS`,
       desc: `Logged ${pushupTotal.toLocaleString()} pushup reps across ${data.pushups.weeks.length} tracked weeks. Peak week ${peakPushupWeek.total} reps. Volume reduced last week to protect left shoulder.` },
     { Icon: IconHeartPulse, color: 'var(--accent-blue)',   title: `${totalKm} KM TRAVELED`,
-      desc: `${totalKm} km on foot in ${data.meta.period.days} days · ${totalKcal.toLocaleString()} active kcal burned · ${data.summary.period_totals.total_flights_climbed.toLocaleString()} flights climbed. ${skating ? `${skating.sessions} skate sessions across ${(skating.total_distance_m! / 1000).toFixed(1)} km.` : ''}` },
+      desc: `${totalKm} km on foot in ${data.meta.period.days} days · ${totalKcal.toLocaleString()} active kcal burned · ${data.summary.period_totals.total_flights_climbed.toLocaleString()} flights climbed. ${skating && skating.total_distance_m !== null ? `${skating.sessions} skate sessions across ${(skating.total_distance_m / 1000).toFixed(1)} km.` : ''}` },
   ]
 
   return (

@@ -109,7 +109,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
           const color = ACTIVITY_COLORS[w.type] ?? 'var(--color-white)'
           return (
             <motion.div
-              key={i}
+              key={`${w.date}-${w.start}`}
               initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.35, delay: (i % 6) * 0.04 }}
               className="powo-lift"
               style={{

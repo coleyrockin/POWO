@@ -198,7 +198,7 @@ function buildSummary(daily: DailyMetric[], workouts: Workout[], vo2Max: VO2Poin
       total_flights_climbed: Math.round(sum(daily.map(day => day.flights_climbed))),
     },
     averages: {
-      avg_daily_steps: Math.round(totalSteps / daily.length),
+      avg_daily_steps: daily.length > 0 ? Math.round(totalSteps / daily.length) : 0,
       avg_active_kcal: round(avg(daily.map(day => day.active_kcal))),
       avg_resting_hr: round(avg(daily.map(day => day.resting_hr))),
       avg_hrv_ms: round(avg(daily.map(day => day.hrv_ms))),
@@ -226,7 +226,7 @@ function buildMonthly(daily: DailyMetric[]): Record<string, MonthlyStats> {
     {
       days_with_data: days.length,
       total_steps: Math.round(sum(days.map(day => day.steps))),
-      avg_steps: Math.round(sum(days.map(day => day.steps)) / days.length),
+      avg_steps: days.length > 0 ? Math.round(sum(days.map(day => day.steps)) / days.length) : 0,
       total_active_kcal: round(sum(days.map(day => day.active_kcal))),
       avg_active_kcal: round(avg(days.map(day => day.active_kcal))),
       total_exercise_min: Math.round(sum(days.map(day => day.exercise_min))),

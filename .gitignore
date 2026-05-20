@@ -57,3 +57,8 @@ apple_health_export*.zip
 *.tsbuildinfo
 next-env.d.ts
 .playwright-mcp/
+
+# audit/playwright session artifacts
+/output/
+/.playwright-cli/
+/docs/audits/

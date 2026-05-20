@@ -90,6 +90,8 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 - **Design-system thinking.** CSS `@property` registered animations, six-color accent palette, typography stack (Bebas Neue / DM Sans / DM Mono), consistent spacing.
 - **Accessibility.** Semantic HTML, ARIA on every icon, structured table markup, `prefers-reduced-motion` guards on every animation.
 - **Performance.** Fully static output, no client-side data fetch, and no icon library bundle.
+- **Production telemetry.** Vercel Web Analytics + Speed Insights for real-user metrics.
+- **Web standards.** PWA manifest, sitemap, robots.txt, and JSON-LD structured data — all generated at build time.
 - **Shipping discipline.** MIT license, CI on PR, error boundaries, custom not-found, OG image, rich metadata.
 
 ## Local Development

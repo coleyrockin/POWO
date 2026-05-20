@@ -1,9 +1,25 @@
 import type { Metadata, Viewport } from 'next'
 import { Bebas_Neue, DM_Mono, DM_Sans } from 'next/font/google'
+import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import MotionRoot from '@/components/MotionRoot'
 import './globals.css'
 
 const SITE_URL = 'https://proof-of-workout-next.vercel.app'
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'POWO — Proof of Workout',
+  url: SITE_URL,
+  description:
+    'A mobile-first fitness dashboard that turns 91 days of Apple Health data into a cinematic, editorial-grade interface.',
+  author: {
+    '@type': 'Person',
+    name: 'Coley Roberts',
+  },
+}
 
 const bebasNeue = Bebas_Neue({
   subsets: ['latin'],
@@ -61,7 +77,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable}`}>
       <body>
+        <Script id="powo-jsonld" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify(jsonLd)}
+        </Script>
         <MotionRoot>{children}</MotionRoot>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

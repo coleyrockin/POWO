@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion'
 import CountUp from './CountUp'
 import Sparkline from './Sparkline'
-import { fmtShort } from '@/lib/helpers'
+import { fmtShort, glowClassForAccent } from '@/lib/helpers'
 import type { HealthData } from '@/lib/types'
 
 interface Props { data: HealthData }
@@ -184,14 +184,7 @@ export default function Hero({ data }: Props) {
             >
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-mid)', position: 'relative', zIndex: 2 }}>{k.label}</span>
               <span
-                className={
-                  k.color === 'var(--accent-blue)'   ? 'powo-glow-blue'   :
-                  k.color === 'var(--accent-green)'  ? 'powo-glow-green'  :
-                  k.color === 'var(--accent-amber)'  ? 'powo-glow-amber'  :
-                  k.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
-                  k.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
-                  k.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
-                }
+                className={glowClassForAccent(k.color)}
                 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: k.color, position: 'relative', zIndex: 2 }}
               >
                 {k.node}

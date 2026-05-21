@@ -44,7 +44,7 @@ export default function SectionHeader({ label, meta }: Props) {
             flexShrink: 0,
           }}
         />
-        <span
+        <h2
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '11px',
@@ -58,7 +58,7 @@ export default function SectionHeader({ label, meta }: Props) {
           }}
         >
           {label}
-        </span>
+        </h2>
       </span>
       {meta && (
         <span

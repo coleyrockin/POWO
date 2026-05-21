@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { IconActivity, IconGolf, IconHeartPulse, IconFlame, IconBicep, IconLightning } from '@/lib/icons'
+import { glowClassForAccent } from '@/lib/helpers'
 import type { HealthData } from '@/lib/types'
 
 interface Props { data: HealthData }
@@ -56,14 +57,7 @@ export default function Awards({ data }: Props) {
             }}
           >
             <span style={{ color: a.color, lineHeight: 0, position: 'relative', zIndex: 2 }}><a.Icon size={20} /></span>
-            <span className={
-              a.color === 'var(--accent-blue)'   ? 'powo-glow-blue'   :
-              a.color === 'var(--accent-green)'  ? 'powo-glow-green'  :
-              a.color === 'var(--accent-amber)'  ? 'powo-glow-amber'  :
-              a.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
-              a.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
-              a.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
-            } style={{ fontFamily: 'var(--font-display)', fontSize: '14px', letterSpacing: '0.5px', color: a.color, lineHeight: 1.15, position: 'relative', zIndex: 2 }}>{a.title}</span>
+            <span className={glowClassForAccent(a.color)} style={{ fontFamily: 'var(--font-display)', fontSize: '14px', letterSpacing: '0.5px', color: a.color, lineHeight: 1.15, position: 'relative', zIndex: 2 }}>{a.title}</span>
             <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--color-mid)', lineHeight: 1.55, position: 'relative', zIndex: 2 }}>{a.desc}</span>
           </motion.div>
         ))}

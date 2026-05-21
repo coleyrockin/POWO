@@ -82,7 +82,7 @@ export default function WeekChange({ data }: Props) {
             return parts.length > 0 ? parts.join(' · ') : 'Week-over-week change minimal — steady state.'
           })()}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-dim)', marginTop: '8px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-faint)', marginTop: '8px' }}>
           <span>last 7d {fmt(last7[0]?.date ?? '')} – {fmt(last7[last7.length - 1]?.date ?? '')}</span>
           <span>prior 7d {fmt(prev7[0]?.date ?? '')} – {fmt(prev7[prev7.length - 1]?.date ?? '')}</span>
         </div>

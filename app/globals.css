@@ -8,14 +8,15 @@
   --color-raised: #18181b;
   --color-border: #242428;
   --color-mid:    #b9b9bd;
-  --color-dim:    #37373d;
+  --color-faint:  #8a8a90; /* content text — passes WCAG AA (5.75:1 on near-black) */
+  --color-dim:    #37373d; /* decorative-only: dividers, hairlines — fails contrast for text */
   --color-red:    #ff4444;
   --color-blue:   #4488ff;
   --color-amber:  #ffaa22;
 
   /* Accent palette — per-KPI variety over electric blue base */
   --accent-blue:     #0a84ff;
-  --accent-blue-dim: #0060cc;
+  --accent-blue-dim: #4490ff; /* dim accent for meta labels — passes WCAG AA (6.35:1) */
   --color-wolf:      #0a84ff; /* legacy alias — do not use in new code */
   --color-wolf2:     #0060cc; /* legacy alias — do not use in new code */
   --accent-green:    #34c759;

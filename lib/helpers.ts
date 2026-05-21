@@ -1,6 +1,19 @@
 // lib/helpers.ts — derived stats, signal analysis, recommendation engine
 import type { DailyMetric, HealthData, VO2Point, Workout, SleepNight } from './types'
 
+// ─── Visual helpers ──────────────────────────────────────────────
+export function glowClassForAccent(color: string): string {
+  switch (color) {
+    case 'var(--accent-blue)':   return 'powo-glow-blue'
+    case 'var(--accent-green)':  return 'powo-glow-green'
+    case 'var(--accent-amber)':  return 'powo-glow-amber'
+    case 'var(--accent-coral)':  return 'powo-glow-coral'
+    case 'var(--accent-purple)': return 'powo-glow-purple'
+    case 'var(--accent-teal)':   return 'powo-glow-teal'
+    default:                     return ''
+  }
+}
+
 // ─── Date helpers ────────────────────────────────────────────────
 export function fmtShort(iso: string): string {
   const d = new Date(iso + 'T00:00:00')

@@ -101,7 +101,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                       />
                     </div>
                   </td>
-                  <td style={{ padding: '9px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', color: calLeader ? 'var(--accent-amber)' : cal === null ? 'var(--color-dim)' : 'var(--color-white)', fontWeight: calLeader ? 600 : 500 }}>
+                  <td style={{ padding: '9px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', color: calLeader ? 'var(--accent-amber)' : cal === null ? 'var(--color-faint)' : 'var(--color-white)', fontWeight: calLeader ? 600 : 500 }}>
                     {cal === null ? (
                       <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px', lineHeight: 1 }}>
                         <span>—</span>

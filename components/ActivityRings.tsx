@@ -66,11 +66,11 @@ export default function ActivityRings({ daily, workouts }: Props) {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '14px', justifyContent: 'flex-end' }}>
                   {dayWorkouts.length > 0 && (() => {
                     const Icon = ACTIVITY_SVG_ICONS[dayWorkouts[0]] ?? ACTIVITY_SVG_ICONS['Unknown Activity']
-                    return <Icon size={10} color={isPeak ? 'var(--accent-amber)' : isPartial ? 'var(--color-dim)' : 'var(--color-mid)'} />
+                    return <Icon size={10} color={isPeak ? 'var(--accent-amber)' : isPartial ? 'var(--color-faint)' : 'var(--color-mid)'} />
                   })()}
                 </div>
 
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: isPeak ? '11px' : '10px', color: isPeak ? 'var(--accent-amber)' : isPartial ? 'var(--color-dim)' : 'var(--color-white)', textAlign: 'center', lineHeight: 1, letterSpacing: '0.5px' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: isPeak ? '11px' : '10px', color: isPeak ? 'var(--accent-amber)' : isPartial ? 'var(--color-faint)' : 'var(--color-white)', textAlign: 'center', lineHeight: 1, letterSpacing: '0.5px' }}>
                   {cal === null ? '--' : cal >= 1000 ? (cal / 1000).toFixed(1) + 'k' : Math.round(cal)}
                 </div>
 
@@ -94,7 +94,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
                   />
                 </div>
 
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.05em', color: isPeak ? 'var(--accent-amber)' : isPartial ? 'var(--color-dim)' : 'var(--color-mid)', textAlign: 'center', fontWeight: isPeak ? 600 : 400 }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.05em', color: isPeak ? 'var(--accent-amber)' : isPartial ? 'var(--color-faint)' : 'var(--color-mid)', textAlign: 'center', fontWeight: isPeak ? 600 : 400 }}>
                   {dow}
                 </div>
               </div>

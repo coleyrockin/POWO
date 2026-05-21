@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next'
+import { SITE_MARKETING_DESCRIPTION, SITE_NAME, SITE_TITLE } from '@/lib/site'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'POWO — Proof of Workout',
-    short_name: 'POWO',
-    description:
-      'A mobile-first fitness dashboard that turns 91 days of Apple Health data into a cinematic, editorial-grade interface.',
+    name: SITE_TITLE,
+    short_name: SITE_NAME,
+    description: SITE_MARKETING_DESCRIPTION,
     start_url: '/',
     display: 'standalone',
     background_color: '#080808',

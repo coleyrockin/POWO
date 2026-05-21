@@ -4,20 +4,25 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import MotionRoot from '@/components/MotionRoot'
+import {
+  SITE_AUTHOR,
+  SITE_DESCRIPTION,
+  SITE_MARKETING_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+} from '@/lib/site'
 import './globals.css'
-
-const SITE_URL = 'https://proof-of-workout-next.vercel.app'
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'POWO — Proof of Workout',
+  name: SITE_TITLE,
   url: SITE_URL,
-  description:
-    'A mobile-first fitness dashboard that turns 91 days of Apple Health data into a cinematic, editorial-grade interface.',
+  description: SITE_MARKETING_DESCRIPTION,
   author: {
     '@type': 'Person',
-    name: 'Coley Roberts',
+    name: SITE_AUTHOR,
   },
 }
 
@@ -43,24 +48,30 @@ const dmSans = DM_Sans({
   display: 'swap',
 })
 
+const shouldLoadVercelTelemetry = process.env.VERCEL === '1'
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: 'POWO — Proof of Workout',
-  description:
-    'Proof of Workout turns Apple Health into a mobile-first dashboard with VO2 trajectory, sleep stages, cardiac trends, workout volume, and training recommendations.',
+  applicationName: SITE_NAME,
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  manifest: '/manifest.webmanifest',
   keywords: ['Apple Health', 'fitness dashboard', 'Next.js', 'data visualization', 'HealthKit', 'VO2 max', 'recovery'],
-  authors: [{ name: 'Coley Roberts' }],
-  creator: 'Coley Roberts',
+  authors: [{ name: SITE_AUTHOR }],
+  creator: SITE_AUTHOR,
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
-    title: 'POWO — Proof of Workout',
+    title: SITE_TITLE,
     description: 'Apple Health, distilled into Proof of Workout.',
     url: SITE_URL,
-    siteName: 'POWO',
+    siteName: SITE_NAME,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'POWO — Proof of Workout',
+    title: SITE_TITLE,
     description: 'Apple Health, distilled into Proof of Workout.',
   },
 }
@@ -81,8 +92,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {JSON.stringify(jsonLd)}
         </Script>
         <MotionRoot>{children}</MotionRoot>
-        <Analytics />
-        <SpeedInsights />
+        {shouldLoadVercelTelemetry ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   )

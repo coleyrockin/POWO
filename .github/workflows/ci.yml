@@ -8,7 +8,7 @@ on:
 
 jobs:
   verify:
-    name: Lint, Test, Typecheck, Build
+    name: Lint, Test, Typecheck, Audit, Build, Smoke
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
@@ -27,7 +27,13 @@ jobs:
         run: npm run test
 
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: npm run typecheck
+
+      - name: Production dependency audit
+        run: npm run audit:prod
 
       - name: Build
         run: npm run build
+
+      - name: Production smoke
+        run: npm run smoke

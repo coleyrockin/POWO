@@ -90,20 +90,28 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 - **Design-system thinking.** CSS `@property` registered animations, six-color accent palette, typography stack (Bebas Neue / DM Sans / DM Mono), consistent spacing.
 - **Accessibility.** Semantic HTML, ARIA on every icon, structured table markup, `prefers-reduced-motion` guards on every animation.
 - **Performance.** Fully static output, no client-side data fetch, and no icon library bundle.
-- **Production telemetry.** Vercel Web Analytics + Speed Insights for real-user metrics.
+- **Production telemetry.** Vercel Web Analytics + Speed Insights for real-user metrics in Vercel deployments.
 - **Web standards.** PWA manifest, sitemap, robots.txt, and JSON-LD structured data — all generated at build time.
 - **Shipping discipline.** MIT license, CI on PR, error boundaries, custom not-found, OG image, rich metadata.
 
 ## Local Development
 
+### Requirements
+
+- Node.js **22.x** (matches `.nvmrc` and CI)
+- npm
+- Network access for first production builds, because `next/font/google` downloads and self-hosts the Google font files during `next build`
+
 ```bash
 git clone https://github.com/coleyrockin/POWO.git
 cd POWO
-npm install
+npm ci
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+No environment variables are required. `.env.example` is included as a setup contract for reviewers.
 
 ### Scripts
 
@@ -112,10 +120,36 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run dev`     | Start Next dev server                     |
 | `npm run build`   | Production build (static)                 |
 | `npm run start`   | Serve production build                    |
+| `npm run preview` | Build, then serve the production app      |
 | `npm run lint`    | ESLint (Next.js config)                   |
 | `npm run test`    | Regression test for health export normalization |
+| `npm run typecheck` | Typecheck without emitting files        |
+| `npm run audit:prod` | Audit production dependencies only     |
 | `npm run verify`  | Lint, test, typecheck, and production build |
-| `npx tsc --noEmit`| Typecheck without emitting files          |
+| `npm run smoke`   | Start the built app and verify routes, metadata, headers, and 404 |
+| `npm run smoke:build` | Build, then run production smoke     |
+| `npm run qa`      | Full release gate: verify, production audit, and smoke |
+
+### Release Check
+
+Before pushing public-facing changes:
+
+```bash
+npm run qa
+```
+
+The smoke gate serves the existing `.next` build on port `3010` and verifies `/`, `/manifest.webmanifest`, `/robots.txt`, `/sitemap.xml`, `/opengraph-image`, `/twitter-image`, security headers, and the custom 404. Use `POWO_SMOKE_PORT=4010 npm run smoke` if port `3010` is busy.
+
+Then inspect the mobile shell at 375 px, 390 px, 430 px, and desktop width. See [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) for the full public/recruiter/deployment checklist.
+
+## Deployment
+
+The `main` branch deploys to Vercel at [proof-of-workout-next.vercel.app](https://proof-of-workout-next.vercel.app).
+
+- Build command: `npm run build`
+- Install command: `npm ci`
+- Environment variables: none required
+- Runtime: static App Router output with Vercel Analytics and Speed Insights enabled on Vercel
 
 ## Project Structure
 
@@ -126,6 +160,9 @@ app/
   globals.css             Design system — tokens, @property animations, utilities
   opengraph-image.tsx     Dynamic OG image (next/og)
   twitter-image.tsx       Re-export of OG for Twitter cards
+  manifest.ts             PWA manifest route
+  robots.ts               Crawl policy route
+  sitemap.ts              Sitemap route
   error.tsx               Error boundary
   not-found.tsx           Custom 404
 
@@ -157,13 +194,18 @@ lib/
   imported-health-export.ts  Curated latest import patch
   normalize-health-export.ts Data normalization and recomputation
   helpers.ts              Stat helpers, recovery engine, weekly aggregates
+  site.ts                 Shared site metadata constants
   icons.tsx               SVG icon components + activity color maps
 
 scripts/
   normalize-health-export.test.mts  Normalizer regression coverage
+  smoke-production.mjs        Production route/header/metadata smoke gate
 
 .github/workflows/ci.yml  Lint, test, typecheck, build on PR
+docs/RELEASE_CHECKLIST.md  Public/release verification checklist
 SECURITY.md               Vulnerability reporting policy
+.env.example              Explicit no-required-env setup contract
+.nvmrc                    Local Node version hint
 ```
 
 ## License

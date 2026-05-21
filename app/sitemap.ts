@@ -1,12 +1,11 @@
 import type { MetadataRoute } from 'next'
-
-const SITE_URL = 'https://proof-of-workout-next.vercel.app'
+import { SITE_LAST_MODIFIED, SITE_URL } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: SITE_URL,
-      lastModified: new Date(),
+      lastModified: new Date(SITE_LAST_MODIFIED),
       changeFrequency: 'monthly',
       priority: 1,
     },

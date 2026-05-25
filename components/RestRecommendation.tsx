@@ -7,7 +7,7 @@ import { analyzeRecovery, analyzeSleep, buildRestRecommendation } from '@/lib/he
 interface Props { data: HealthData }
 
 const STATUS_THEME: Record<string, { bg: string; border: string; accent: string; chip: string; chipText: string; label: string }> = {
-  recover:  { bg: 'linear-gradient(180deg, #2a0a14 0%, #170509 100%)', border: '#5c1a2a', accent: 'var(--accent-coral)',  chip: 'var(--accent-coral)',  chipText: 'var(--color-black)', label: 'PULL BACK' },
+  recover:  { bg: 'linear-gradient(180deg, #1d0810 0%, #100407 100%)', border: '#43202a', accent: 'var(--accent-coral)',  chip: 'var(--accent-coral)',  chipText: 'var(--color-black)', label: 'PULL BACK' },
   taper:    { bg: 'linear-gradient(180deg, #2a1a05 0%, #170d02 100%)', border: '#5c4214', accent: 'var(--accent-amber)',  chip: 'var(--accent-amber)',  chipText: 'var(--color-black)', label: 'TAPER' },
   maintain: { bg: 'linear-gradient(180deg, #002648 0%, #00132a 100%)', border: '#003d7a', accent: 'var(--accent-blue)',   chip: 'var(--accent-blue)',   chipText: 'var(--color-black)', label: 'STEADY' },
   push:     { bg: 'linear-gradient(180deg, #0e2a14 0%, #07140a 100%)', border: '#1a5c2a', accent: 'var(--accent-green)',  chip: 'var(--accent-green)',  chipText: 'var(--color-black)', label: 'GREEN LIGHT' },
@@ -55,7 +55,7 @@ export default function RestRecommendation({ data }: Props) {
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         style={{
           background: theme.bg, border: `1px solid ${theme.border}`, borderTop: 'none', padding: '18px 16px',
-          boxShadow: `inset 0 1px 0 ${theme.accent}33, 0 0 24px ${theme.accent}1a`,
+          boxShadow: `inset 0 1px 0 ${theme.accent}26, 0 0 18px ${theme.accent}12`,
           display: 'grid', gridTemplateColumns: '160px 1fr', gap: '14px', alignItems: 'center',
         }}
       >
@@ -67,7 +67,7 @@ export default function RestRecommendation({ data }: Props) {
               initial={{ pathLength: 0 }} whileInView={{ pathLength: F / 100 }} viewport={{ once: true }} transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
               d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 ${largeArc} 1 ${end.x} ${end.y}`}
               stroke={theme.accent} strokeWidth="10" fill="none" strokeLinecap="round"
-              style={{ filter: `drop-shadow(0 0 6px ${theme.accent})` }}
+              style={{ filter: `drop-shadow(0 0 5px ${theme.accent})` }}
             />
           </svg>
           <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '20px' }}>

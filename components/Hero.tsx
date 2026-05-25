@@ -142,19 +142,19 @@ export default function Hero({ data }: Props) {
         <div aria-hidden style={{ height: '2px', background: 'linear-gradient(90deg, var(--accent-blue), rgba(0,212,170,0.42), rgba(255,170,34,0.18))' }} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
           <div style={{ minHeight: '66px', padding: '13px 14px 12px', borderRight: '1px solid rgba(255,255,255,0.055)', borderBottom: '1px solid rgba(255,255,255,0.055)' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--accent-blue)', textTransform: 'uppercase', marginBottom: '6px' }}>Goal</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--accent-blue)', textTransform: 'uppercase', marginBottom: '6px' }}>Goal</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.primary_goal}</div>
           </div>
           <div style={{ minHeight: '66px', padding: '13px 14px 12px', borderBottom: '1px solid rgba(255,255,255,0.055)' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Weight</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Weight</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.weight_lbs} lb <span style={{ color: 'var(--color-dim)', fontWeight: 500 }}>·</span> {data.profile.weight_kg} kg</div>
           </div>
           <div style={{ minHeight: '76px', padding: '13px 14px 12px', borderRight: '1px solid rgba(255,255,255,0.055)' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Focus</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Focus</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.training_focus}</div>
           </div>
           <div style={{ minHeight: '76px', padding: '13px 14px 12px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.17em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Lifestyle</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Lifestyle</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.active_lifestyle.join(' · ')}</div>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function Hero({ data }: Props) {
                 isolation: 'isolate',
               }}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-mid)', position: 'relative', zIndex: 2 }}>{k.label}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)', position: 'relative', zIndex: 2 }}>{k.label}</span>
               <span
                 className={glowClassForAccent(k.color)}
                 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: k.color, position: 'relative', zIndex: 2 }}

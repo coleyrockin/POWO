@@ -211,3 +211,19 @@ SECURITY.md               Vulnerability reporting policy
 ## License
 
 MIT © Coley Roberts
+
+## Documentation status and planning
+
+This repository’s planning and execution guidance is documented in [`ROADMAP.md`](./ROADMAP.md).
+
+### Current project status
+
+- **Shipped**: Static dashboard implementation with multiple health and training views, Next.js app structure, and existing CI/smoke pipeline.
+- **In progress / planned**: Documentation consolidation, roadmap hygiene, and broader quality hardening (as described in the roadmap).
+- **Constraints**: This repository is intentionally scoped in this phase to planning and documentation improvements before new feature development.
+
+### Repo workflow notes
+
+- Primary scripts: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, `npm run smoke`.
+- See `ROADMAP.md` for the recommended first-agent execution order, verification expectations, and tests/checks for each step.
+- For feature planning, keep shipped work and planned work clearly separated in all future updates.

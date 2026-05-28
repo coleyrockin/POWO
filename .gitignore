@@ -63,3 +63,10 @@ next-env.d.ts
 /output/
 /.playwright-cli/
 /docs/audits/
+
+# visual-regression harness — local dev tool only.
+# Baselines are font-rendering/OS specific, so they are NOT committed;
+# regenerate locally with `npm run test:visual:update`.
+/test-results/
+/playwright-report/
+/tests/**/*-snapshots/

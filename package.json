@@ -18,6 +18,8 @@
     "verify": "npm run lint && npm run test && npm run typecheck && npm run build",
     "smoke": "node scripts/smoke-production.mjs",
     "smoke:build": "npm run build && npm run smoke",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
     "qa": "npm run verify && npm run audit:prod && npm run smoke"
   },
   "dependencies": {
@@ -29,6 +31,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -76,34 +76,9 @@ export default function SectionNav() {
   }
 
   return (
-    <nav
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 30,
-        background: 'rgba(8, 8, 9, 0.9)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--color-border)',
-        boxShadow: '0 10px 28px rgba(0,0,0,0.32)',
-      }}
-      aria-label="Section navigation"
-    >
-      <div style={{ position: 'relative' }}>
-        <div
-          ref={stripRef}
-          className="no-scrollbar"
-          style={{
-            display: 'flex',
-            gap: '6px',
-            overflowX: 'auto',
-            padding: '9px 16px',
-            scrollPaddingInline: '16px',
-            scrollSnapType: 'x mandatory',
-            WebkitMaskImage: 'linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%)',
-            maskImage: 'linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%)',
-          }}
-        >
+    <nav className="powo-nav" aria-label="Section navigation">
+      <div className="powo-nav-inner">
+        <div ref={stripRef} className="powo-nav-strip no-scrollbar">
           {SECTIONS.map(s => {
             const isActive = active === s.id
             return (
@@ -111,25 +86,8 @@ export default function SectionNav() {
                 key={s.id}
                 ref={el => { buttonsRef.current[s.id] = el }}
                 onClick={() => onClick(s.id)}
-                style={{
-                  flexShrink: 0,
-                  minHeight: '30px',
-                  padding: '5px 12px',
-                  background: isActive ? 'linear-gradient(180deg, #4ca4ff, var(--accent-blue))' : 'rgba(255,255,255,0.045)',
-                  color: isActive ? 'var(--color-black)' : 'var(--color-white)',
-                  border: '1px solid',
-                  borderColor: isActive ? 'rgba(76,164,255,0.95)' : 'var(--color-border)',
-                  borderRadius: '6px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '10px',
-                  fontWeight: isActive ? 700 : 500,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  boxShadow: isActive ? '0 0 14px rgba(10,132,255,0.24), inset 0 1px 0 rgba(255,255,255,0.25)' : 'inset 0 1px 0 rgba(255,255,255,0.04)',
-                  transition: 'background 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease',
-                  scrollSnapAlign: 'center',
-                }}
+                aria-current={isActive ? 'true' : undefined}
+                className={isActive ? 'powo-nav-btn is-active' : 'powo-nav-btn'}
               >
                 {s.label}
               </button>

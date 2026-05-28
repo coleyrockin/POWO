@@ -27,8 +27,9 @@ export default function Page() {
       <ScrollProgress />
       <Hero data={d} />
       <HealthCommandStrip data={d} partialDate={partialDay?.date} />
-      <SectionNav />
-      <div className="powo-sections">
+      <div className="powo-body">
+        <SectionNav />
+        <div className="powo-sections">
         <ActivityRings daily={d.daily} workouts={d.workouts} />
         <WeeklySummary data={d} />
         <WeekChange data={d} />
@@ -41,6 +42,7 @@ export default function Page() {
         <RestRecommendation data={d} />
         <WorkoutRecommendation data={d} />
         <Awards data={d} />
+        </div>
       </div>
       <Footer
         generated={d.meta.generated_at}

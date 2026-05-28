@@ -28,7 +28,7 @@ Zero UI libraries. Every card, chart, animation, and visualization — built fro
 
 POWO ingests 91 days of Apple HealthKit data for a single athlete and renders it across sixteen composed sections: a hero KPI grid with per-metric sparklines, a data-quality and coach-takeaway strip, a 14-day calorie burn chart, period totals, week-over-week deltas, a daily breakdown table, a VO₂ max trajectory chart, cardiac metrics, sleep-stage analysis, a workout library, a pushup log, rest and training recommendations, achievements, and an Apple Health verification footer.
 
-The entire experience is a **430 px-wide, dark-mode column** optimized for a 375 px iPhone viewport. It runs entirely statically — no client-side data fetching, no runtime API.
+The experience is **mobile-first** — a dark-mode column tuned pixel-by-pixel for a 375 px iPhone viewport — and now **responsive across three breakpoints**: the phone column stays exactly as designed, an iPad layout (≥641 px) widens the column and reflows the metric grids, and a desktop layout (≥1024 px) becomes a true dashboard with a sticky left-rail navigation and a two-column section canvas. It runs entirely statically — no client-side data fetching, no runtime API.
 
 ## Tech Stack
 
@@ -61,7 +61,7 @@ The entire experience is a **430 px-wide, dark-mode column** optimized for a 375
 
 **Six-color accent palette with tinting.** Base blue `#0a84ff`, extended with green, coral, amber, purple, and teal. Each KPI, cardiac metric, award, and WoW tile is mapped to one accent and tinted throughout: sparkline fill, radial halo, gradient border, text glow.
 
-**Mobile-first, capped at 430 px.** No breakpoints — the design intentionally lives on the phone.
+**Mobile-first, then responsive.** The phone is the design's source of truth — the base layer carries no media queries, so it can never drift. iPad and desktop layers are purely additive `@media` overrides (≥641 px, ≥1024 px): the column widens, equal-column grids gain columns, and on desktop the navigation becomes a left rail while sections tile into a two-column canvas. A local Playwright visual-regression check (`npm run test:visual`) guards the 390 px phone render pixel-for-pixel against every layout change.
 
 **Static data, real data.** `lib/data.ts` composes a source-controlled base snapshot with the latest curated import patch from `lib/imported-health-export.ts` via `lib/normalize-health-export.ts`. No API, no database, no client-side data fetch.
 
@@ -123,6 +123,8 @@ No environment variables are required. `.env.example` is included as a setup con
 | `npm run preview` | Build, then serve the production app      |
 | `npm run lint`    | ESLint (Next.js config)                   |
 | `npm run test`    | Regression test for health export normalization |
+| `npm run test:visual` | Local visual-regression check at 390 / 820 / 1280 px (freezes the phone render) |
+| `npm run test:visual:update` | Recapture visual baselines after an intended layout change |
 | `npm run typecheck` | Typecheck without emitting files        |
 | `npm run audit:prod` | Audit production dependencies only     |
 | `npm run verify`  | Lint, test, typecheck, and production build |

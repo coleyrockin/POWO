@@ -134,6 +134,8 @@ body::after {
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ── App shell ── */
+/* Phone is the base (no media query) — it cannot change unless these base
+   rules change. iPad/desktop widths are purely additive overrides below. */
 .powo-shell {
   width: 100%;
   max-width: 430px;
@@ -149,6 +151,37 @@ body::after {
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.65),
     0 28px 90px rgba(0, 0, 0, 0.55);
+}
+
+/* iPad — widen the column, gentle reflow handled per-section */
+@media (min-width: 641px) {
+  .powo-shell { max-width: 760px; }
+}
+
+/* Desktop — capped dashboard canvas, centered */
+@media (min-width: 1024px) {
+  .powo-shell { max-width: 1200px; }
+}
+
+/* ── Section column ── */
+/* Base = the original inline values from page.tsx (phone unchanged).
+   Horizontal padding widens with the column so cards aren't edge-to-edge. */
+.powo-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0 14px 30px;
+}
+@media (min-width: 641px) {
+  .powo-sections {
+    gap: 34px;
+    padding: 0 22px 40px;
+  }
+}
+@media (min-width: 1024px) {
+  .powo-sections {
+    padding: 0 32px 52px;
+  }
 }
 
 .powo-shell::before {

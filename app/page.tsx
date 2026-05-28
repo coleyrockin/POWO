@@ -28,7 +28,7 @@ export default function Page() {
       <Hero data={d} />
       <HealthCommandStrip data={d} partialDate={partialDay?.date} />
       <SectionNav />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', padding: '0 14px 30px' }}>
+      <div className="powo-sections">
         <ActivityRings daily={d.daily} workouts={d.workouts} />
         <WeeklySummary data={d} />
         <WeekChange data={d} />

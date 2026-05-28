@@ -221,17 +221,21 @@ body::after {
 .powo-grid-kpi     { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .powo-grid-cardiac { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .powo-grid-awards  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.powo-grid-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 @media (min-width: 641px) {
   .powo-grid-kpi     { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .powo-grid-cardiac { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .powo-grid-awards  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .powo-grid-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (min-width: 1024px) {
   .powo-grid-kpi     { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .powo-grid-cardiac { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .powo-grid-awards  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Period-summary spans the full canvas width, so it carries more columns */
+  .powo-grid-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 /* ── Hero wordmark sizing ──

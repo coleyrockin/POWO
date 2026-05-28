@@ -45,7 +45,7 @@ export default function WeeklySummary({ data }: Props) {
   return (
     <section id="period">
       <SectionHeader label="Period Summary" meta={`${data.meta.period.days} days · 2026`} />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div className="powo-grid-summary" style={{ display: 'grid', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map((t, i) => (
           <motion.div
             key={t.label}

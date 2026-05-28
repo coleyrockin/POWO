@@ -49,7 +49,7 @@ export default function WorkoutRecommendation({ data }: Props) {
       </motion.div>
 
       {/* Day cards */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div className="powo-train-days" style={{ gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {rec.days.map((day, i) => (
           <motion.div key={day.day}
             initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}

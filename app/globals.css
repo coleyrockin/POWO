@@ -153,14 +153,16 @@ body::after {
     0 28px 90px rgba(0, 0, 0, 0.55);
 }
 
-/* iPad — widen the column, gentle reflow handled per-section */
+/* iPad — widen the column, gentle reflow handled per-section.
+   96vw keeps the side gutters minimal instead of a narrow centered strip. */
 @media (min-width: 641px) {
-  .powo-shell { max-width: 760px; }
+  .powo-shell { max-width: min(96vw, 920px); }
 }
 
-/* Desktop — capped dashboard canvas, centered */
+/* Desktop — fill the viewport (minus a hair of breathing room), capped so the
+   content never becomes uncomfortably wide on ultra-wide monitors. */
 @media (min-width: 1024px) {
-  .powo-shell { max-width: 1200px; }
+  .powo-shell { max-width: min(98vw, 1760px); }
 }
 
 /* ── Body wrapper (nav + sections) ──
@@ -194,23 +196,43 @@ body::after {
   }
 }
 
-/* Desktop dashboard canvas — two-column tiling.
-   Padding moves to .powo-body (which now owns the horizontal gutter).
-   Spans are assigned by position: the five data-heavy charts (1–5) and the
-   Achievements block (12) span both columns; the six compact analytical cards
-   (6–11) tile as three clean 2-up pairs. DOM order is unchanged, so reading
-   order and screen-reader flow are preserved. */
+/* Desktop dashboard canvas — masonry-style multi-column pack.
+   A rigid 2-up grid wastes huge vertical space when paired cards differ in
+   height (a short card leaves dead space beside a tall one). CSS multi-column
+   flows cards continuously so they pack tightly, and the column COUNT adapts to
+   width (≈2 cols on a laptop, 3 on a wide monitor) so the extra horizontal
+   space is used instead of stretching two columns thin.
+
+   The five data-heavy charts (1–5) and the Achievements block (12) span the
+   full width via column-span; the six compact analytical cards (6–11) flow in
+   the balanced columns. DOM order is unchanged → reading/SR order preserved. */
 @media (min-width: 1024px) {
   .powo-sections {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-    align-items: start;
+    display: block;
+    column-width: 400px;
+    column-gap: 24px;
     padding: 0;
   }
+  .powo-sections > * {
+    break-inside: avoid;
+    margin: 0 0 24px;
+  }
+  /* Full-width: the five charts (1–5), the tall 7-day plan (11), Awards (12).
+     The plan is spanned because, even packed, its height would dominate one
+     masonry column; full-width it renders short and wide instead. */
   .powo-sections > :nth-child(-n + 5),
-  .powo-sections > :nth-child(12) {
-    grid-column: 1 / -1;
+  .powo-sections > :nth-child(n + 11) {
+    column-span: all;
+  }
+}
+
+/* Training plan day-list: stacked on phone/iPad, two-up on the wide desktop
+   card so the full-width section is short instead of a long single column. */
+.powo-train-days { display: flex; flex-direction: column; }
+@media (min-width: 1024px) {
+  .powo-train-days {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

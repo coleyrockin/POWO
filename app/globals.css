@@ -217,10 +217,14 @@ body::after {
     break-inside: avoid;
     margin: 0 0 24px;
   }
-  /* Full-width: the five charts (1–5), the tall 7-day plan (11), Awards (12).
-     The plan is spanned because, even packed, its height would dominate one
-     masonry column; full-width it renders short and wide instead. */
-  .powo-sections > :nth-child(-n + 5),
+  /* Full-width: 14-day burn (1), Period panel (2), Week-over-week row (3),
+     the tall 7-day plan (11), Achievements (12). These genuinely use the width.
+     The VO₂ chart (5) and Daily-breakdown table (4) are NOT spanned — at full
+     width the chart became oversized (aspect-locked → ~600px tall) and the
+     table stretched sparse; in the masonry they render at a right-sized width.
+     The plan (11) is spanned because, even packed, its height would dominate a
+     column; full-width it renders short and wide (two-up day list) instead. */
+  .powo-sections > :nth-child(-n + 3),
   .powo-sections > :nth-child(n + 11) {
     column-span: all;
   }

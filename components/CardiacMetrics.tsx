@@ -66,7 +66,7 @@ export default function CardiacMetrics({ data }: Props) {
   return (
     <section id="cardiac">
       <SectionHeader label="Cardiac Metrics" meta={`${data.meta.period.days}-day baseline · 14-day trend`} />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div className="powo-grid-cardiac" style={{ display: 'grid', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map((v, i) => {
           const dirArrow = v.delta === null ? '' : v.delta > 0 ? '↑' : v.delta < 0 ? '↓' : '·'
           const deltaStr = v.delta !== null ? `${dirArrow} ${Math.abs(v.delta).toFixed(v.decimals)}` : '—'

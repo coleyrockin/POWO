@@ -68,12 +68,12 @@ export default function Hero({ data }: Props) {
           position: 'absolute', left: '50%', top: '10px',
           transform: 'translateX(-50%)',
           fontFamily: 'var(--font-display)', lineHeight: 1, userSelect: 'none', pointerEvents: 'none',
-          fontSize: 'clamp(110px, 31vw, 162px)',
           WebkitTextStroke: '1px rgba(240,237,230,0.055)', color: 'transparent', letterSpacing: '1px',
           opacity: 0.95,
           whiteSpace: 'nowrap',
           zIndex: 0,
         }}
+        className="powo-hero-ghost"
         aria-hidden
       >
         POWO
@@ -93,7 +93,7 @@ export default function Hero({ data }: Props) {
         Apple Health · {data.meta.period.days}-Day Snapshot
       </motion.div>
 
-      <motion.h1 {...fadeUp(0.1)} className="powo-wordmark" style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', fontSize: 'clamp(72px, 22vw, 106px)', marginBottom: '6px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+      <motion.h1 {...fadeUp(0.1)} className="powo-wordmark powo-hero-title" style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', marginBottom: '6px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
         POWO
       </motion.h1>
 
@@ -162,7 +162,7 @@ export default function Hero({ data }: Props) {
 
       {/* KPI grid — stat trophies */}
       <div style={{ width: '100%', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--color-border)', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '6px' }}>
+        <div className="powo-grid-kpi" style={{ display: 'grid', gap: '6px' }}>
           {kpis.map((k, i) => (
             <motion.div
               key={k.label}

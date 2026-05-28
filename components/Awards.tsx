@@ -38,7 +38,7 @@ export default function Awards({ data }: Props) {
   return (
     <section id="awards">
       <SectionHeader label="Achievements" meta={`${data.meta.period.days}-day highlights`} />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '8px', padding: '10px', background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
+      <div className="powo-grid-awards" style={{ display: 'grid', alignItems: 'stretch', gap: '8px', padding: '10px', background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {AWARDS.map((a, i) => (
           <motion.div
             key={a.title}

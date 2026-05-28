@@ -184,6 +184,43 @@ body::after {
   }
 }
 
+/* ── Responsive grids ──
+   Only the column count is responsive; each consuming element keeps its own
+   inline gap/background/border. Phone counts equal today's inline values so
+   the base layer is unchanged. */
+.powo-grid-kpi     { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.powo-grid-cardiac { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.powo-grid-awards  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (min-width: 641px) {
+  .powo-grid-kpi     { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .powo-grid-cardiac { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .powo-grid-awards  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .powo-grid-kpi     { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .powo-grid-cardiac { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .powo-grid-awards  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ── Hero wordmark sizing ──
+   Base keeps the exact clamp() from the phone design. At >=641px the vw term
+   is dropped (it would explode on wide viewports) and a fixed size is pinned,
+   stepping up once more at desktop. */
+.powo-hero-ghost { font-size: clamp(110px, 31vw, 162px); }
+.powo-hero-title { font-size: clamp(72px, 22vw, 106px); }
+
+@media (min-width: 641px) {
+  .powo-hero-ghost { font-size: 168px; }
+  .powo-hero-title { font-size: 106px; }
+}
+
+@media (min-width: 1024px) {
+  .powo-hero-ghost { font-size: 220px; }
+  .powo-hero-title { font-size: 124px; }
+}
+
 .powo-shell::before {
   content: '';
   position: absolute;

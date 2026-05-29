@@ -89,7 +89,7 @@ export default function RestRecommendation({ data }: Props) {
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '10px' }}>Recovery Signals</div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px 16px' }}>
           {signals.map(sg => (
-            <div key={sg.k} style={{ display: 'flex', justifyContent: 'space-between', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', borderBottom: '1px dashed rgba(255,255,255,0.08)', padding: '5px 0' }}>
+            <div key={sg.k} style={{ display: 'flex', justifyContent: 'space-between', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', padding: '5px 0' }}>
               <span style={{ color: 'var(--color-mid)' }}>{sg.k}</span>
               <span style={{ color: toneColor(sg.tone), fontWeight: 600 }}>{sg.v}</span>
             </div>
@@ -108,7 +108,7 @@ export default function RestRecommendation({ data }: Props) {
           {rec.daily_protocol.map((p, i) => (
             <motion.div key={p.label}
               initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-              style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '10px', padding: '7px 0', borderBottom: '1px dashed rgba(255,255,255,0.08)' }}
+              style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '10px', padding: '7px 0' }}
             >
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: theme.accent, fontWeight: 600, letterSpacing: '0.05em' }}>{p.label}</span>
               <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.45 }}>{p.detail}</span>
@@ -153,7 +153,7 @@ export default function RestRecommendation({ data }: Props) {
           {rec.return_criteria.map(c => (
             <motion.div key={c.label}
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-              style={{ display: 'grid', gridTemplateColumns: '18px 1fr auto', gap: '8px', alignItems: 'flex-start', padding: '7px 0', borderBottom: '1px dashed rgba(255,255,255,0.08)' }}
+              style={{ display: 'grid', gridTemplateColumns: '18px 1fr auto', gap: '8px', alignItems: 'flex-start', padding: '7px 0' }}
             >
               {c.met ? (
                 <span style={{ width: '14px', height: '14px', borderRadius: '3px', background: 'var(--accent-green)', color: 'var(--color-black)', fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px' }}>✓</span>

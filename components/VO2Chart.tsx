@@ -287,7 +287,7 @@ export default function VO2Chart({ trend }: Props) {
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: fromPeak < 0 ? 'var(--accent-coral)' : 'var(--accent-green)' }}>{fromPeak.toFixed(1)}%</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>19-day decline · rest signal</div>
           </div>
-          <div style={{ gridColumn: '1 / -1', borderTop: '1px dashed rgba(255,255,255,0.08)', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ gridColumn: '1 / -1', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', letterSpacing: '0.12em' }}>FIRST → TODAY</span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: sinceFirst >= 0 ? 'var(--accent-green)' : 'var(--accent-coral)', fontWeight: 600 }}>{sinceFirst >= 0 ? '+' : ''}{sinceFirst.toFixed(1)}%</span>
           </div>

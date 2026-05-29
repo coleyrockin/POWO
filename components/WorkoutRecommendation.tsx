@@ -87,7 +87,7 @@ export default function WorkoutRecommendation({ data }: Props) {
               })}
             </div>
 
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5, paddingTop: '8px', borderTop: '1px dashed rgba(255,255,255,0.08)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5, paddingTop: '8px' }}>
               <span style={{ color: 'var(--accent-teal)', opacity: 0.8 }}>WHY</span> · {day.rationale}
             </div>
             {day.cites && day.cites.length > 0 && (

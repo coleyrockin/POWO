@@ -70,7 +70,7 @@ export default function WeekChange({ data }: Props) {
             )
           })}
         </div>
-        <div style={{ marginTop: '12px', padding: '10px 10px 0', borderTop: '1px dashed rgba(255,255,255,0.08)', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>
+        <div style={{ marginTop: '12px', padding: '10px 10px 0', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>
           <span style={{ color: 'var(--color-mid)', fontWeight: 600, letterSpacing: '0.08em' }}>READ</span> · {(() => {
             const stepsDelta = wc[0].deltaPct ?? 0
             const rhrDelta = wc[3].deltaPct ?? 0

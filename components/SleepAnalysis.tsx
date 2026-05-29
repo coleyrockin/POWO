@@ -31,7 +31,7 @@ export default function SleepAnalysis({ sleep }: Props) {
       <SectionHeader label="Sleep Analysis" meta={`${s.nights_with_data} nights · stages tracked`} />
 
       {/* Coverage note — moved to top so reader sees the gap before the data */}
-      <div style={{ background: 'linear-gradient(180deg, #1a1505 0%, #0d0a02 100%)', border: '1px solid #5c4214', borderTop: 'none', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+      <div style={{ background: 'linear-gradient(180deg, #1a1505 0%, #0d0a02 100%)', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-black)', background: 'var(--accent-amber)', padding: '2px 5px', borderRadius: '2px', fontWeight: 700, letterSpacing: '0.14em', flexShrink: 0, marginTop: '1px' }}>GAP</span>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>{sleep.coverage_note}</span>
       </div>

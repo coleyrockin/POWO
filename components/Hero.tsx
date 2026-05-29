@@ -55,7 +55,6 @@ export default function Hero({ data }: Props) {
     <header className="powo-hero" style={{
       position: 'relative',
       overflow: 'hidden',
-      borderBottom: '1px solid var(--color-border)',
       padding: '46px 24px 36px',
       display: 'flex',
       flexDirection: 'column',
@@ -111,16 +110,15 @@ export default function Hero({ data }: Props) {
         lineHeight: 1,
         position: 'relative',
         zIndex: 1,
-        border: '1px solid rgba(255,255,255,0.07)',
         borderRadius: '6px',
         background: 'rgba(8,8,9,0.42)',
         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.035)',
         overflow: 'hidden',
       }}>
         <span style={{ padding: '8px 10px', color: 'var(--color-white)', fontWeight: 600 }}>{data.meta.owner.toUpperCase()}</span>
-        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.07)' }} />
+        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.04)' }} />
         <span style={{ padding: '8px 10px', color: 'var(--color-mid)', whiteSpace: 'nowrap' }}>{fmtShort(data.meta.period.start)} – {fmtShort(data.meta.period.end)}, 2026</span>
-        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.07)' }} />
+        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.04)' }} />
         <span style={{ display: 'inline-block', color: 'var(--accent-blue)', padding: '8px 10px', letterSpacing: '0.12em', fontSize: '10px', fontWeight: 700, background: 'rgba(10,132,255,0.09)' }}>
           {data.meta.period.days} DAYS
         </span>
@@ -131,7 +129,6 @@ export default function Hero({ data }: Props) {
         width: '100%',
         marginTop: '18px',
         padding: '0',
-        border: '1px solid var(--color-border)',
         background: 'linear-gradient(180deg, rgba(24,24,27,0.72), rgba(13,13,15,0.94))',
         borderRadius: '6px',
         boxShadow: 'var(--shadow-card)',
@@ -141,15 +138,15 @@ export default function Hero({ data }: Props) {
       }}>
         <div aria-hidden style={{ height: '2px', background: 'linear-gradient(90deg, var(--accent-blue), rgba(0,212,170,0.42), rgba(255,170,34,0.18))' }} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
-          <div style={{ minHeight: '66px', padding: '13px 14px 12px', borderRight: '1px solid rgba(255,255,255,0.055)', borderBottom: '1px solid rgba(255,255,255,0.055)' }}>
+          <div style={{ minHeight: '66px', padding: '13px 14px 12px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--accent-blue)', textTransform: 'uppercase', marginBottom: '6px' }}>Goal</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.primary_goal}</div>
           </div>
-          <div style={{ minHeight: '66px', padding: '13px 14px 12px', borderBottom: '1px solid rgba(255,255,255,0.055)' }}>
+          <div style={{ minHeight: '66px', padding: '13px 14px 12px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Weight</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.weight_lbs} lb <span style={{ color: 'var(--color-dim)', fontWeight: 500 }}>·</span> {data.profile.weight_kg} kg</div>
           </div>
-          <div style={{ minHeight: '76px', padding: '13px 14px 12px', borderRight: '1px solid rgba(255,255,255,0.055)' }}>
+          <div style={{ minHeight: '76px', padding: '13px 14px 12px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>Focus</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.training_focus}</div>
           </div>
@@ -161,7 +158,7 @@ export default function Hero({ data }: Props) {
       </motion.div>
 
       {/* KPI grid — stat trophies */}
-      <div style={{ width: '100%', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--color-border)', position: 'relative', zIndex: 1 }}>
+      <div style={{ width: '100%', marginTop: '16px', paddingTop: '16px', position: 'relative', zIndex: 1 }}>
         <div className="powo-grid-kpi" style={{ display: 'grid', gap: '6px' }}>
           {kpis.map((k, i) => (
             <motion.div
@@ -200,7 +197,7 @@ export default function Hero({ data }: Props) {
       {/* Headline insight */}
       <motion.div {...fadeUp(0.55)} style={{
         width: '100%', marginTop: '24px', padding: '15px 15px 14px',
-        border: '1px solid #1f2a24', background: 'linear-gradient(180deg, #0f1815 0%, #080f0d 100%)',
+        background: 'linear-gradient(180deg, #0f1815 0%, #080f0d 100%)',
         boxShadow: 'inset 0 1px 0 rgba(0,212,170,0.10), 0 0 24px rgba(0,212,170,0.06)',
         borderRadius: '6px',
         position: 'relative',

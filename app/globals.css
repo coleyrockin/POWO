@@ -6,7 +6,7 @@
   --color-card:   #111113;
   --color-panel:  #0d0d0f;
   --color-raised: #18181b;
-  --color-border: #242428;
+  --color-border: transparent;
   --color-mid:    #b9b9bd;
   --color-faint:  #8a8a90; /* content text — passes WCAG AA (5.75:1 on near-black) */
   --color-dim:    #37373d; /* decorative-only: dividers, hairlines — fails contrast for text */
@@ -30,10 +30,7 @@
 
 :root {
   --radius-card: 6px;
-  --shadow-card:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 12px 34px rgba(0, 0, 0, 0.28);
+  --shadow-card: 0 12px 34px rgba(0, 0, 0, 0.28);
 }
 
 *, *::before, *::after {
@@ -145,23 +142,12 @@ body::after {
   isolation: isolate;
   background:
     linear-gradient(180deg, rgba(16, 16, 18, 0.94), rgba(8, 8, 8, 0.98) 42%, #080808 100%);
-  border-inline: 1px solid rgba(255, 255, 255, 0.055);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.65),
-    0 28px 90px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
 }
 
-/* iPad — widen the column, gentle reflow handled per-section.
-   96vw keeps the side gutters minimal instead of a narrow centered strip. */
+/* iPad + Desktop — fill the full viewport width, no side gutters. */
 @media (min-width: 641px) {
-  .powo-shell { max-width: min(96vw, 920px); }
-}
-
-/* Desktop — fill the viewport (minus a hair of breathing room), capped at a
-   READABLE width so cards/strips stay legible instead of stretching into huge
-   sparse cells on ultra-wide monitors. */
-@media (min-width: 1024px) {
-  .powo-shell { max-width: min(96vw, 1360px); }
+  .powo-shell { max-width: 100%; box-shadow: none; }
 }
 
 /* ── Body wrapper (nav + sections) ──
@@ -285,8 +271,6 @@ body::after {
 @media (min-width: 1024px) {
   .powo-cmd-grid {
     grid-template-columns: 1fr 1fr;
-    max-width: 1100px;
-    margin-inline: auto;
   }
 }
 
@@ -307,14 +291,10 @@ body::after {
   .powo-hero-title { font-size: 124px; }
 }
 
-/* Hero is a full-width banner (outside .powo-body). Cap its CONTENT width on
-   desktop so the profile strip / KPI row / headline don't sprawl edge-to-edge
-   while the gradient band itself still spans the full shell. The ghost
-   watermark is absolutely positioned + aria-hidden, so it is excluded. */
-@media (min-width: 1024px) {
-  .powo-hero > *:not([aria-hidden]) {
-    max-width: 1120px;
-  }
+/* Hero is a full-width banner (outside .powo-body). Wider side padding on
+   desktop/iPad so content isn't jammed to the edges, but it fills the width. */
+@media (min-width: 641px) {
+  .powo-hero { padding-inline: 32px; }
 }
 
 .powo-shell::before {
@@ -361,7 +341,6 @@ section[id] {
   background: rgba(8, 8, 9, 0.9);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--color-border);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
 }
 
@@ -384,7 +363,7 @@ section[id] {
   padding: 5px 12px;
   background: rgba(255, 255, 255, 0.045);
   color: var(--color-white);
-  border: 1px solid var(--color-border);
+  border: none;
   border-radius: 6px;
   font-family: var(--font-mono);
   font-size: 10px;
@@ -393,14 +372,13 @@ section[id] {
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  transition: background 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
   scroll-snap-align: center;
 }
 
 .powo-nav-btn.is-active {
   background: linear-gradient(180deg, #4ca4ff, var(--accent-blue));
   color: var(--color-black);
-  border-color: rgba(76, 164, 255, 0.95);
   font-weight: 700;
   box-shadow: 0 0 14px rgba(10, 132, 255, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
@@ -452,10 +430,7 @@ tbody tr:hover {
 /* ── Card depth — gradient surface + inset highlight + outer shadow ── */
 .powo-lift {
   background: linear-gradient(180deg, #18181b 0%, #0f0f11 100%) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 1px 2px rgba(0, 0, 0, 0.44);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.44);
   transition:
     transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 220ms ease,
@@ -467,8 +442,6 @@ tbody tr:hover {
   transform: translateY(-2px);
   background: linear-gradient(180deg, #202026 0%, #111114 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
     0 10px 28px rgba(10, 132, 255, 0.12),
     0 2px 4px rgba(0, 0, 0, 0.5);
   z-index: 2;
@@ -517,7 +490,7 @@ tbody tr:hover {
   100% { --shine-x: 130%; }
 }
 
-/* ── Stat-trophy tile — radial halo behind big number, accent border, subtle lift ── */
+/* ── Stat-trophy tile — radial halo behind big number ── */
 .powo-trophy {
   position: relative;
   overflow: hidden;
@@ -527,21 +500,6 @@ tbody tr:hover {
   transition:
     transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
     background 280ms ease;
-}
-.powo-trophy::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--trophy-color) 55%, transparent), transparent 35%, transparent 70%, color-mix(in srgb, var(--trophy-color) 22%, transparent));
-  opacity: 0.55;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  padding: 1px;
-  border-radius: inherit;
 }
 .powo-trophy::after {
   content: '';

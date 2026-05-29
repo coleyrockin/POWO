@@ -14,8 +14,6 @@ export default function SectionHeader({ label, meta }: Props) {
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
       style={{
-        border: '1px solid var(--color-border)',
-        borderBottom: '1px solid rgba(255,255,255,0.035)',
         background: 'linear-gradient(180deg, rgba(22,22,25,0.82), rgba(12,12,14,0.94))',
         display: 'flex',
         alignItems: 'center',

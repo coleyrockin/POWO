@@ -24,7 +24,7 @@ export default function WorkoutRecommendation({ data }: Props) {
       {/* Headline card */}
       <motion.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-        style={{ background: 'linear-gradient(180deg, #0a2018 0%, #050f0c 100%)', border: '1px solid #1a3a30', borderTop: 'none', padding: '18px 16px', boxShadow: 'inset 0 1px 0 rgba(0,212,170,0.18), 0 0 24px rgba(0,212,170,0.08)' }}
+        style={{ background: 'linear-gradient(180deg, #0a2018 0%, #050f0c 100%)', padding: '18px 16px', boxShadow: '0 0 24px rgba(0,212,170,0.08)' }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--accent-teal)', letterSpacing: '0.5px' }}>{rec.cycle_name}</div>

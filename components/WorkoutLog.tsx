@@ -119,7 +119,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                 display: 'flex', flexDirection: 'column', gap: '8px',
                 background: highlight ? `linear-gradient(180deg, color-mix(in srgb, ${color} 14%, #0a0a0a), color-mix(in srgb, ${color} 6%, #0a0a0a))` : 'var(--color-card)',
                 position: 'relative',
-                ...(highlight ? { border: `1px solid color-mix(in srgb, ${color} 35%, transparent)`, margin: '-1px', boxShadow: `inset 0 1px 0 color-mix(in srgb, ${color} 22%, transparent), 0 0 24px color-mix(in srgb, ${color} 10%, transparent)` } : {}),
+                ...(highlight ? { boxShadow: `inset 0 1px 0 color-mix(in srgb, ${color} 22%, transparent), 0 0 24px color-mix(in srgb, ${color} 10%, transparent)` } : {}),
               }}
             >
               {isBest && (
@@ -139,7 +139,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                   {w.type === 'Weight Training' ? 'Weights' : w.type}
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, padding: '3px 8px', flexShrink: 0,
-                  ...(highlight ? { background: color, color: 'var(--color-black)' } : { background: '#0a0a0a', border: '1px solid var(--color-border)', color: 'var(--color-white)' }) }}>
+                  ...(highlight ? { background: color, color: 'var(--color-black)' } : { background: '#0a0a0a', color: 'var(--color-white)' }) }}>
                   {Math.round(w.calories)} kcal
                 </div>
               </div>

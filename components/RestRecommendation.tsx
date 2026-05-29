@@ -54,7 +54,7 @@ export default function RestRecommendation({ data }: Props) {
       <motion.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         style={{
-          background: theme.bg, border: `1px solid ${theme.border}`, borderTop: 'none', padding: '18px 16px',
+          background: theme.bg, padding: '18px 16px',
           boxShadow: `inset 0 1px 0 ${theme.accent}26, 0 0 18px ${theme.accent}12`,
           display: 'grid', gridTemplateColumns: '160px 1fr', gap: '14px', alignItems: 'center',
         }}

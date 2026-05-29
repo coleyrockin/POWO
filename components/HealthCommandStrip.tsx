@@ -46,15 +46,12 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
       aria-label="Data quality and coach takeaway"
       style={{
         padding: '14px',
-        borderBottom: '1px solid var(--color-border)',
         background: 'linear-gradient(180deg, rgba(8,8,8,0.98), rgba(8,8,8,0.82))',
       }}
     >
       <div
         className="powo-cmd-grid"
         style={{
-          border: '1px solid var(--color-border)',
-          background: 'var(--color-border)',
           boxShadow: 'var(--shadow-card)',
         }}
       >
@@ -77,7 +74,6 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
                   alignItems: 'center',
                   minHeight: '22px',
                   padding: '4px 7px',
-                  border: '1px solid rgba(255,255,255,0.07)',
                   borderRadius: '4px',
                   background: item.includes('partial') ? 'rgba(255,170,34,0.08)' : 'rgba(255,255,255,0.025)',
                   color: item.includes('partial') ? 'var(--accent-amber)' : 'var(--color-mid)',
@@ -94,7 +90,7 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
           </div>
         </div>
 
-        <div style={{ background: 'linear-gradient(180deg, rgba(13,24,21,0.96), rgba(8,15,13,0.96))', padding: '13px 14px', borderTop: '2px solid rgba(0,212,170,0.18)' }}>
+        <div style={{ background: 'linear-gradient(180deg, rgba(13,24,21,0.96), rgba(8,15,13,0.96))', padding: '13px 14px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent-teal)', marginBottom: '6px', fontWeight: 700 }}>
             Coach Takeaway
           </div>

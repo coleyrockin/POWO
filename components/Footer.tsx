@@ -15,7 +15,7 @@ export default function Footer({
   }
 
   return (
-    <footer style={{ borderTop: '1px solid var(--color-border)', textAlign: 'center', padding: '32px 16px 36px' }}>
+    <footer style={{ textAlign: 'center', padding: '32px 16px 36px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '7px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-mid)' }}>
         <span style={{ color: 'var(--accent-blue)', fontWeight: 600 }}>✓ Apple Health Verified</span>
         <span>Source: Apple HealthKit</span>
@@ -24,7 +24,7 @@ export default function Footer({
         <span style={{ color: 'var(--color-mid)', fontSize: '11px', marginTop: '2px' }}>{period}</span>
       </div>
 
-      <div style={{ marginTop: '28px', paddingTop: '22px', borderTop: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ marginTop: '28px', paddingTop: '22px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
         <div className="powo-wordmark" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', letterSpacing: '4px', lineHeight: 1 }}>
           POWO
         </div>

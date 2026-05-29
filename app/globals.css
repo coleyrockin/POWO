@@ -220,9 +220,22 @@ body::after {
    card so the full-width section is short instead of a long single column. */
 .powo-train-days { display: flex; flex-direction: column; }
 @media (min-width: 1024px) {
-  .powo-train-days {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Masonry columns (not a 2-col grid): a short day card no longer stretches
+     to match its taller row-neighbor, so there's no dead space below it.
+     DOM order 1→7 is preserved; visual flow is down col A then col B. */
+  .powo-train-days { display: block; column-count: 2; column-gap: 1px; }
+  .powo-train-days > * { break-inside: avoid; margin-bottom: 1px; }
+}
+
+/* Monthly-breakdown table — phone keeps the fixed 5-col fr grid (frozen). From
+   iPad up, columns hug their content (auto) and left-anchor, so the values sit
+   in a tight tabular block instead of stretching ragged across the canvas. */
+.powo-monthly-grid { grid-template-columns: 48px 1fr 1fr 1fr 1fr; column-gap: 8px; }
+@media (min-width: 641px) {
+  .powo-monthly-grid {
+    grid-template-columns: 48px auto auto auto auto;
+    justify-content: start;
+    column-gap: 40px;
   }
 }
 

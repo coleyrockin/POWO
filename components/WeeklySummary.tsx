@@ -71,7 +71,7 @@ export default function WeeklySummary({ data }: Props) {
       {/* Monthly breakdown */}
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-blue-dim)', textTransform: 'uppercase', marginBottom: '10px' }}>Monthly Breakdown</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '48px 1fr 1fr 1fr 1fr', gap: '10px 8px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px', lineHeight: 1.45 }}>
+        <div className="powo-monthly-grid" style={{ display: 'grid', rowGap: '10px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px', lineHeight: 1.45 }}>
           <div style={{ color: 'var(--color-mid)', fontSize: '10px', letterSpacing: '0.12em' }}>MO</div>
           <div style={{ color: 'var(--color-mid)', fontSize: '10px', letterSpacing: '0.12em' }}>STEPS</div>
           <div style={{ color: 'var(--color-mid)', fontSize: '10px', letterSpacing: '0.12em' }}>KCAL</div>

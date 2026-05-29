@@ -31,7 +31,7 @@ export default function WeekChange({ data }: Props) {
     <section id="week-change">
       <SectionHeader label="Week-Over-Week" meta={`${fmt(start)} – ${fmt(end)} vs prior 7d`} />
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '8px' }}>
+        <div className="powo-grid-wow" style={{ display: 'grid', gap: '8px' }}>
           {wc.map((m, i) => {
             const delta = m.deltaPct ?? 0
             const { arrow, color } = ArrowFor(delta, m.goodDirection)
@@ -62,7 +62,7 @@ export default function WeekChange({ data }: Props) {
                 }}
               >
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)', textTransform: 'uppercase', position: 'relative', zIndex: 2 }}>{m.label}</div>
-                <div className={glowClass} style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: accentColor, lineHeight: 1, marginTop: '4px', position: 'relative', zIndex: 2 }}>{main}</div>
+                <div className={glowClass} style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, calc(15px + 1.2vw), 26px)', color: accentColor, lineHeight: 1, marginTop: '4px', position: 'relative', zIndex: 2 }}>{main}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color, fontWeight: 600, marginTop: '4px', position: 'relative', zIndex: 2 }}>
                   {arrow} {m.deltaPct !== null ? `${Math.abs(m.deltaPct).toFixed(0)}%` : '—'}
                 </div>

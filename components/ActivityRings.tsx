@@ -35,7 +35,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
         meta={`${Math.round(totalCal).toLocaleString()} kcal${partialDays.length > 0 ? ` · ${partialDays.length} partial` : ''}`}
       />
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '20px 14px 18px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(14, 1fr)', gap: '3px', alignItems: 'flex-end' }}>
+        <div className="powo-burn" style={{ display: 'grid', gap: '3px', alignItems: 'flex-end' }}>
           {last14.map((d, i) => {
             const isPartial = d.active_kcal === null
             const cal = d.active_kcal

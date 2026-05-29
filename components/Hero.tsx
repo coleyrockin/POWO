@@ -52,7 +52,7 @@ export default function Hero({ data }: Props) {
   ]
 
   return (
-    <header style={{
+    <header className="powo-hero" style={{
       position: 'relative',
       overflow: 'hidden',
       borderBottom: '1px solid var(--color-border)',

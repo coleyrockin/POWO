@@ -51,10 +51,8 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
       }}
     >
       <div
+        className="powo-cmd-grid"
         style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr',
-          gap: '1px',
           border: '1px solid var(--color-border)',
           background: 'var(--color-border)',
           boxShadow: 'var(--shadow-card)',

@@ -61,7 +61,7 @@ export default function WeeklySummary({ data }: Props) {
               t.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
               t.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
               t.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
-            } style={{ fontFamily: 'var(--font-display)', fontSize: '28px', lineHeight: 1, letterSpacing: '0.5px', color: t.color }}>{t.val}</div>
+            } style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, calc(22px + 1.5vw), 34px)', lineHeight: 1, letterSpacing: '0.5px', color: t.color }}>{t.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '4px' }}>{t.unit}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 500, color: t.color, marginTop: '2px' }}>{t.delta}</div>
           </motion.div>

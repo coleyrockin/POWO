@@ -17,8 +17,6 @@
   /* Accent palette — per-KPI variety over electric blue base */
   --accent-blue:     #0a84ff;
   --accent-blue-dim: #4490ff; /* dim accent for meta labels — passes WCAG AA (6.35:1) */
-  --color-wolf:      #0a84ff; /* legacy alias — do not use in new code */
-  --color-wolf2:     #0060cc; /* legacy alias — do not use in new code */
   --accent-green:    #34c759;
   --accent-coral:    #ff6b6b;
   --accent-amber:    #ffaa22;
@@ -159,10 +157,11 @@ body::after {
   .powo-shell { max-width: min(96vw, 920px); }
 }
 
-/* Desktop — fill the viewport (minus a hair of breathing room), capped so the
-   content never becomes uncomfortably wide on ultra-wide monitors. */
+/* Desktop — fill the viewport (minus a hair of breathing room), capped at a
+   READABLE width so cards/strips stay legible instead of stretching into huge
+   sparse cells on ultra-wide monitors. */
 @media (min-width: 1024px) {
-  .powo-shell { max-width: min(98vw, 1760px); }
+  .powo-shell { max-width: min(96vw, 1360px); }
 }
 
 /* ── Body wrapper (nav + sections) ──
@@ -203,9 +202,10 @@ body::after {
    width (≈2 cols on a laptop, 3 on a wide monitor) so the extra horizontal
    space is used instead of stretching two columns thin.
 
-   The five data-heavy charts (1–5) and the Achievements block (12) span the
-   full width via column-span; the six compact analytical cards (6–11) flow in
-   the balanced columns. DOM order is unchanged → reading/SR order preserved. */
+   The wide strips — 14-day burn (1), Period panel (2), Week-over-week row (3),
+   the 7-day plan (11) and Achievements (12) — span the full width via
+   column-span; the compact analytical cards (4–10) flow in the balanced
+   columns. DOM order is unchanged → reading/SR order preserved. */
 @media (min-width: 1024px) {
   .powo-sections {
     display: block;
@@ -264,6 +264,32 @@ body::after {
   .powo-grid-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
+/* ── Full-width strip caps ──
+   These two sections span the whole desktop canvas (column-span: all). Left
+   un-capped, their fixed column counts (5 WoW tiles / 14 burn bars) stretch
+   into sparse, oversized cells. Base = exact phone values (unchanged). On
+   desktop only, cap the inner width and center so cells stay right-sized. */
+.powo-grid-wow { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.powo-burn     { grid-template-columns: repeat(14, 1fr); }
+
+@media (min-width: 1024px) {
+  .powo-grid-wow { max-width: 920px;  margin-inline: auto; }
+  .powo-burn     { max-width: 880px;  margin-inline: auto; }
+}
+
+/* Data-quality + coach-takeaway strip (sits outside .powo-body, full shell
+   width). Phone: stacked single column (unchanged). Desktop: the two panels
+   sit side-by-side and the block is capped + centered so 9px labels don't
+   stretch across the whole canvas. */
+.powo-cmd-grid { display: grid; grid-template-columns: 1fr; gap: 1px; }
+@media (min-width: 1024px) {
+  .powo-cmd-grid {
+    grid-template-columns: 1fr 1fr;
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+}
+
 /* ── Hero wordmark sizing ──
    Base keeps the exact clamp() from the phone design. At >=641px the vw term
    is dropped (it would explode on wide viewports) and a fixed size is pinned,
@@ -279,6 +305,16 @@ body::after {
 @media (min-width: 1024px) {
   .powo-hero-ghost { font-size: 220px; }
   .powo-hero-title { font-size: 124px; }
+}
+
+/* Hero is a full-width banner (outside .powo-body). Cap its CONTENT width on
+   desktop so the profile strip / KPI row / headline don't sprawl edge-to-edge
+   while the gradient band itself still spans the full shell. The ghost
+   watermark is absolutely positioned + aria-hidden, so it is excluded. */
+@media (min-width: 1024px) {
+  .powo-hero > *:not([aria-hidden]) {
+    max-width: 1120px;
+  }
 }
 
 .powo-shell::before {

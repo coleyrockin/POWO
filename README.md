@@ -28,7 +28,7 @@ Zero UI libraries. Every card, chart, animation, and visualization — built fro
 
 POWO ingests 91 days of Apple HealthKit data for a single athlete and renders it across sixteen composed sections: a hero KPI grid with per-metric sparklines, a data-quality and coach-takeaway strip, a 14-day calorie burn chart, period totals, week-over-week deltas, a daily breakdown table, a VO₂ max trajectory chart, cardiac metrics, sleep-stage analysis, a workout library, a pushup log, rest and training recommendations, achievements, and an Apple Health verification footer.
 
-The experience is **mobile-first** — a dark-mode column tuned pixel-by-pixel for a 375 px iPhone viewport — and now **responsive across three breakpoints**: the phone column stays exactly as designed, an iPad layout (≥641 px) widens the column and reflows the metric grids, and a desktop layout (≥1024 px) becomes a true dashboard with a sticky left-rail navigation and a two-column section canvas. It runs entirely statically — no client-side data fetching, no runtime API.
+The experience is **mobile-first** — a dark-mode column tuned pixel-by-pixel for a 375 px iPhone viewport — and now **responsive across three breakpoints**: the phone column stays exactly as designed, an iPad layout (≥641 px) widens the column and reflows the metric grids, and a desktop layout (≥1024 px) becomes a true dashboard with a sticky left-rail navigation and a CSS multi-column masonry section canvas (≈2 columns on a laptop, 3 on a wide monitor), capped at a readable 1360 px. It runs entirely statically — no client-side data fetching, no runtime API.
 
 ## Tech Stack
 
@@ -61,7 +61,7 @@ The experience is **mobile-first** — a dark-mode column tuned pixel-by-pixel f
 
 **Six-color accent palette with tinting.** Base blue `#0a84ff`, extended with green, coral, amber, purple, and teal. Each KPI, cardiac metric, award, and WoW tile is mapped to one accent and tinted throughout: sparkline fill, radial halo, gradient border, text glow.
 
-**Mobile-first, then responsive.** The phone is the design's source of truth — the base layer carries no media queries, so it can never drift. iPad and desktop layers are purely additive `@media` overrides (≥641 px, ≥1024 px): the column widens, equal-column grids gain columns, and on desktop the navigation becomes a left rail while sections tile into a two-column canvas. A local Playwright visual-regression check (`npm run test:visual`) guards the 390 px phone render pixel-for-pixel against every layout change.
+**Mobile-first, then responsive.** The phone is the design's source of truth — the base layer carries no media queries, so it can never drift. iPad and desktop layers are purely additive `@media` overrides (≥641 px, ≥1024 px): the column widens, equal-column grids gain columns, and on desktop the navigation becomes a left rail while sections pack into a CSS multi-column masonry canvas (wide strips span the full width; compact cards flow in the balanced columns). A local Playwright visual-regression check (`npm run test:visual`) guards the 390 px phone render pixel-for-pixel against every layout change.
 
 **Static data, real data.** `lib/data.ts` composes a source-controlled base snapshot with the latest curated import patch from `lib/imported-health-export.ts` via `lib/normalize-health-export.ts`. No API, no database, no client-side data fetch.
 
@@ -142,7 +142,7 @@ npm run qa
 
 The smoke gate serves the existing `.next` build on port `3010` and verifies `/`, `/manifest.webmanifest`, `/robots.txt`, `/sitemap.xml`, `/opengraph-image`, `/twitter-image`, security headers, and the custom 404. Use `POWO_SMOKE_PORT=4010 npm run smoke` if port `3010` is busy.
 
-Then inspect the mobile shell at 375 px, 390 px, 430 px, and desktop width. See [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) for the full public/recruiter/deployment checklist.
+Then inspect the layout at phone (375 / 390 / 430 px), iPad (641 / 768 / 820 px), and desktop (1280 / 1440 px) widths. See [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) for the full public/recruiter/deployment checklist.
 
 ## Deployment
 

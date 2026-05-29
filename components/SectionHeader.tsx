@@ -47,7 +47,8 @@ export default function SectionHeader({ label, meta }: Props) {
         <h2
           style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '11px',
+            // Phone pins to 11px (preferred term < 11 at 390px); scales to 15px on desktop.
+            fontSize: 'clamp(11px, calc(8px + 0.7vw), 15px)',
             fontWeight: 700,
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
@@ -64,7 +65,7 @@ export default function SectionHeader({ label, meta }: Props) {
         <span
           style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '10px',
+            fontSize: 'clamp(10px, calc(8px + 0.45vw), 12px)',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
             color: 'var(--accent-blue-dim)',

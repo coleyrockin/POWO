@@ -18,7 +18,7 @@ The smoke gate defaults to port `3010`. Use `POWO_SMOKE_PORT=4010 npm run smoke`
 
 ## Visual QA
 
-- Check the home page at `375px`, `390px`, `430px`, and desktop width.
+- Check the home page at phone (`375px`, `390px`, `430px`), iPad (`641px`, `768px`, `820px`), and desktop (`1280px`, `1440px`) widths.
 - Verify no horizontal overflow, clipped text, broken chart labels, or blank Framer Motion reveal states.
 - Confirm `docs/screenshot.jpg` and the public screenshots still match the current data window and hero totals.
 - Check reduced-motion mode for readable non-jarring states.

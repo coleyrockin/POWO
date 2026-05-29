@@ -28,7 +28,7 @@ function buildPath(pts: { x: number; y: number }[], smooth: boolean): string {
 }
 
 export default function Sparkline({ values, color, width = 78, height = 18, delay = 0, smooth = true }: Props) {
-  if (values.length < 2) return <svg width={width} height={height} aria-hidden />
+  if (values.length < 2) return <svg style={{ display: 'block', width: '100%', height }} aria-hidden />
 
   const min = Math.min(...values)
   const max = Math.max(...values)
@@ -47,10 +47,9 @@ export default function Sparkline({ values, color, width = 78, height = 18, dela
 
   return (
     <svg
-      width={width}
-      height={height}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ display: 'block', overflow: 'visible' }}
+      preserveAspectRatio="none"
+      style={{ display: 'block', width: '100%', height, overflow: 'visible' }}
       aria-hidden
     >
       <defs>

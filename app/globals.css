@@ -234,6 +234,10 @@ body::after {
 .powo-grid-cardiac { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .powo-grid-awards  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .powo-grid-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Hero profile strip — stays 2-up through iPad (cells ~390px there). At desktop
+   it spans the full shell width, so 2 cols become 616px+ half-empty cells;
+   promote to a single tight 4-up row instead. */
+.powo-grid-profile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 @media (min-width: 641px) {
   .powo-grid-kpi     { grid-template-columns: repeat(6, minmax(0, 1fr)); }
@@ -248,6 +252,15 @@ body::after {
   .powo-grid-awards  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   /* Period-summary spans the full canvas width, so it carries more columns */
   .powo-grid-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .powo-grid-profile { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Hero KPI sparkline — fixed 78px on phone/iPad (matches the compact tile). On
+   the wide desktop trophy tile a fixed 78px reads as a tiny centered island, so
+   let it fill the tile width (the SVG stretches via preserveAspectRatio:none). */
+.powo-kpi-spark { width: 78px; }
+@media (min-width: 1024px) {
+  .powo-kpi-spark { width: 100%; }
 }
 
 /* ── Full-width strip caps ──

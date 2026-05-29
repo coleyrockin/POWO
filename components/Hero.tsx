@@ -137,7 +137,7 @@ export default function Hero({ data }: Props) {
         overflow: 'hidden',
       }}>
         <div aria-hidden style={{ height: '2px', background: 'linear-gradient(90deg, var(--accent-blue), rgba(0,212,170,0.42), rgba(255,170,34,0.18))' }} />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
+        <div className="powo-grid-profile" style={{ display: 'grid' }}>
           <div style={{ minHeight: '66px', padding: '13px 14px 12px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--accent-blue)', textTransform: 'uppercase', marginBottom: '6px' }}>Goal</div>
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.primary_goal}</div>
@@ -186,7 +186,7 @@ export default function Hero({ data }: Props) {
               >
                 {k.node}
               </span>
-              <div style={{ width: '78px', height: '18px', position: 'relative', zIndex: 2 }}>
+              <div className="powo-kpi-spark" style={{ height: '18px', position: 'relative', zIndex: 2 }}>
                 <Sparkline values={k.spark} color={k.color} delay={0.35 + i * 0.06} />
               </div>
             </motion.div>

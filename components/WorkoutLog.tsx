@@ -59,8 +59,11 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {workoutSummary.map((w, i) => {
             const Icon = ACTIVITY_SVG_ICONS[w.type] ?? ACTIVITY_SVG_ICONS['Unknown Activity']
-            const color = ACTIVITY_COLORS[w.type] ?? 'var(--color-white)'
+            // Unified accent for the ranked list (per-activity colors read as a
+            // rainbow here). Magnitude is carried by bar width + value-driven opacity.
+            const color = 'var(--accent-blue)'
             const pct = Math.round((w.total_calories / maxSummaryCal) * 100)
+            const barOpacity = 0.5 + 0.5 * (pct / 100)
             const hours = Math.round(w.total_duration_min / 60)
             return (
               <motion.div key={w.type}
@@ -86,6 +89,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                         ['--bar-color' as string]: color,
                         height: '6px',
                         borderRadius: '3px',
+                        opacity: barOpacity,
                       }}
                     />
                   </div>

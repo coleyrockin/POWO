@@ -49,18 +49,19 @@ export default function CountUp({
     return () => cancelAnimationFrame(frame)
   }, [inView, value, duration])
 
-  const formatted = format
-    ? format(display)
-    : display.toLocaleString(undefined, {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-      })
+  const fmt = (n: number) =>
+    format ? format(n) : n.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+  const formatted = fmt(display)
 
   return (
-    <span ref={ref} className={className} style={style}>
-      {prefix}
-      {formatted}
-      {suffix}
+    // role=img + aria-label makes screen readers announce the FINAL value once,
+    // not each animated intermediate frame.
+    <span ref={ref} className={className} style={style} role="img" aria-label={`${prefix}${fmt(value)}${suffix}`}>
+      <span aria-hidden>
+        {prefix}
+        {formatted}
+        {suffix}
+      </span>
     </span>
   )
 }

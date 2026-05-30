@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface Props {
   label: string
@@ -8,13 +8,13 @@ interface Props {
 
 export default function SectionHeader({ label, meta }: Props) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
+      className="powo-section-header"
       style={{
-        background: 'linear-gradient(180deg, rgba(22,22,25,0.82), rgba(12,12,14,0.94))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -22,11 +22,10 @@ export default function SectionHeader({ label, meta }: Props) {
         minHeight: '46px',
         padding: '13px 16px',
         position: 'relative',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.045)',
       }}
     >
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: '1 1 auto' }}>
-        <motion.span
+        <m.span
           aria-hidden
           initial={{ scaleY: 0 }}
           whileInView={{ scaleY: 1 }}
@@ -75,6 +74,6 @@ export default function SectionHeader({ label, meta }: Props) {
           {meta}
         </span>
       )}
-    </motion.div>
+    </m.div>
   )
 }

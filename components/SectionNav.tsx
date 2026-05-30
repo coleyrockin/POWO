@@ -90,7 +90,7 @@ export default function SectionNav() {
                 key={s.id}
                 ref={el => { buttonsRef.current[s.id] = el }}
                 onClick={() => onClick(s.id)}
-                aria-current={isActive ? 'true' : undefined}
+                aria-current={isActive ? 'location' : undefined}
                 className={isActive ? 'powo-nav-btn is-active' : 'powo-nav-btn'}
               >
                 {s.label}

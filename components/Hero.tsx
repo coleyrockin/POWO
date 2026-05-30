@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import CountUp from './CountUp'
 import Sparkline from './Sparkline'
 import { fmtShort, glowClassForAccent } from '@/lib/helpers'
@@ -78,7 +78,7 @@ export default function Hero({ data }: Props) {
         POWO
       </div>
 
-      <motion.div {...fadeUp(0.05)} className="powo-badge-glow" style={{
+      <m.div {...fadeUp(0.05)} className="powo-badge-glow" style={{
         display: 'inline-flex', alignItems: 'center', gap: '8px',
         background: 'linear-gradient(180deg, #3ddb6a 0%, #2bb04c 100%)', color: 'var(--color-black)',
         fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600,
@@ -90,13 +90,13 @@ export default function Hero({ data }: Props) {
           <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--color-black)' }} />
         </span>
         Apple Health · {data.meta.period.days}-Day Snapshot
-      </motion.div>
+      </m.div>
 
-      <motion.h1 {...fadeUp(0.1)} className="powo-wordmark powo-hero-title" style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', marginBottom: '6px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+      <m.h1 {...fadeUp(0.1)} className="powo-wordmark powo-hero-title" style={{ fontFamily: 'var(--font-display)', lineHeight: 0.88, letterSpacing: '2px', marginBottom: '6px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
         POWO
-      </motion.h1>
+      </m.h1>
 
-      <motion.div {...fadeUp(0.15)} style={{
+      <m.div {...fadeUp(0.15)} style={{
         fontFamily: 'var(--font-mono)',
         fontSize: '10px',
         color: 'var(--color-white)',
@@ -116,16 +116,16 @@ export default function Hero({ data }: Props) {
         overflow: 'hidden',
       }}>
         <span style={{ padding: '8px 10px', color: 'var(--color-white)', fontWeight: 600 }}>{data.meta.owner.toUpperCase()}</span>
-        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.04)' }} />
+        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'var(--hairline)' }} />
         <span style={{ padding: '8px 10px', color: 'var(--color-mid)', whiteSpace: 'nowrap' }}>{fmtShort(data.meta.period.start)} – {fmtShort(data.meta.period.end)}, 2026</span>
-        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'rgba(255,255,255,0.04)' }} />
+        <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'var(--hairline)' }} />
         <span style={{ display: 'inline-block', color: 'var(--accent-blue)', padding: '8px 10px', letterSpacing: '0.12em', fontSize: '10px', fontWeight: 700, background: 'rgba(10,132,255,0.09)' }}>
           {data.meta.period.days} DAYS
         </span>
-      </motion.div>
+      </m.div>
 
       {/* Profile strip */}
-      <motion.div {...fadeUp(0.2)} style={{
+      <m.div {...fadeUp(0.2)} style={{
         width: '100%',
         marginTop: '18px',
         padding: '0',
@@ -155,13 +155,13 @@ export default function Hero({ data }: Props) {
             <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.35, fontWeight: 600, color: 'var(--color-white)' }}>{data.profile.active_lifestyle.join(' · ')}</div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* KPI grid — stat trophies */}
       <div style={{ width: '100%', marginTop: '16px', paddingTop: '16px', position: 'relative', zIndex: 1 }}>
         <div className="powo-grid-kpi" style={{ display: 'grid', gap: '6px' }}>
           {kpis.map((k, i) => (
-            <motion.div
+            <m.div
               key={k.label}
               {...fadeUp(0.22 + i * 0.05)}
               className="powo-trophy"
@@ -189,13 +189,13 @@ export default function Hero({ data }: Props) {
               <div className="powo-kpi-spark" style={{ height: '18px', position: 'relative', zIndex: 2 }}>
                 <Sparkline values={k.spark} color={k.color} delay={0.35 + i * 0.06} />
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
 
       {/* Headline insight */}
-      <motion.div {...fadeUp(0.55)} style={{
+      <m.div {...fadeUp(0.55)} style={{
         width: '100%', marginTop: '24px', padding: '15px 15px 14px',
         background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-teal) 10%, var(--color-card)), color-mix(in srgb, var(--accent-teal) 4%, var(--color-card)))',
         boxShadow: 'inset 0 1px 0 rgba(0,212,170,0.10), 0 0 24px rgba(0,212,170,0.06)',
@@ -207,7 +207,7 @@ export default function Hero({ data }: Props) {
         <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.55, color: 'var(--color-white)' }}>
           VO₂ max climbed from <span style={{ color: 'var(--accent-teal)', fontWeight: 600 }}>{v.first.value.toFixed(1)}</span> to a peak of <span style={{ color: 'var(--accent-amber)', fontWeight: 600 }}>{v.peak.value.toFixed(2)}</span> on {fmtShort(v.peak.date)} — <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>+{since.toFixed(1)}%</span> in {vo2Weeks} weeks. Daily averages: <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{a.avg_daily_steps.toLocaleString()} steps</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_active_kcal)} kcal</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_exercise_min)} exercise min</span>.
         </div>
-      </motion.div>
+      </m.div>
     </header>
   )
 }

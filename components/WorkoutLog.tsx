@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { ACTIVITY_SVG_ICONS } from '@/lib/icons'
 import type { Workout, WorkoutTypeSummary } from '@/lib/types'
@@ -66,7 +66,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
             const barOpacity = 0.5 + 0.5 * (pct / 100)
             const hours = Math.round(w.total_duration_min / 60)
             return (
-              <motion.div key={w.type}
+              <m.div key={w.type}
                 initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
                 style={{ display: 'grid', gridTemplateColumns: '20px 1fr auto', alignItems: 'center', gap: '10px' }}
               >
@@ -79,7 +79,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                     </span>
                   </div>
                   <div style={{ height: '6px', borderRadius: '3px', background: 'var(--color-track)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
-                    <motion.div
+                    <m.div
                       className="powo-comet"
                       initial={{ width: 0 }}
                       whileInView={{ width: `${pct}%` }}
@@ -95,7 +95,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                   </div>
                 </div>
                 <span style={{ fontFamily: 'var(--font-display)', fontSize: '15px', color, letterSpacing: '0.5px', minWidth: '52px', textAlign: 'right' }}>{Math.round(w.total_calories).toLocaleString()}</span>
-              </motion.div>
+              </m.div>
             )
           })}
         </div>
@@ -112,7 +112,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
           const Icon = ACTIVITY_SVG_ICONS[w.type] ?? ACTIVITY_SVG_ICONS['Unknown Activity']
           const color = ACTIVITY_COLORS[w.type] ?? 'var(--color-white)'
           return (
-            <motion.div
+            <m.div
               key={`${w.date}-${w.start}`}
               initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.35, delay: (i % 6) * 0.04 }}
               className="powo-lift"
@@ -127,7 +127,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
               }}
             >
               {isBest && (
-                <div style={{ position: 'absolute', top: '10px', right: '10px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-black)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700 }}>BEST</div>
+                <div style={{ position: 'absolute', top: '10px', right: '10px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700 }}>BEST</div>
               )}
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: 'var(--color-mid)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '6px' }}>
                 <span>{fmtDate(w.date)}</span>
@@ -143,7 +143,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                   {w.type === 'Weight Training' ? 'Weights' : w.type}
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, padding: '3px 8px', flexShrink: 0,
-                  ...(highlight ? { background: color, color: 'var(--color-black)' } : { background: 'var(--color-track)', color: 'var(--color-white)' }) }}>
+                  ...(highlight ? { background: color, color: 'var(--on-accent)' } : { background: 'var(--color-track)', color: 'var(--color-white)' }) }}>
                   {Math.round(w.calories)} kcal
                 </div>
               </div>
@@ -163,7 +163,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                   </span>
                 )}
               </div>
-            </motion.div>
+            </m.div>
           )
         })}
       </div>

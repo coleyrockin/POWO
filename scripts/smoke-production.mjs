@@ -257,6 +257,10 @@ async function run() {
     ['/sitemap.xml', checkSitemap],
     ['/opengraph-image', () => checkPng('/opengraph-image')],
     ['/twitter-image', () => checkPng('/twitter-image')],
+    ['/api/cards/overview', () => checkPng('/api/cards/overview')],
+    ['/api/cards/week', () => checkPng('/api/cards/week')],
+    ['/api/cards/activity', () => checkPng('/api/cards/activity')],
+    ['/api/cards/story', () => checkPng('/api/cards/story')],
     ['/missing-powo-smoke-route', checkNotFound],
   ]
 

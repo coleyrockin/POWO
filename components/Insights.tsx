@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { buildInsights } from '@/lib/helpers'
 import type { HealthData } from '@/lib/types'
@@ -12,7 +12,7 @@ export default function Insights({ data }: Props) {
   return (
     <section id="insights">
       <SectionHeader label="Insights" meta="patterns in your data" />
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}
       >
@@ -25,7 +25,7 @@ export default function Insights({ data }: Props) {
         {/* Correlation cards */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '8px', marginBottom: '14px' }}>
           {correlations.map((c, i) => (
-            <motion.div
+            <m.div
               key={c.key}
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
               className="powo-lift"
@@ -43,14 +43,14 @@ export default function Insights({ data }: Props) {
                 <span style={{ color: c.smallSample ? 'var(--accent-amber)' : 'var(--color-mid)' }}>n={c.n}{c.smallSample ? ' · small n' : ''}</span>
               </div>
               <div style={{ marginTop: '6px', fontFamily: 'var(--font-sans)', fontSize: '12px', lineHeight: 1.5, color: 'var(--color-faint)' }}>{c.read}</div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
         {/* Latent signal tiles */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px' }}>
           {signals.map((s, i) => (
-            <motion.div
+            <m.div
               key={s.key}
               initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
               className="powo-lift"
@@ -59,10 +59,10 @@ export default function Insights({ data }: Props) {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-mid)', marginBottom: '5px' }}>{s.title}</div>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: '19px', lineHeight: 1, color: s.accent }}>{s.value}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-faint)', marginTop: '5px', lineHeight: 1.4 }}>{s.detail}</div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
-      </motion.div>
+      </m.div>
     </section>
   )
 }

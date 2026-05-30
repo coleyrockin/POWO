@@ -20,29 +20,9 @@ export function fmtShort(iso: string): string {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()
 }
 
-export function fmtFull(iso: string): string {
-  const d = new Date(iso + 'T00:00:00')
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-export function dayOfWeek(iso: string): string {
-  const d = new Date(iso + 'T00:00:00')
-  return d.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()
-}
-
 // ─── Slicing ─────────────────────────────────────────────────────
 export function lastNDays(daily: DailyMetric[], n: number): DailyMetric[] {
   return daily.slice(-n)
-}
-
-export function workoutsInRange(workouts: Workout[], startDate: string): Workout[] {
-  return workouts.filter(w => w.date >= startDate)
-}
-
-export function workoutsLastNDays(workouts: Workout[], daily: DailyMetric[], n: number): Workout[] {
-  const cutoff = daily[daily.length - n]?.date
-  if (!cutoff) return []
-  return workouts.filter(w => w.date >= cutoff)
 }
 
 // ─── Stats helpers (null-safe) ───────────────────────────────────
@@ -87,6 +67,10 @@ export function trendSlope(values: (number | null)[]): number {
 
 // ─── VO2 max signals ─────────────────────────────────────────────
 export function vo2Recent(vo2: VO2Point[]): { peak: VO2Point; current: VO2Point; deltaFromPeak: number; deltaPct: number } {
+  if (vo2.length === 0) {
+    const zero: VO2Point = { date: '', value: 0 }
+    return { peak: zero, current: zero, deltaFromPeak: 0, deltaPct: 0 }
+  }
   const peak = vo2.reduce((a, b) => (b.value > a.value ? b : a))
   const current = vo2[vo2.length - 1]
   const deltaFromPeak = current.value - peak.value
@@ -169,7 +153,7 @@ export function buildWeeklyAggregates(data: HealthData): WeeklyAggregate[] {
   const out: WeeklyAggregate[] = []
   const sortedKeys = [...groups.keys()].sort()
   for (const k of sortedKeys) {
-    const days = groups.get(k)!
+    const days = groups.get(k) ?? []
     const start = new Date(k + 'T00:00:00')
     const end = new Date(start)
     end.setDate(end.getDate() + 6)
@@ -273,8 +257,9 @@ export interface SleepSignals {
 export function analyzeSleep(data: HealthData): SleepSignals {
   const s = data.sleep.summary
   const nights = data.sleep.nights
-  const bestNight = nights.reduce((a, b) => (b.total_sleep_hours > a.total_sleep_hours ? b : a))
-  const worstNight = nights.reduce((a, b) => (b.total_sleep_hours < a.total_sleep_hours ? b : a))
+  const emptyNight: SleepNight = { date: '', total_sleep_hours: 0, core_hours: 0, deep_hours: 0, rem_hours: 0, deep_pct: 0, rem_pct: 0 }
+  const bestNight = nights.length ? nights.reduce((a, b) => (b.total_sleep_hours > a.total_sleep_hours ? b : a)) : emptyNight
+  const worstNight = nights.length ? nights.reduce((a, b) => (b.total_sleep_hours < a.total_sleep_hours ? b : a)) : emptyNight
   const consistency: 'tight' | 'moderate' | 'erratic' =
     s.stdev_hours < 0.7 ? 'tight' : s.stdev_hours < 1.2 ? 'moderate' : 'erratic'
   return {
@@ -751,6 +736,17 @@ function lagPairs(
   return { xs, ys }
 }
 
+// Build aligned (x, y) pairs from arbitrary items, dropping a pair when EITHER
+// value is null so the two arrays never misalign (pearsonR pairs by index).
+export function pairDrop<T>(items: T[], xf: (t: T) => number | null, yf: (t: T) => number | null): { xs: number[]; ys: number[] } {
+  const xs: number[] = [], ys: number[] = []
+  for (const it of items) {
+    const x = xf(it), y = yf(it)
+    if (x !== null && y !== null) { xs.push(x); ys.push(y) }
+  }
+  return { xs, ys }
+}
+
 function hm(hours: number): string {
   const h = Math.floor(hours)
   return `${h}h ${Math.round((hours - h) * 60)}m`
@@ -790,13 +786,13 @@ export function buildInsights(data: HealthData): InsightsResult {
         : r > 0 ? `Bigger burn days nudge next-morning RHR up (${s}) — autonomic load showing through.`
         : `More burn tracks with lower next-day RHR (${s}) — fitness adaptation outpacing fatigue.`),
     mkCorr('sleep-hrv', 'Sleep duration → next-day HRV', 'Sleep hrs', 'Next-day HRV',
-      (() => { const p = joinSleepToDaily(data, 1); return { xs: p.map(x => x.night.total_sleep_hours), ys: p.map(x => x.next.hrv_ms).filter((v): v is number => v !== null) } })(),
+      pairDrop(joinSleepToDaily(data, 1), p => p.night.total_sleep_hours, p => p.next.hrv_ms),
       'var(--accent-purple)',
       (r, s) => s === 'none' ? 'No clear link in the sleep-tracked window.'
         : r > 0 ? `More sleep tends to lift next-day HRV (${s}) — recovery responds to rest.`
         : `Longer sleep tracks with lower next-day HRV (${s}) — unusual; likely small-sample noise.`),
     mkCorr('deep-rhr', 'Deep sleep → next-day resting HR', 'Deep hrs', 'Next-day RHR',
-      (() => { const p = joinSleepToDaily(data, 1); return { xs: p.map(x => x.night.deep_hours), ys: p.map(x => x.next.resting_hr).filter((v): v is number => v !== null) } })(),
+      pairDrop(joinSleepToDaily(data, 1), p => p.night.deep_hours, p => p.next.resting_hr),
       'var(--accent-blue)',
       (r, s) => s === 'none' ? 'No clear link in the sleep-tracked window.'
         : r < 0 ? `More deep sleep tracks with a lower next-morning RHR (${s}) — restorative.`

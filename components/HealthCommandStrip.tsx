@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { analyzeRecovery } from '@/lib/helpers'
 import type { HealthData } from '@/lib/types'
 
@@ -39,7 +39,7 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
   const partialCountCopy = `${partialDays.length} partial day${partialDays.length === 1 ? '' : 's'}`
 
   return (
-    <motion.section
+    <m.section
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
@@ -99,6 +99,6 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
           </p>
         </div>
       </div>
-    </motion.section>
+    </m.section>
   )
 }

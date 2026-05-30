@@ -1,10 +1,11 @@
 'use client'
 import { useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ACTIVITY_SVG_ICONS } from '@/lib/icons'
 import type { DailyMetric, Workout } from '@/lib/types'
 import SectionHeader from './SectionHeader'
 import ChartCursorBar from './ChartCursorBar'
+import { ChartLiveRegion } from './ChartCursor'
 
 interface Props {
   daily: DailyMetric[]
@@ -44,6 +45,17 @@ export default function ActivityRings({ daily, workouts }: Props) {
   const active = activeIdx !== null ? last14[activeIdx] : null
   const activeWorkouts = active ? (workoutsByDate[active.date] ?? []) : []
   const activeIsPeak = active != null && active.active_kcal !== null && active.active_kcal === maxCal && maxCal > 0
+  const activeLabel = active
+    ? `${new Date(active.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: ${active.active_kcal === null ? 'partial data' : `${Math.round(active.active_kcal)} active kcal`}${activeWorkouts.length ? `, ${activeWorkouts.join(', ')}` : ''}`
+    : ''
+  const onKey = (e: React.KeyboardEvent) => {
+    const last = last14.length - 1
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { setActiveIdx(p => (p === null ? 0 : Math.min(p + 1, last))); e.preventDefault() }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { setActiveIdx(p => (p === null ? last : Math.max(p - 1, 0))); e.preventDefault() }
+    else if (e.key === 'Home') { setActiveIdx(0); e.preventDefault() }
+    else if (e.key === 'End') { setActiveIdx(last); e.preventDefault() }
+    else if (e.key === 'Escape') { setActiveIdx(null) }
+  }
 
   return (
     <section>
@@ -55,7 +67,13 @@ export default function ActivityRings({ daily, workouts }: Props) {
         <div
           ref={gridRef}
           className="powo-burn"
+          tabIndex={0}
+          role="application"
+          aria-roledescription="interactive bar chart"
+          aria-label={`14-day active-calorie burn, ${last14.length} days. Use arrow keys to inspect each day.${active ? ` Selected ${activeLabel}.` : ''}`}
           style={{ display: 'grid', gap: '3px', alignItems: 'flex-end', position: 'relative', touchAction: 'pan-y' }}
+          onKeyDown={onKey}
+          onBlur={() => setActiveIdx(null)}
           onPointerDown={e => { if (e.pointerType === 'touch') { draggingRef.current = true; try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* noop */ } const i = idxFromClientX(e.clientX); if (i !== null) setActiveIdx(i) } }}
           onPointerMove={e => { if (e.pointerType === 'touch' && draggingRef.current) { const i = idxFromClientX(e.clientX); if (i !== null) setActiveIdx(i) } }}
           onPointerUp={e => { if (e.pointerType === 'touch') { draggingRef.current = false; setActiveIdx(null) } }}
@@ -87,13 +105,13 @@ export default function ActivityRings({ daily, workouts }: Props) {
                 aria-label={`${d.date}: ${calLabel}${workoutLabel}`}
                 title={`${d.date}: ${calLabel}${workoutLabel}`}
                 onPointerEnter={e => { if (e.pointerType !== 'touch') setActiveIdx(i) }}
-                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', background: activeIdx === i ? 'rgba(255,255,255,0.05)' : 'transparent', borderRadius: '4px' }}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', background: activeIdx === i ? 'var(--color-raised)' : 'transparent', borderRadius: '4px' }}
               >
                 {isPeak && (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.7, duration: 0.3 }}
-                    style={{ fontFamily: 'var(--font-mono)', fontSize: '8px', letterSpacing: '0.12em', color: 'var(--color-black)', background: 'var(--accent-amber)', padding: '1px 4px', borderRadius: '2px', fontWeight: 700 }}
-                  >★</motion.div>
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: '8px', letterSpacing: '0.12em', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '1px 4px', borderRadius: '2px', fontWeight: 700 }}
+                  >★</m.div>
                 )}
                 {!isPeak && <div style={{ height: '12px' }} />}
 
@@ -109,7 +127,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
                 </div>
 
                 <div style={{ width: '100%', height: '96px', display: 'flex', alignItems: 'flex-end' }}>
-                  <motion.div
+                  <m.div
                     initial={{ height: 0 }} whileInView={{ height: barHeight }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
                     style={{
                       width: '100%', borderRadius: '3px 3px 0 0',
@@ -136,6 +154,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
           })}
         </div>
       </div>
+      <ChartLiveRegion message={active ? activeLabel : ''} />
     </section>
   )
 }

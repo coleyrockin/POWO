@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import type { HealthData } from '@/lib/types'
 import { buildWorkoutRecommendation } from '@/lib/helpers'
@@ -22,7 +22,7 @@ export default function WorkoutRecommendation({ data }: Props) {
       <SectionHeader label="Recommended Workout" meta={`${rec.days.length}-day cycle · ${rec.weekly_volume_min} min`} />
 
       {/* Headline card */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         style={{ background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-teal) 11%, var(--color-card)), color-mix(in srgb, var(--accent-teal) 4%, var(--color-card)))', padding: '18px 16px', boxShadow: '0 0 24px rgba(0,212,170,0.08)' }}
       >
@@ -46,12 +46,12 @@ export default function WorkoutRecommendation({ data }: Props) {
             </div>
           ))}
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Day cards */}
       <div className="powo-train-days" style={{ gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {rec.days.map((day, i) => (
-          <motion.div key={day.day}
+          <m.div key={day.day}
             initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
             className="powo-lift"
             style={{ background: 'var(--color-card)', padding: '16px 14px' }}
@@ -97,7 +97,7 @@ export default function WorkoutRecommendation({ data }: Props) {
                 ))}
               </div>
             )}
-          </motion.div>
+          </m.div>
         ))}
       </div>
 

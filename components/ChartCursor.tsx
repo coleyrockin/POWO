@@ -1,5 +1,5 @@
 'use client'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 interface Props {
   /** Active point, in SVG user units. */
@@ -46,9 +46,9 @@ export default function ChartCursor({ x, y, topY, baseY, label, value, accentCol
 
   if (reduced) return <g aria-hidden>{content}</g>
   return (
-    <motion.g aria-hidden initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.09 }}>
+    <m.g aria-hidden initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.09 }}>
       {content}
-    </motion.g>
+    </m.g>
   )
 }
 

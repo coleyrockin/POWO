@@ -12,7 +12,7 @@ export default function ThemeToggle() {
       style={{
         position: 'fixed',
         right: '16px',
-        bottom: '16px',
+        bottom: 'max(16px, env(safe-area-inset-bottom))',
         zIndex: 10000,
         width: '44px',
         height: '44px',

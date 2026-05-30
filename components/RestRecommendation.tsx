@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import type { HealthData } from '@/lib/types'
 import { analyzeRecovery, analyzeSleep, buildRestRecommendation } from '@/lib/helpers'
@@ -9,10 +9,10 @@ interface Props { data: HealthData }
 // Tints are color-mixed over --color-card so they adapt to light/dark automatically.
 const tint = (accent: string) => `linear-gradient(180deg, color-mix(in srgb, ${accent} 15%, var(--color-card)), color-mix(in srgb, ${accent} 6%, var(--color-card)))`
 const STATUS_THEME: Record<string, { bg: string; border: string; accent: string; chip: string; chipText: string; label: string }> = {
-  recover:  { bg: tint('var(--accent-coral)'),  border: 'color-mix(in srgb, var(--accent-coral) 35%, var(--color-card))', accent: 'var(--accent-coral)',  chip: 'var(--accent-coral)',  chipText: 'var(--color-black)', label: 'PULL BACK' },
-  taper:    { bg: tint('var(--accent-amber)'),  border: 'color-mix(in srgb, var(--accent-amber) 35%, var(--color-card))', accent: 'var(--accent-amber)',  chip: 'var(--accent-amber)',  chipText: 'var(--color-black)', label: 'TAPER' },
-  maintain: { bg: tint('var(--accent-blue)'),   border: 'color-mix(in srgb, var(--accent-blue) 35%, var(--color-card))',  accent: 'var(--accent-blue)',   chip: 'var(--accent-blue)',   chipText: 'var(--color-black)', label: 'STEADY' },
-  push:     { bg: tint('var(--accent-green)'),  border: 'color-mix(in srgb, var(--accent-green) 35%, var(--color-card))', accent: 'var(--accent-green)',  chip: 'var(--accent-green)',  chipText: 'var(--color-black)', label: 'GREEN LIGHT' },
+  recover:  { bg: tint('var(--accent-coral)'),  border: 'color-mix(in srgb, var(--accent-coral) 35%, var(--color-card))', accent: 'var(--accent-coral)',  chip: 'var(--accent-coral)',  chipText: 'var(--on-accent)', label: 'PULL BACK' },
+  taper:    { bg: tint('var(--accent-amber)'),  border: 'color-mix(in srgb, var(--accent-amber) 35%, var(--color-card))', accent: 'var(--accent-amber)',  chip: 'var(--accent-amber)',  chipText: 'var(--on-accent)', label: 'TAPER' },
+  maintain: { bg: tint('var(--accent-blue)'),   border: 'color-mix(in srgb, var(--accent-blue) 35%, var(--color-card))',  accent: 'var(--accent-blue)',   chip: 'var(--accent-blue)',   chipText: 'var(--on-accent)', label: 'STEADY' },
+  push:     { bg: tint('var(--accent-green)'),  border: 'color-mix(in srgb, var(--accent-green) 35%, var(--color-card))', accent: 'var(--accent-green)',  chip: 'var(--accent-green)',  chipText: 'var(--on-accent)', label: 'GREEN LIGHT' },
 }
 
 export default function RestRecommendation({ data }: Props) {
@@ -53,7 +53,7 @@ export default function RestRecommendation({ data }: Props) {
       <SectionHeader label="Recommended Rest Period" meta={`fatigue ${F}/100`} />
 
       {/* Top status card */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         style={{
           background: theme.bg, padding: '18px 16px',
@@ -64,8 +64,8 @@ export default function RestRecommendation({ data }: Props) {
         {/* Gauge */}
         <div style={{ position: 'relative', width: '160px', height: '90px' }}>
           <svg viewBox="0 0 160 90" style={{ width: '100%', height: '100%' }}>
-            <path d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 1 1 ${fullEnd.x} ${fullEnd.y}`} stroke="rgba(255,255,255,0.08)" strokeWidth="10" fill="none" strokeLinecap="round" />
-            <motion.path
+            <path d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 1 1 ${fullEnd.x} ${fullEnd.y}`} stroke="var(--hairline)" strokeWidth="10" fill="none" strokeLinecap="round" />
+            <m.path
               initial={{ pathLength: 0 }} whileInView={{ pathLength: F / 100 }} viewport={{ once: true }} transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
               d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 ${largeArc} 1 ${end.x} ${end.y}`}
               stroke={theme.accent} strokeWidth="10" fill="none" strokeLinecap="round"
@@ -84,7 +84,7 @@ export default function RestRecommendation({ data }: Props) {
             <span style={{ color: 'var(--color-mid)' }}>Duration:</span> <span style={{ color: theme.accent, fontWeight: 600 }}>{rec.durationDays} day{rec.durationDays !== 1 ? 's' : ''}</span>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Rationale signals grid */}
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
@@ -108,13 +108,13 @@ export default function RestRecommendation({ data }: Props) {
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '10px' }}>Daily Protocol</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {rec.daily_protocol.map((p, i) => (
-            <motion.div key={p.label}
+            <m.div key={p.label}
               initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
               style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '10px', padding: '7px 0' }}
             >
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: theme.accent, fontWeight: 600, letterSpacing: '0.05em' }}>{p.label}</span>
               <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.45 }}>{p.detail}</span>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
@@ -153,12 +153,12 @@ export default function RestRecommendation({ data }: Props) {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {rec.return_criteria.map(c => (
-            <motion.div key={c.label}
+            <m.div key={c.label}
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               style={{ display: 'grid', gridTemplateColumns: '18px 1fr auto', gap: '8px', alignItems: 'flex-start', padding: '7px 0' }}
             >
               {c.met ? (
-                <span style={{ width: '14px', height: '14px', borderRadius: '3px', background: 'var(--accent-green)', color: 'var(--color-black)', fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px' }}>✓</span>
+                <span style={{ width: '14px', height: '14px', borderRadius: '3px', background: 'var(--accent-green)', color: 'var(--on-accent)', fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px' }}>✓</span>
               ) : (
                 <span style={{ width: '14px', height: '14px', borderRadius: '3px', border: '1.5px solid var(--accent-coral)', background: 'rgba(255,107,107,0.08)', marginTop: '1px' }} />
               )}
@@ -172,7 +172,7 @@ export default function RestRecommendation({ data }: Props) {
                 </div>
               </div>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: c.met ? 'var(--accent-green)' : 'var(--accent-coral)', fontWeight: 700, letterSpacing: '0.1em' }}>{c.met ? 'OK' : 'WAIT'}</span>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

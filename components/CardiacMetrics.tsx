@@ -1,10 +1,11 @@
 'use client'
 import { useRef } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { useChartCursor } from './useChartCursor'
+import { ChartLiveRegion } from './ChartCursor'
 import type { DailyMetric, HealthData } from '@/lib/types'
-import { avg, maxOf, minOf } from '@/lib/helpers'
+import { avg, maxOf, minOf, glowClassForAccent } from '@/lib/helpers'
 
 interface Props { data: HealthData }
 
@@ -37,8 +38,9 @@ function Sparkline({ values, color, max, min, dates, unit, decimals }: { values:
       <svg
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
-        role="img"
-        aria-label={`14-day trend${active ? `, ${activeDate}: ${active.v.toFixed(decimals)} ${unit}` : ''}`}
+        role="application"
+        aria-roledescription="interactive sparkline"
+        aria-label={`14-day trend${active ? `, ${activeDate}: ${active.v.toFixed(decimals)} ${unit}` : '. Use arrow keys to inspect.'}`}
         {...handlers}
         style={{ width: '100%', height: '34px', ...handlers.style }}
         preserveAspectRatio="none"
@@ -55,6 +57,7 @@ function Sparkline({ values, color, max, min, dates, unit, decimals }: { values:
           </div>
         </>
       )}
+      <ChartLiveRegion message={active ? `${activeDate}: ${active.v.toFixed(decimals)} ${unit}` : ''} />
     </div>
   )
 }
@@ -101,20 +104,13 @@ export default function CardiacMetrics({ data }: Props) {
           const dirArrow = v.delta === null ? '' : v.delta > 0 ? '↑' : v.delta < 0 ? '↓' : '·'
           const deltaStr = v.delta !== null ? `${dirArrow} ${Math.abs(v.delta).toFixed(v.decimals)}` : '—'
           return (
-            <motion.div key={v.label}
+            <m.div key={v.label}
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
               className="powo-lift"
               style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '154px', height: '100%', display: 'flex', flexDirection: 'column' }}
             >
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-white)', marginBottom: '6px' }}>{v.label}</div>
-              <div className={
-                v.color === 'var(--accent-blue)'   ? 'powo-glow-blue'   :
-                v.color === 'var(--accent-green)'  ? 'powo-glow-green'  :
-                v.color === 'var(--accent-amber)'  ? 'powo-glow-amber'  :
-                v.color === 'var(--accent-coral)'  ? 'powo-glow-coral'  :
-                v.color === 'var(--accent-purple)' ? 'powo-glow-purple' :
-                v.color === 'var(--accent-teal)'   ? 'powo-glow-teal'   : ''
-              } style={{ fontFamily: 'var(--font-display)', fontSize: '24px', lineHeight: 1, color: v.color }}>{v.baseline.toFixed(v.decimals)}</div>
+              <div className={glowClassForAccent(v.color)} style={{ fontFamily: 'var(--font-display)', fontSize: '24px', lineHeight: 1, color: v.color }}>{v.baseline.toFixed(v.decimals)}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '4px' }}>{v.unit} · {data.meta.period.days}-day baseline</div>
               <div style={{ marginTop: '8px' }}>
                 <Sparkline values={v.vals} color={v.color} max={v.sparkMax} min={v.sparkMin} dates={last14.map(d => d.date)} unit={v.unit} decimals={v.decimals} />
@@ -124,7 +120,7 @@ export default function CardiacMetrics({ data }: Props) {
                 <span style={{ color: v.color }}>{deltaStr}</span>
                 <span style={{ color: 'var(--color-mid)' }}>{v.lo !== null && v.hi !== null ? `${v.lo.toFixed(v.decimals)}–${v.hi.toFixed(v.decimals)}` : ''}</span>
               </div>
-            </motion.div>
+            </m.div>
           )
         })}
       </div>

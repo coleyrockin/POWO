@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m as Motion } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import type { HealthData } from '@/lib/types'
 import { buildWeekChange } from '@/lib/helpers'
@@ -44,7 +44,7 @@ export default function WeekChange({ data }: Props) {
                 : m.current.toFixed(1))
               : '—'
             return (
-              <motion.div
+              <Motion.div
                 key={m.label}
                 initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
                 className="powo-trophy"
@@ -66,7 +66,7 @@ export default function WeekChange({ data }: Props) {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color, fontWeight: 600, marginTop: '4px', position: 'relative', zIndex: 2 }}>
                   {arrow} {m.deltaPct !== null ? `${Math.abs(m.deltaPct).toFixed(0)}%` : '—'}
                 </div>
-              </motion.div>
+              </Motion.div>
             )
           })}
         </div>

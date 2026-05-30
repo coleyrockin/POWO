@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import type { HealthData } from '@/lib/types'
 import { buildWeeklyAggregates } from '@/lib/helpers'
@@ -47,7 +47,7 @@ export default function WeeklySummary({ data }: Props) {
       <SectionHeader label="Period Summary" meta={`${data.meta.period.days} days · 2026`} />
       <div className="powo-grid-summary" style={{ display: 'grid', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map((t, i) => (
-          <motion.div
+          <m.div
             key={t.label}
             initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.03 }}
             className="powo-lift"
@@ -64,7 +64,7 @@ export default function WeeklySummary({ data }: Props) {
             } style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, calc(22px + 1.5vw), 34px)', lineHeight: 1, letterSpacing: '0.5px', color: t.color }}>{t.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '4px' }}>{t.unit}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 500, color: t.color, marginTop: '2px' }}>{t.delta}</div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
 
@@ -101,15 +101,15 @@ export default function WeeklySummary({ data }: Props) {
             const pct = (w.activeKcal / max) * 100
             const isBest = w.weekStart === bestWeek.weekStart
             const isWorst = w.weekStart === worstWeek.weekStart
-            const color = isBest ? 'var(--accent-amber)' : isWorst ? 'var(--accent-coral)' : '#5a6470'
+            const color = isBest ? 'var(--accent-amber)' : isWorst ? 'var(--accent-coral)' : 'var(--color-mid)'
             return (
-              <motion.div key={w.weekStart}
+              <m.div key={w.weekStart}
                 initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.025 }}
                 style={{ display: 'grid', gridTemplateColumns: '92px 1fr 64px', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px' }}
               >
                 <span style={{ color: isBest || isWorst ? color : 'var(--color-mid)', fontWeight: isBest || isWorst ? 600 : 400 }}>{fmtRange(w.weekStart, w.weekEnd)}</span>
                 <div style={{ height: '7px', borderRadius: '3px', background: 'var(--color-track)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
-                  <motion.div
+                  <m.div
                     className="powo-comet"
                     initial={{ width: 0 }}
                     whileInView={{ width: `${pct}%` }}
@@ -123,7 +123,7 @@ export default function WeeklySummary({ data }: Props) {
                   />
                 </div>
                 <span style={{ color: isBest || isWorst ? color : 'var(--color-white)', textAlign: 'right', fontWeight: 600 }}>{Math.round(w.activeKcal).toLocaleString()}</span>
-              </motion.div>
+              </m.div>
             )
           })}
         </div>

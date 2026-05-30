@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import ChartCursorBar from './ChartCursorBar'
 import type { SleepData } from '@/lib/types'
@@ -37,7 +37,7 @@ export default function SleepAnalysis({ sleep }: Props) {
 
       {/* Coverage note — moved to top so reader sees the gap before the data */}
       <div style={{ background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-amber) 13%, var(--color-card)), color-mix(in srgb, var(--accent-amber) 5%, var(--color-card)))', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-black)', background: 'var(--accent-amber)', padding: '2px 5px', borderRadius: '2px', fontWeight: 700, letterSpacing: '0.14em', flexShrink: 0, marginTop: '1px' }}>GAP</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 5px', borderRadius: '2px', fontWeight: 700, letterSpacing: '0.14em', flexShrink: 0, marginTop: '1px' }}>GAP</span>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>{sleep.coverage_note}</span>
       </div>
 
@@ -85,19 +85,19 @@ export default function SleepAnalysis({ sleep }: Props) {
             const remPct = (n.rem_hours / n.total_sleep_hours) * 100
             const corePct = (n.core_hours / n.total_sleep_hours) * 100
             return (
-              <motion.div key={n.date}
+              <m.div key={n.date}
                 initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
                 onPointerEnter={e => { if (e.pointerType !== 'touch') setActiveIdx(i) }}
-                style={{ display: 'grid', gridTemplateColumns: '52px 1fr 64px', alignItems: 'center', gap: '8px', background: activeIdx === i ? 'rgba(255,255,255,0.04)' : 'transparent', borderRadius: '4px' }}
+                style={{ display: 'grid', gridTemplateColumns: '52px 1fr 64px', alignItems: 'center', gap: '8px', background: activeIdx === i ? 'var(--color-raised)' : 'transparent', borderRadius: '4px' }}
               >
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: isLongest ? 'var(--accent-amber)' : isShortest ? 'var(--accent-coral)' : 'var(--color-mid)', fontWeight: isLongest || isShortest ? 600 : 400 }}>{fmtDate(n.date)}</span>
                 <div style={{ height: '14px', borderRadius: '3px', background: 'var(--color-track)', display: 'flex', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)', width: `${totalPct}%` }}>
-                  <motion.div initial={{ width: 0 }} whileInView={{ width: `${deepPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 }} style={{ background: 'var(--accent-coral)', height: '100%' }} />
-                  <motion.div initial={{ width: 0 }} whileInView={{ width: `${remPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.05 }} style={{ background: 'var(--accent-amber)', height: '100%' }} />
-                  <motion.div initial={{ width: 0 }} whileInView={{ width: `${corePct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.1 }} style={{ background: 'var(--accent-blue)', height: '100%' }} />
+                  <m.div initial={{ width: 0 }} whileInView={{ width: `${deepPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 }} style={{ background: 'var(--accent-coral)', height: '100%' }} />
+                  <m.div initial={{ width: 0 }} whileInView={{ width: `${remPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.05 }} style={{ background: 'var(--accent-amber)', height: '100%' }} />
+                  <m.div initial={{ width: 0 }} whileInView={{ width: `${corePct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.1 }} style={{ background: 'var(--accent-blue)', height: '100%' }} />
                 </div>
                 <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', color: isLongest ? 'var(--accent-amber)' : 'var(--color-white)', textAlign: 'right' }}>{fmtHM(n.total_sleep_hours)}</span>
-              </motion.div>
+              </m.div>
             )
           })}
         </div>

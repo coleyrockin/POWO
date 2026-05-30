@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 
 const CARDS = [
@@ -15,7 +15,7 @@ export default function ShareCards() {
       <SectionHeader label="Share" meta="Download stat cards" />
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
         {CARDS.map((c, i) => (
-          <motion.a
+          <m.a
             key={c.variant}
             href={`/api/cards/${c.variant}`}
             download={`powo-${c.variant}.png`}
@@ -26,7 +26,6 @@ export default function ShareCards() {
               flexDirection: 'column',
               gap: '5px',
               padding: '15px 13px 13px',
-              background: 'rgba(255,255,255,0.025)',
               borderRadius: '8px',
               borderTop: `2px solid ${c.color}`,
               textDecoration: 'none',
@@ -35,7 +34,7 @@ export default function ShareCards() {
             <span style={{ fontFamily: 'var(--font-display)', fontSize: '20px', lineHeight: 1, color: 'var(--color-white)', letterSpacing: '0.5px' }}>{c.label}</span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: 'var(--color-mid)' }}>{c.desc}</span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: c.color, marginTop: '6px', letterSpacing: '0.12em' }}>↓ PNG</span>
-          </motion.a>
+          </m.a>
         ))}
       </div>
     </section>

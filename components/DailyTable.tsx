@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import type { DailyMetric, Workout } from '@/lib/types'
 
@@ -70,7 +70,7 @@ export default function DailyTable({ daily, workouts }: Props) {
               const pct = Math.round((d.steps / maxSteps) * 100)
               const workoutCount = workoutCountByDate[d.date] ?? 0
               return (
-                <motion.tr
+                <m.tr
                   key={d.date}
                   initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.03 }}
                   style={{ background: 'var(--color-track)', height: '44px' }}
@@ -112,7 +112,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: 'var(--color-white)' }}>{d.exercise_min ?? '—'}</td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: d.resting_hr !== null && d.resting_hr <= 60 ? 'var(--accent-green)' : d.resting_hr !== null && d.resting_hr >= 70 ? 'var(--accent-coral)' : 'var(--color-white)' }}>{d.resting_hr ?? '—'}</td>
                   <td style={{ padding: '11px 10px 11px 4px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: d.hrv_ms !== null && d.hrv_ms >= 60 ? 'var(--accent-green)' : 'var(--color-white)' }}>{d.hrv_ms !== null ? Math.round(d.hrv_ms) : '—'}</td>
-                </motion.tr>
+                </m.tr>
               )
             })}
           </tbody>

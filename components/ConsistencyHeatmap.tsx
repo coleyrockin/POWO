@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import CountUp from './CountUp'
 import { buildConsistency, glowClassForAccent } from '@/lib/helpers'
@@ -66,9 +66,8 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
   return (
     <section id="consistency">
       <SectionHeader label="Consistency" meta={`${c.totalActiveDays} active · ${Math.round(c.pctActive)}%`} />
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-        className="powo-heatmap"
         style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '18px 14px' }}
       >
         {/* Month labels — aligned to the grid columns below */}
@@ -114,7 +113,7 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
         {/* Streak stat tiles */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginTop: '16px' }}>
           {tiles.map((t, i) => (
-            <motion.div
+            <m.div
               key={t.label}
               initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
               className="powo-trophy"
@@ -127,10 +126,10 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
                 style={{ fontFamily: 'var(--font-display)', fontSize: '30px', lineHeight: 1, color: t.color, position: 'relative', zIndex: 2 }}
               />
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-faint)', position: 'relative', zIndex: 2 }}>{t.unit}</span>
-            </motion.div>
+            </m.div>
           ))}
         </div>
-      </motion.div>
+      </m.div>
     </section>
   )
 }

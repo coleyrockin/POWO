@@ -1,6 +1,6 @@
 'use client'
 import { useRef } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { useChartCursor } from './useChartCursor'
 import ChartCursor, { ChartLiveRegion } from './ChartCursor'
@@ -95,11 +95,14 @@ export default function VO2Chart({ trend }: Props) {
   const active = activeIndex !== null ? coords[activeIndex] : null
   const activeAccent = active && active.x > peakCoord.x ? 'var(--accent-coral)' : 'var(--accent-teal)'
   const fmtTip = (iso: string) => new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  const dayDiff = (a: string, b: string) => Math.max(0, Math.round((new Date(b + 'T00:00:00').getTime() - new Date(a + 'T00:00:00').getTime()) / 86400000))
+  const firstToPeakDays = dayDiff(first.date, peak.date)
+  const peakToTodayDays = dayDiff(peak.date, current.date)
 
   return (
     <section id="vo2">
       <SectionHeader label="VO₂ Max Trajectory" meta={`${trend.length} readings`} />
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '20px 16px 18px' }}
       >
@@ -110,7 +113,7 @@ export default function VO2Chart({ trend }: Props) {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>{new Date(first.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
           </div>
           <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent-amber)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>Peak <span style={{ background: 'var(--accent-amber)', color: 'var(--color-black)', padding: '0px 4px', fontSize: '9px', fontWeight: 700, borderRadius: '2px' }}>PR</span></div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent-amber)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>Peak <span style={{ background: 'var(--accent-amber)', color: 'var(--on-accent)', padding: '0px 4px', fontSize: '9px', fontWeight: 700, borderRadius: '2px' }}>PR</span></div>
             <div className="powo-glow-amber" style={{ fontFamily: 'var(--font-display)', fontSize: '28px', lineHeight: 1, color: 'var(--accent-amber)' }}>{peak.value.toFixed(2)}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>{new Date(peak.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
           </div>
@@ -125,7 +128,8 @@ export default function VO2Chart({ trend }: Props) {
           <svg
             ref={svgRef}
             viewBox={`0 0 ${W} ${H}`}
-            role="img"
+            role="application"
+            aria-roledescription="interactive line chart"
             aria-label={`VO₂ max trajectory, ${trend.length} readings. Use arrow keys to inspect each reading.${active ? ` Selected ${fmtTip(active.date)}: ${active.value.toFixed(2)}.` : ''}`}
             {...handlers}
             style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible', ...handlers.style }}
@@ -143,7 +147,7 @@ export default function VO2Chart({ trend }: Props) {
                 <stop offset="100%" stopColor="#000000" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="vo2LineRise" gradientUnits="userSpaceOnUse" x1={PAD_L} y1="0" x2={peakCoord.x} y2="0">
-                <stop offset="0%" stopColor="#5fe7c7" />
+                <stop offset="0%" stopColor="var(--accent-teal)" />
                 <stop offset="60%" stopColor="var(--accent-teal)" />
                 <stop offset="100%" stopColor="var(--accent-amber)" />
               </linearGradient>
@@ -182,7 +186,7 @@ export default function VO2Chart({ trend }: Props) {
             })}
 
             {/* Peak beam — soft vertical light column behind the line */}
-            <motion.rect
+            <m.rect
               x={peakCoord.x - 22}
               y={PAD_T - 8}
               width={44}
@@ -202,7 +206,7 @@ export default function VO2Chart({ trend }: Props) {
             <line x1={PAD_L} x2={W - PAD_R} y1={BASE_Y} y2={BASE_Y} stroke="var(--hairline)" strokeWidth="1" />
 
             {/* Unified story fill — green ascent through amber peak to coral decline */}
-            <motion.path
+            <m.path
               d={smoothArea(coords)}
               fill="url(#vo2StoryFill)"
               initial={{ opacity: 0 }}
@@ -210,7 +214,7 @@ export default function VO2Chart({ trend }: Props) {
               viewport={{ once: true }}
               transition={{ duration: 1.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             />
-            <motion.path
+            <m.path
               d={smoothArea(coords)}
               fill="url(#vo2StoryFillVert)"
               initial={{ opacity: 0 }}
@@ -220,7 +224,7 @@ export default function VO2Chart({ trend }: Props) {
             />
 
             {/* Pre-peak line: rise gradient teal → amber */}
-            <motion.path
+            <m.path
               d={smoothLine(preCoords)}
               fill="none"
               stroke="url(#vo2LineRise)"
@@ -235,7 +239,7 @@ export default function VO2Chart({ trend }: Props) {
             />
 
             {/* Post-peak line: decline gradient amber → coral, dashed */}
-            <motion.path
+            <m.path
               d={smoothLine(postCoords)}
               fill="none"
               stroke="url(#vo2LineFall)"
@@ -259,7 +263,7 @@ export default function VO2Chart({ trend }: Props) {
 
             {/* Peak marker — pulsing halo */}
             <g>
-              <motion.circle
+              <m.circle
                 cx={peakCoord.x}
                 cy={peakCoord.y}
                 fill="var(--accent-amber)"
@@ -306,16 +310,16 @@ export default function VO2Chart({ trend }: Props) {
           </svg>
         </div>
 
-        <div style={{ marginTop: '14px', padding: '12px 12px', border: '1px solid var(--color-border)', background: 'rgba(255,255,255,0.035)', borderRadius: '6px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
+        <div style={{ marginTop: '14px', padding: '12px 12px', border: '1px solid var(--color-border)', background: 'var(--color-raised)', borderRadius: '6px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
           <div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--accent-amber)', textTransform: 'uppercase' }}>First → Peak</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--accent-amber)' }}>+{(((peak.value - first.value) / first.value) * 100).toFixed(1)}%</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>60-day rise</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>{firstToPeakDays}-day rise</div>
           </div>
           <div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', color: fromPeak < 0 ? 'var(--accent-coral)' : 'var(--accent-green)', textTransform: 'uppercase' }}>Peak → Today</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: fromPeak < 0 ? 'var(--accent-coral)' : 'var(--accent-green)' }}>{fromPeak.toFixed(1)}%</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>19-day decline · rest signal</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '2px' }}>{peakToTodayDays}-day decline · rest signal</div>
           </div>
           <div style={{ gridColumn: '1 / -1', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', letterSpacing: '0.12em' }}>FIRST → TODAY</span>
@@ -323,7 +327,7 @@ export default function VO2Chart({ trend }: Props) {
           </div>
         </div>
         <ChartLiveRegion message={active ? `${fmtTip(active.date)}: VO₂ max ${active.value.toFixed(2)}` : ''} />
-      </motion.div>
+      </m.div>
     </section>
   )
 }

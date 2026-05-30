@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { m as Motion } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { lastNDays, sum, avg, buildConsistency, glowClassForAccent } from '@/lib/helpers'
 import type { DailyMetric, Workout } from '@/lib/types'
@@ -92,7 +92,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
                     fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.06em', fontWeight: 600,
                     padding: '6px 14px', borderRadius: '6px', cursor: 'pointer', border: 'none',
                     background: active ? 'var(--accent-blue)' : 'transparent',
-                    color: active ? 'var(--color-black)' : 'var(--color-mid)',
+                    color: active ? 'var(--on-accent)' : 'var(--color-mid)',
                     transition: 'background 0.15s, color 0.15s',
                   }}
                 >
@@ -124,7 +124,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
           {tiles.map((t, i) => {
             const d = deltaFor(t)
             return (
-              <motion.div
+              <Motion.div
                 key={t.label}
                 initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
                 className="powo-trophy"
@@ -133,7 +133,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-mid)', position: 'relative', zIndex: 2 }}>{t.label}</span>
                 <span className={glowClassForAccent(t.color)} style={{ fontFamily: 'var(--font-display)', fontSize: '24px', lineHeight: 1, color: t.color, position: 'relative', zIndex: 2 }}>{t.value}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', minHeight: '12px', color: d?.color ?? 'transparent', position: 'relative', zIndex: 2 }}>{d?.txt ?? '·'}</span>
-              </motion.div>
+              </Motion.div>
             )
           })}
         </div>

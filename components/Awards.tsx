@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { IconActivity, IconGolf, IconHeartPulse, IconFlame, IconBicep, IconLightning } from '@/lib/icons'
 import { glowClassForAccent } from '@/lib/helpers'
@@ -40,7 +40,7 @@ export default function Awards({ data }: Props) {
       <SectionHeader label="Achievements" meta={`${data.meta.period.days}-day highlights`} />
       <div className="powo-grid-awards" style={{ display: 'grid', alignItems: 'stretch', gap: '8px', padding: '10px', background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {AWARDS.map((a, i) => (
-          <motion.div
+          <m.div
             key={a.title}
             initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
             className="powo-trophy"
@@ -59,7 +59,7 @@ export default function Awards({ data }: Props) {
             <span style={{ color: a.color, lineHeight: 0, position: 'relative', zIndex: 2 }}><a.Icon size={20} /></span>
             <span className={glowClassForAccent(a.color)} style={{ fontFamily: 'var(--font-display)', fontSize: '14px', letterSpacing: '0.5px', color: a.color, lineHeight: 1.15, position: 'relative', zIndex: 2 }}>{a.title}</span>
             <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--color-mid)', lineHeight: 1.55, position: 'relative', zIndex: 2 }}>{a.desc}</span>
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </section>

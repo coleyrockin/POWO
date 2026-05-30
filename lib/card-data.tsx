@@ -125,7 +125,7 @@ export function renderWeekCard(d: HealthData, wc: WeekChangeMetric[]): ReactElem
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '24px' }}>
               <div style={{ display: 'flex', fontFamily: DISPLAY, fontSize: '52px', color: C.white }}>{fmtVal(m)}</div>
               <div style={{ display: 'flex', fontSize: '30px', color: deltaColor(m), paddingBottom: '6px' }}>
-                {m.deltaPct === null ? '—' : `${m.deltaPct >= 0 ? '▲' : '▼'} ${Math.abs(m.deltaPct).toFixed(0)}%`}
+                {m.deltaPct === null ? '—' : `${m.deltaPct >= 0 ? '+' : '-'}${Math.abs(m.deltaPct).toFixed(0)}%`}
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface Props {
   values: number[]
@@ -59,7 +59,7 @@ export default function Sparkline({ values, color, width = 78, height = 18, dela
         </linearGradient>
       </defs>
       <path d={areaPath} fill={`url(#${gradId})`} />
-      <motion.path
+      <m.path
         d={linePath}
         fill="none"
         stroke={color}

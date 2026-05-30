@@ -35,6 +35,7 @@
   --color-track: #0a0a0a;   /* progress-bar tracks */
   --tooltip-bg:  #0d0d0d;   /* chart tooltips (kept dark in light mode too) */
   --hairline:    rgba(255, 255, 255, 0.06);
+  --on-accent:   #080808;   /* text/icon color on a bright accent background */
 }
 
 /* ── Light theme ──
@@ -56,6 +57,17 @@ html.light {
   --shadow-card:  0 10px 30px rgba(20, 20, 20, 0.10);
   --ambient-tint:   rgba(10, 132, 255, 0.10);
   --ambient-tint-2: rgba(255, 170, 34, 0.05);
+  /* Accents darkened for ≥3:1 large-text contrast on white surfaces (neon tones
+     read garish + fail WCAG on light). Used for text, strokes, bars, and badge
+     backgrounds (badge text flips to --on-accent below). */
+  --accent-blue:     #0a6ed1;
+  --accent-blue-dim: #0a6ed1;
+  --accent-green:    #1a9e48;
+  --accent-coral:    #e0484a;
+  --accent-amber:    #b87a08;
+  --accent-purple:   #8a3ff0;
+  --accent-teal:     #00917a;
+  --on-accent:       #ffffff;
   color-scheme: light;
 }
 html.light body {
@@ -68,6 +80,10 @@ html.light .powo-shell {
   box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10);
 }
 html.light body::after { opacity: 0.018; }  /* softer grain on light */
+
+/* Section header surface — themed via class so it flips (was a hardcoded inline gradient). */
+.powo-section-header { background: linear-gradient(180deg, rgba(22,22,25,0.82), rgba(12,12,14,0.94)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.045); }
+html.light .powo-section-header { background: linear-gradient(180deg, #ffffff, #f4f3ec); box-shadow: inset 0 1px 0 rgba(0,0,0,0.04); }
 
 /* Class-based dark surfaces → light equivalents (inline styles handled per-component). */
 html.light .powo-lift {
@@ -248,10 +264,10 @@ body::after {
    width (≈2 cols on a laptop, 3 on a wide monitor) so the extra horizontal
    space is used instead of stretching two columns thin.
 
-   The wide strips — 14-day burn (1), Period panel (2), Week-over-week row (3),
-   the 7-day plan (11) and Achievements (12) — span the full width via
-   column-span; the compact analytical cards (4–10) flow in the balanced
-   columns. DOM order is unchanged → reading/SR order preserved. */
+   Full-width strips: Explore (1), 14-day burn (2), Period panel (3),
+   Week-over-week (4) at the top; Training plan (14), Achievements (15),
+   Share cards (16) at the bottom. The compact analytical cards (5–13) flow in
+   the balanced columns. DOM order is unchanged → reading/SR order preserved. */
 @media (min-width: 1024px) {
   .powo-sections {
     display: block;
@@ -263,13 +279,11 @@ body::after {
     break-inside: avoid;
     margin: 0 0 24px;
   }
-  /* Full-width: 14-day burn (1), Period panel (2), Week-over-week row (3),
-     the tall 7-day plan (11), Achievements (12). These genuinely use the width.
-     The VO₂ chart (5) and Daily-breakdown table (4) are NOT spanned — at full
-     width the chart became oversized (aspect-locked → ~600px tall) and the
-     table stretched sparse; in the masonry they render at a right-sized width.
-     The plan (11) is spanned because, even packed, its height would dominate a
-     column; full-width it renders short and wide (two-up day list) instead. */
+  /* Full-width (column-span: all): top control/summary strips — Explore (1),
+     14-day burn (2), Period (3), Week-over-week (4) — and the bottom wide
+     sections — Training plan (14), Achievements (15), Share cards (16). The
+     analytical cards (5–13: Insights, Streak, Daily table, VO₂, Cardiac, Sleep,
+     Workouts, Pushups, Rest) flow in the masonry columns at a right-sized width. */
   .powo-sections > :nth-child(-n + 4),
   .powo-sections > :nth-child(n + 14) {
     column-span: all;
@@ -625,4 +639,6 @@ tbody tr:hover {
   .powo-trophy:hover { transform: none; }
   .powo-wordmark { animation: none !important; }
   [style*='powo-pulse'] { animation: none !important; }
+  /* The ambient-tint glow cross-fades 900ms on every section scroll — disable it. */
+  body::before { transition: none; }
 }

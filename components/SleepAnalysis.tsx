@@ -1,6 +1,8 @@
 'use client'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionHeader from './SectionHeader'
+import ChartCursorBar from './ChartCursorBar'
 import type { SleepData } from '@/lib/types'
 
 interface Props { sleep: SleepData }
@@ -26,12 +28,15 @@ export default function SleepAnalysis({ sleep }: Props) {
   // Per-night composition bars (proportional to total)
   const maxTotal = Math.max(...nights.map(n => n.total_sleep_hours))
 
+  const [activeIdx, setActiveIdx] = useState<number | null>(null)
+  const an = activeIdx !== null ? nights[activeIdx] : null
+
   return (
     <section id="sleep">
       <SectionHeader label="Sleep Analysis" meta={`${s.nights_with_data} nights · stages tracked`} />
 
       {/* Coverage note — moved to top so reader sees the gap before the data */}
-      <div style={{ background: 'linear-gradient(180deg, #1a1505 0%, #0d0a02 100%)', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+      <div style={{ background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-amber) 13%, var(--color-card)), color-mix(in srgb, var(--accent-amber) 5%, var(--color-card)))', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-black)', background: 'var(--accent-amber)', padding: '2px 5px', borderRadius: '2px', fontWeight: 700, letterSpacing: '0.14em', flexShrink: 0, marginTop: '1px' }}>GAP</span>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>{sleep.coverage_note}</span>
       </div>
@@ -60,7 +65,18 @@ export default function SleepAnalysis({ sleep }: Props) {
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-amber)', borderRadius: '2px' }} /> REM</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-blue)', borderRadius: '2px' }} /> Core</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: '7px', position: 'relative' }}
+          onPointerLeave={e => { if (e.pointerType !== 'touch') setActiveIdx(null) }}
+        >
+          {an && (
+            <ChartCursorBar
+              leftPct={50}
+              label={fmtDate(an.date)}
+              lines={[`${fmtHM(an.total_sleep_hours)} total`, `Deep ${fmtHM(an.deep_hours)} · REM ${fmtHM(an.rem_hours)} · Core ${fmtHM(an.core_hours)}`]}
+              accentColor="var(--accent-blue)"
+            />
+          )}
           {nights.map((n, i) => {
             const isLongest = n.date === longest.date
             const isShortest = n.date === shortest.date
@@ -71,10 +87,11 @@ export default function SleepAnalysis({ sleep }: Props) {
             return (
               <motion.div key={n.date}
                 initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-                style={{ display: 'grid', gridTemplateColumns: '52px 1fr 64px', alignItems: 'center', gap: '8px' }}
+                onPointerEnter={e => { if (e.pointerType !== 'touch') setActiveIdx(i) }}
+                style={{ display: 'grid', gridTemplateColumns: '52px 1fr 64px', alignItems: 'center', gap: '8px', background: activeIdx === i ? 'rgba(255,255,255,0.04)' : 'transparent', borderRadius: '4px' }}
               >
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: isLongest ? 'var(--accent-amber)' : isShortest ? 'var(--accent-coral)' : 'var(--color-mid)', fontWeight: isLongest || isShortest ? 600 : 400 }}>{fmtDate(n.date)}</span>
-                <div style={{ height: '14px', borderRadius: '3px', background: '#0a0a0a', display: 'flex', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)', width: `${totalPct}%` }}>
+                <div style={{ height: '14px', borderRadius: '3px', background: 'var(--color-track)', display: 'flex', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)', width: `${totalPct}%` }}>
                   <motion.div initial={{ width: 0 }} whileInView={{ width: `${deepPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 }} style={{ background: 'var(--accent-coral)', height: '100%' }} />
                   <motion.div initial={{ width: 0 }} whileInView={{ width: `${remPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.05 }} style={{ background: 'var(--accent-amber)', height: '100%' }} />
                   <motion.div initial={{ width: 0 }} whileInView={{ width: `${corePct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.1 }} style={{ background: 'var(--accent-blue)', height: '100%' }} />

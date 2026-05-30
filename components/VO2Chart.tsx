@@ -1,6 +1,9 @@
 'use client'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import SectionHeader from './SectionHeader'
+import { useChartCursor } from './useChartCursor'
+import ChartCursor, { ChartLiveRegion } from './ChartCursor'
 import type { VO2Point } from '@/lib/types'
 
 interface Props { trend: VO2Point[] }
@@ -53,9 +56,10 @@ function smoothArea(pts: Pt[]): string {
 }
 
 export default function VO2Chart({ trend }: Props) {
-  if (trend.length === 0) return null
-  const baseMs = new Date(trend[0].date + 'T00:00:00').getTime()
-  const endMs = new Date(trend[trend.length - 1].date + 'T00:00:00').getTime()
+  const svgRef = useRef<SVGSVGElement>(null)
+  const hasData = trend.length > 0
+  const baseMs = hasData ? new Date(trend[0].date + 'T00:00:00').getTime() : 0
+  const endMs = hasData ? new Date(trend[trend.length - 1].date + 'T00:00:00').getTime() : 0
   const totalDays = Math.max(1, Math.round((endMs - baseMs) / 86400000))
 
   const coords = trend.map(p => ({
@@ -63,6 +67,10 @@ export default function VO2Chart({ trend }: Props) {
     x: px(dayIndex(p.date, baseMs), totalDays),
     y: py(p.value),
   }))
+
+  const { activeIndex, handlers } = useChartCursor({ coords, svgRef, enabled: hasData })
+
+  if (!hasData) return null
 
   const peak = trend.reduce((a, b) => (b.value > a.value ? b : a))
   const peakIdx = coords.findIndex(c => c.date === peak.date)
@@ -83,6 +91,10 @@ export default function VO2Chart({ trend }: Props) {
     const m = new Date(c.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short' }).toUpperCase()
     if (!seen.has(m)) { seen.add(m); monthAnchors.push({ label: m, x: c.x }) }
   })
+
+  const active = activeIndex !== null ? coords[activeIndex] : null
+  const activeAccent = active && active.x > peakCoord.x ? 'var(--accent-coral)' : 'var(--accent-teal)'
+  const fmtTip = (iso: string) => new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 
   return (
     <section id="vo2">
@@ -111,8 +123,12 @@ export default function VO2Chart({ trend }: Props) {
 
         <div style={{ width: '100%', overflow: 'visible' }}>
           <svg
+            ref={svgRef}
             viewBox={`0 0 ${W} ${H}`}
-            style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}
+            role="img"
+            aria-label={`VO₂ max trajectory, ${trend.length} readings. Use arrow keys to inspect each reading.${active ? ` Selected ${fmtTip(active.date)}: ${active.value.toFixed(2)}.` : ''}`}
+            {...handlers}
+            style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible', ...handlers.style }}
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
@@ -159,8 +175,8 @@ export default function VO2Chart({ trend }: Props) {
               const y = py(g)
               return (
                 <g key={g}>
-                  <line x1={PAD_L} x2={W - PAD_R} y1={y} y2={y} stroke="rgba(255,255,255,0.09)" strokeWidth="1" strokeDasharray="2 5" />
-                  <text x={PAD_L - 6} y={y + 3} textAnchor="end" fill="#8b8b92" fontFamily="DM Mono, monospace" fontSize="9.5">{g}</text>
+                  <line x1={PAD_L} x2={W - PAD_R} y1={y} y2={y} stroke="var(--hairline)" strokeWidth="1" strokeDasharray="2 5" />
+                  <text x={PAD_L - 6} y={y + 3} textAnchor="end" fill="var(--color-faint)" fontFamily="DM Mono, monospace" fontSize="9.5">{g}</text>
                 </g>
               )
             })}
@@ -183,7 +199,7 @@ export default function VO2Chart({ trend }: Props) {
             <line x1={peakCoord.x} x2={peakCoord.x} y1={PAD_T - 6} y2={BASE_Y} stroke="var(--accent-amber)" strokeWidth="1" strokeDasharray="2 4" opacity="0.55" />
 
             {/* Baseline */}
-            <line x1={PAD_L} x2={W - PAD_R} y1={BASE_Y} y2={BASE_Y} stroke="rgba(255,255,255,0.09)" strokeWidth="1" />
+            <line x1={PAD_L} x2={W - PAD_R} y1={BASE_Y} y2={BASE_Y} stroke="var(--hairline)" strokeWidth="1" />
 
             {/* Unified story fill — green ascent through amber peak to coral decline */}
             <motion.path
@@ -251,10 +267,10 @@ export default function VO2Chart({ trend }: Props) {
                 transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
               />
               <circle cx={peakCoord.x} cy={peakCoord.y} r="7" fill="var(--accent-amber)" opacity="0.34" filter="url(#vo2peakGlow)" />
-              <circle cx={peakCoord.x} cy={peakCoord.y} r="4" fill="#0d0d0d" stroke="var(--accent-amber)" strokeWidth="2" />
+              <circle cx={peakCoord.x} cy={peakCoord.y} r="4" fill="var(--tooltip-bg)" stroke="var(--accent-amber)" strokeWidth="2" />
               {/* Label box positioned above the dot, with leader space */}
               <g transform={`translate(${peakCoord.x}, ${peakCoord.y - 20})`}>
-                <rect x={-22} y={-11} width={44} height={15} rx={2} fill="#0d0d0d" stroke="var(--accent-amber)" strokeWidth="1" opacity="0.95" />
+                <rect x={-22} y={-11} width={44} height={15} rx={2} fill="var(--tooltip-bg)" stroke="var(--accent-amber)" strokeWidth="1" opacity="0.95" />
                 <text x={0} y={0} textAnchor="middle" fill="var(--accent-amber)" fontFamily="DM Mono, monospace" fontSize="10" fontWeight="700">{peak.value.toFixed(2)}</text>
               </g>
             </g>
@@ -262,17 +278,31 @@ export default function VO2Chart({ trend }: Props) {
             {/* Current marker — anchored label that flips off-line */}
             <g>
               <circle cx={curCoord.x} cy={curCoord.y} r="9" fill="var(--accent-teal)" opacity="0.16" />
-              <circle cx={curCoord.x} cy={curCoord.y} r="3.5" fill="#0d0d0d" stroke="var(--accent-teal)" strokeWidth="2" />
+              <circle cx={curCoord.x} cy={curCoord.y} r="3.5" fill="var(--tooltip-bg)" stroke="var(--accent-teal)" strokeWidth="2" />
               <g transform={`translate(${Math.min(curCoord.x, W - PAD_R - 2)}, ${curCoord.y + 18})`}>
-                <rect x={-22} y={-10} width={44} height={14} rx={2} fill="#0d0d0d" stroke="var(--accent-teal)" strokeWidth="1" opacity="0.95" />
+                <rect x={-22} y={-10} width={44} height={14} rx={2} fill="var(--tooltip-bg)" stroke="var(--accent-teal)" strokeWidth="1" opacity="0.95" />
                 <text x={0} y={0} textAnchor="middle" fill="var(--accent-teal)" fontFamily="DM Mono, monospace" fontSize="10" fontWeight="600">{current.value.toFixed(2)}</text>
               </g>
             </g>
 
             {/* Month labels anchored to first reading of each month */}
             {monthAnchors.map((m, i) => (
-              <text key={`m${i}`} x={m.x} y={H - 8} textAnchor="middle" fill="#8b8b92" fontFamily="DM Mono, monospace" fontSize="9.5" letterSpacing="1">{m.label}</text>
+              <text key={`m${i}`} x={m.x} y={H - 8} textAnchor="middle" fill="var(--color-faint)" fontFamily="DM Mono, monospace" fontSize="9.5" letterSpacing="1">{m.label}</text>
             ))}
+
+            {/* Interactive cursor — only present on hover/focus, so the default render is unchanged */}
+            {active && (
+              <ChartCursor
+                x={active.x}
+                y={active.y}
+                topY={PAD_T}
+                baseY={BASE_Y}
+                label={fmtTip(active.date)}
+                value={active.value.toFixed(2)}
+                accentColor={activeAccent}
+                viewBoxWidth={W}
+              />
+            )}
           </svg>
         </div>
 
@@ -292,6 +322,7 @@ export default function VO2Chart({ trend }: Props) {
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: sinceFirst >= 0 ? 'var(--accent-green)' : 'var(--accent-coral)', fontWeight: 600 }}>{sinceFirst >= 0 ? '+' : ''}{sinceFirst.toFixed(1)}%</span>
           </div>
         </div>
+        <ChartLiveRegion message={active ? `${fmtTip(active.date)}: VO₂ max ${active.value.toFixed(2)}` : ''} />
       </motion.div>
     </section>
   )

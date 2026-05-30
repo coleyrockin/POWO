@@ -111,8 +111,8 @@ export default function Hero({ data }: Props) {
         position: 'relative',
         zIndex: 1,
         borderRadius: '6px',
-        background: 'rgba(8,8,9,0.42)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.035)',
+        background: 'var(--color-panel)',
+        boxShadow: 'inset 0 1px 0 var(--hairline)',
         overflow: 'hidden',
       }}>
         <span style={{ padding: '8px 10px', color: 'var(--color-white)', fontWeight: 600 }}>{data.meta.owner.toUpperCase()}</span>
@@ -129,7 +129,7 @@ export default function Hero({ data }: Props) {
         width: '100%',
         marginTop: '18px',
         padding: '0',
-        background: 'linear-gradient(180deg, rgba(24,24,27,0.72), rgba(13,13,15,0.94))',
+        background: 'var(--color-panel)',
         borderRadius: '6px',
         boxShadow: 'var(--shadow-card)',
         position: 'relative',
@@ -197,7 +197,7 @@ export default function Hero({ data }: Props) {
       {/* Headline insight */}
       <motion.div {...fadeUp(0.55)} style={{
         width: '100%', marginTop: '24px', padding: '15px 15px 14px',
-        background: 'linear-gradient(180deg, #0f1815 0%, #080f0d 100%)',
+        background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-teal) 10%, var(--color-card)), color-mix(in srgb, var(--accent-teal) 4%, var(--color-card)))',
         boxShadow: 'inset 0 1px 0 rgba(0,212,170,0.10), 0 0 24px rgba(0,212,170,0.06)',
         borderRadius: '6px',
         position: 'relative',

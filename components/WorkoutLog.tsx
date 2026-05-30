@@ -78,7 +78,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                       <span style={{ color }}>{w.sessions}</span> sessions · {hours}h
                     </span>
                   </div>
-                  <div style={{ height: '6px', borderRadius: '3px', background: 'linear-gradient(180deg, #1a1a1d, #242429)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                  <div style={{ height: '6px', borderRadius: '3px', background: 'var(--color-track)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
                     <motion.div
                       className="powo-comet"
                       initial={{ width: 0 }}
@@ -121,7 +121,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                 minHeight: '158px',
                 height: '100%',
                 display: 'flex', flexDirection: 'column', gap: '8px',
-                background: highlight ? `linear-gradient(180deg, color-mix(in srgb, ${color} 14%, #0a0a0a), color-mix(in srgb, ${color} 6%, #0a0a0a))` : 'var(--color-card)',
+                background: highlight ? `linear-gradient(180deg, color-mix(in srgb, ${color} 14%, var(--color-track)), color-mix(in srgb, ${color} 6%, var(--color-track)))` : 'var(--color-card)',
                 position: 'relative',
                 ...(highlight ? { boxShadow: `inset 0 1px 0 color-mix(in srgb, ${color} 22%, transparent), 0 0 24px color-mix(in srgb, ${color} 10%, transparent)` } : {}),
               }}
@@ -143,7 +143,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                   {w.type === 'Weight Training' ? 'Weights' : w.type}
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, padding: '3px 8px', flexShrink: 0,
-                  ...(highlight ? { background: color, color: 'var(--color-black)' } : { background: '#0a0a0a', color: 'var(--color-white)' }) }}>
+                  ...(highlight ? { background: color, color: 'var(--color-black)' } : { background: 'var(--color-track)', color: 'var(--color-white)' }) }}>
                   {Math.round(w.calories)} kcal
                 </div>
               </div>

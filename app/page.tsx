@@ -1,11 +1,14 @@
 import { healthData } from '@/lib/data'
 import ScrollProgress from '@/components/ScrollProgress'
 import SectionNav from '@/components/SectionNav'
+import DashboardShell from '@/components/DashboardShell'
 import Hero from '@/components/Hero'
 import HealthCommandStrip from '@/components/HealthCommandStrip'
 import ActivityRings from '@/components/ActivityRings'
 import WeeklySummary from '@/components/WeeklySummary'
 import WeekChange from '@/components/WeekChange'
+import Insights from '@/components/Insights'
+import ConsistencyHeatmap from '@/components/ConsistencyHeatmap'
 import DailyTable from '@/components/DailyTable'
 import WorkoutLog from '@/components/WorkoutLog'
 import CardiacMetrics from '@/components/CardiacMetrics'
@@ -15,6 +18,7 @@ import PushupLog from '@/components/PushupLog'
 import RestRecommendation from '@/components/RestRecommendation'
 import WorkoutRecommendation from '@/components/WorkoutRecommendation'
 import Awards from '@/components/Awards'
+import ShareCards from '@/components/ShareCards'
 import Footer from '@/components/Footer'
 
 export default function Page() {
@@ -30,9 +34,12 @@ export default function Page() {
       <div className="powo-body">
         <SectionNav />
         <div className="powo-sections">
+        <DashboardShell daily={d.daily} workouts={d.workouts} />
         <ActivityRings daily={d.daily} workouts={d.workouts} />
         <WeeklySummary data={d} />
         <WeekChange data={d} />
+        <Insights data={d} />
+        <ConsistencyHeatmap daily={d.daily} workouts={d.workouts} />
         <DailyTable daily={d.daily} workouts={d.workouts} />
         <VO2Chart trend={d.vo2_max} />
         <CardiacMetrics data={d} />
@@ -42,6 +49,7 @@ export default function Page() {
         <RestRecommendation data={d} />
         <WorkoutRecommendation data={d} />
         <Awards data={d} />
+        <ShareCards />
         </div>
       </div>
       <Footer

@@ -1,5 +1,5 @@
 // lib/helpers.ts — derived stats, signal analysis, recommendation engine
-import type { DailyMetric, HealthData, VO2Point, Workout, SleepNight } from './types'
+import type { ActivityBucket, ConsistencyResult, DailyMetric, DayConsistency, HealthData, VO2Point, Workout, SleepNight } from './types'
 
 // ─── Visual helpers ──────────────────────────────────────────────
 export function glowClassForAccent(color: string): string {
@@ -579,4 +579,269 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
     days,
     guardrails,
   }
+}
+
+// ─── Consistency / streaks ───────────────────────────────────────
+// A day counts as "active" if it clears either floor. Period averages are
+// ~71 exercise min / ~803 active kcal, so 20 min OR 400 kcal is a generous
+// floor that still catches watch-logged days where one signal is missing.
+const ACTIVE_KCAL_THRESHOLD = 400
+const EXERCISE_MIN_THRESHOLD = 20
+
+function kcalBucket(kcal: number | null): ActivityBucket | null {
+  if (kcal === null) return null
+  if (kcal < ACTIVE_KCAL_THRESHOLD) return 0
+  if (kcal < 700) return 1
+  if (kcal < 1000) return 2
+  if (kcal < 1500) return 3
+  return 4
+}
+
+function minBucket(min: number | null): ActivityBucket | null {
+  if (min === null) return null
+  if (min < EXERCISE_MIN_THRESHOLD) return 0
+  if (min < 45) return 1
+  if (min < 75) return 2
+  if (min < 120) return 3
+  return 4
+}
+
+/**
+ * GitHub-style activity buckets + streak math over the daily series.
+ * Partial days (both active_kcal and exercise_min null) are transparent: they
+ * neither extend nor break a streak. The streak is computed in array order.
+ */
+export function buildConsistency(daily: DailyMetric[], workouts: Workout[]): ConsistencyResult {
+  const workoutCountByDate = new Map<string, number>()
+  for (const w of workouts) {
+    workoutCountByDate.set(w.date, (workoutCountByDate.get(w.date) ?? 0) + 1)
+  }
+
+  const days: DayConsistency[] = daily.map(d => {
+    const isPartial = d.active_kcal === null && d.exercise_min === null
+    const kb = kcalBucket(d.active_kcal)
+    const mb = minBucket(d.exercise_min)
+    let bucket: ActivityBucket
+    if (isPartial) bucket = 0
+    else if (kb === null) bucket = mb ?? 0
+    else if (mb === null) bucket = kb
+    else bucket = Math.max(kb, mb) as ActivityBucket
+    return {
+      date: d.date,
+      bucket,
+      exerciseMin: d.exercise_min,
+      activeKcal: d.active_kcal,
+      workoutCount: workoutCountByDate.get(d.date) ?? 0,
+      isPartial,
+    }
+  })
+
+  let longestStreak = 0
+  let currentRun = 0
+  for (const day of days) {
+    if (day.isPartial) continue // transparent: neither extends nor breaks
+    if (day.bucket >= 1) {
+      currentRun += 1
+      if (currentRun > longestStreak) longestStreak = currentRun
+    } else {
+      currentRun = 0
+    }
+  }
+
+  const totalActiveDays = days.filter(d => !d.isPartial && d.bucket >= 1).length
+  const nonPartialDays = days.filter(d => !d.isPartial).length
+  const pctActive = nonPartialDays > 0 ? (totalActiveDays / nonPartialDays) * 100 : 0
+
+  return { days, currentStreak: currentRun, longestStreak, totalActiveDays, pctActive }
+}
+
+// ─── Correlation / insights ──────────────────────────────────────
+export function stddev(values: number[]): number {
+  if (values.length < 2) return 0
+  const m = values.reduce((a, b) => a + b, 0) / values.length
+  const variance = values.reduce((a, b) => a + (b - m) ** 2, 0) / values.length
+  return Math.sqrt(variance)
+}
+
+/** Pearson correlation. Returns 0 for n<2 or zero-variance (no div-by-zero). */
+export function pearsonR(xs: number[], ys: number[]): number {
+  const n = Math.min(xs.length, ys.length)
+  if (n < 2) return 0
+  let sx = 0, sy = 0
+  for (let i = 0; i < n; i++) { sx += xs[i]; sy += ys[i] }
+  const mx = sx / n, my = sy / n
+  let num = 0, dx = 0, dy = 0
+  for (let i = 0; i < n; i++) {
+    const a = xs[i] - mx, b = ys[i] - my
+    num += a * b; dx += a * a; dy += b * b
+  }
+  const den = Math.sqrt(dx * dy)
+  return den === 0 ? 0 : num / den
+}
+
+// Local-date arithmetic (tz-safe — avoids toISOString UTC drift on +UTC zones).
+function addDays(iso: string, n: number): string {
+  const d = new Date(iso + 'T00:00:00')
+  d.setDate(d.getDate() + n)
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+/** Join each sleep night to the daily row `dayOffset` days later (1 = next-day readiness). */
+export function joinSleepToDaily(data: HealthData, dayOffset = 1): { night: SleepNight; next: DailyMetric }[] {
+  const byDate = new Map(data.daily.map(d => [d.date, d]))
+  const out: { night: SleepNight; next: DailyMetric }[] = []
+  for (const night of data.sleep.nights) {
+    const target = dayOffset === 0 ? night.date : addDays(night.date, dayOffset)
+    const next = byDate.get(target)
+    if (next) out.push({ night, next })
+  }
+  return out
+}
+
+export interface CorrelationInsight {
+  key: string
+  title: string
+  xLabel: string
+  yLabel: string
+  r: number
+  n: number
+  smallSample: boolean
+  strength: 'none' | 'weak' | 'moderate' | 'strong'
+  read: string
+  accent: string
+}
+
+export interface SignalInsight {
+  key: string
+  title: string
+  value: string
+  detail: string
+  accent: string
+}
+
+export interface InsightsResult {
+  narrative: string
+  correlations: CorrelationInsight[]
+  signals: SignalInsight[]
+}
+
+function strengthOf(r: number): CorrelationInsight['strength'] {
+  const a = Math.abs(r)
+  return a < 0.2 ? 'none' : a < 0.4 ? 'weak' : a < 0.7 ? 'moderate' : 'strong'
+}
+
+// Build same-window lagged pairs: x on day d, y on day d+offset, nulls dropped.
+function lagPairs(
+  daily: DailyMetric[],
+  x: (d: DailyMetric) => number | null,
+  y: (d: DailyMetric) => number | null,
+  offset = 1,
+): { xs: number[]; ys: number[] } {
+  const byDate = new Map(daily.map(d => [d.date, d]))
+  const xs: number[] = [], ys: number[] = []
+  for (const d of daily) {
+    const xv = x(d)
+    const nd = byDate.get(addDays(d.date, offset))
+    const yv = nd ? y(nd) : null
+    if (xv !== null && yv !== null) { xs.push(xv); ys.push(yv) }
+  }
+  return { xs, ys }
+}
+
+function hm(hours: number): string {
+  const h = Math.floor(hours)
+  return `${h}h ${Math.round((hours - h) * 60)}m`
+}
+
+/**
+ * Assembles the Insights section: lagged correlations (load/sleep → next-day
+ * recovery), latent signals already computed elsewhere but never surfaced, and a
+ * threshold-triggered auto-narrative (same `reasons.join(' · ')` pattern as the
+ * existing coach takeaway).
+ */
+export function buildInsights(data: HealthData): InsightsResult {
+  const recovery = analyzeRecovery(data)
+  const sleep = analyzeSleep(data)
+  const weekly = buildWeeklyAggregates(data)
+
+  const mkCorr = (
+    key: string, title: string, xLabel: string, yLabel: string,
+    pairs: { xs: number[]; ys: number[] }, accent: string,
+    read: (r: number, strength: CorrelationInsight['strength']) => string,
+  ): CorrelationInsight => {
+    const r = pearsonR(pairs.xs, pairs.ys)
+    const n = Math.min(pairs.xs.length, pairs.ys.length)
+    const strength = strengthOf(r)
+    return { key, title, xLabel, yLabel, r, n, smallSample: n < 20, strength, read: read(r, strength), accent }
+  }
+
+  const correlations: CorrelationInsight[] = [
+    mkCorr('load-hrv', 'Training load → next-day HRV', 'Exercise min', 'Next-day HRV',
+      lagPairs(data.daily, d => d.exercise_min, d => d.hrv_ms), 'var(--accent-teal)',
+      (r, s) => s === 'none' ? 'No clear link this period — load isn’t obviously denting recovery.'
+        : r < 0 ? `Harder days tend to drop next-day HRV (${s} link) — a real training cost worth pacing.`
+        : `Higher load tracks with higher next-day HRV (${s}) — you’re absorbing the volume well.`),
+    mkCorr('kcal-rhr', 'Active burn → next-day resting HR', 'Active kcal', 'Next-day RHR',
+      lagPairs(data.daily, d => d.active_kcal, d => d.resting_hr), 'var(--accent-coral)',
+      (r, s) => s === 'none' ? 'No clear link — burn isn’t elevating next-morning resting HR.'
+        : r > 0 ? `Bigger burn days nudge next-morning RHR up (${s}) — autonomic load showing through.`
+        : `More burn tracks with lower next-day RHR (${s}) — fitness adaptation outpacing fatigue.`),
+    mkCorr('sleep-hrv', 'Sleep duration → next-day HRV', 'Sleep hrs', 'Next-day HRV',
+      (() => { const p = joinSleepToDaily(data, 1); return { xs: p.map(x => x.night.total_sleep_hours), ys: p.map(x => x.next.hrv_ms).filter((v): v is number => v !== null) } })(),
+      'var(--accent-purple)',
+      (r, s) => s === 'none' ? 'No clear link in the sleep-tracked window.'
+        : r > 0 ? `More sleep tends to lift next-day HRV (${s}) — recovery responds to rest.`
+        : `Longer sleep tracks with lower next-day HRV (${s}) — unusual; likely small-sample noise.`),
+    mkCorr('deep-rhr', 'Deep sleep → next-day resting HR', 'Deep hrs', 'Next-day RHR',
+      (() => { const p = joinSleepToDaily(data, 1); return { xs: p.map(x => x.night.deep_hours), ys: p.map(x => x.next.resting_hr).filter((v): v is number => v !== null) } })(),
+      'var(--accent-blue)',
+      (r, s) => s === 'none' ? 'No clear link in the sleep-tracked window.'
+        : r < 0 ? `More deep sleep tracks with a lower next-morning RHR (${s}) — restorative.`
+        : `More deep sleep tracks with higher next-day RHR (${s}) — likely small-sample noise.`),
+  ]
+
+  // Latent signals (computed elsewhere, never surfaced as cards)
+  const rhrSlope = trendSlope(weekly.map(w => w.rhrAvg))
+  const hrvSlope = trendSlope(weekly.map(w => w.hrvAvg))
+  const signals: SignalInsight[] = [
+    {
+      key: 'sleep-extremes', title: 'Sleep range',
+      value: `${hm(sleep.bestNight.total_sleep_hours)} / ${hm(sleep.worstNight.total_sleep_hours)}`,
+      detail: `Best ${fmtShort(sleep.bestNight.date)} · Worst ${fmtShort(sleep.worstNight.date)} · ${sleep.consistency} consistency`,
+      accent: 'var(--accent-purple)',
+    },
+    {
+      key: 'rhr-trend', title: 'Weekly RHR trend',
+      value: `${rhrSlope <= 0 ? '↓' : '↑'} ${Math.abs(rhrSlope).toFixed(1)} bpm/wk`,
+      detail: rhrSlope <= 0 ? 'Resting HR easing across weeks — recovering well.' : 'Resting HR creeping up week over week.',
+      accent: rhrSlope <= 0 ? 'var(--accent-green)' : 'var(--accent-coral)',
+    },
+    {
+      key: 'hrv-trend', title: 'Weekly HRV trend',
+      value: `${hrvSlope >= 0 ? '↑' : '↓'} ${Math.abs(hrvSlope).toFixed(1)} ms/wk`,
+      detail: hrvSlope >= 0 ? 'HRV trending up — building parasympathetic capacity.' : 'HRV drifting down across weeks.',
+      accent: hrvSlope >= 0 ? 'var(--accent-green)' : 'var(--accent-coral)',
+    },
+    {
+      key: 'fatigue', title: 'Fatigue load',
+      value: `${recovery.fatigueScore}/100`,
+      detail: `Training load ${recovery.loadTrend} · VO₂ ${recovery.vo2Trend}`,
+      accent: recovery.fatigueScore >= 50 ? 'var(--accent-coral)' : recovery.fatigueScore >= 30 ? 'var(--accent-amber)' : 'var(--accent-green)',
+    },
+  ]
+
+  // Auto-narrative — strongest signals, threshold-triggered, joined like the coach takeaway.
+  const reasons: string[] = []
+  const topCorr = [...correlations].filter(c => c.strength !== 'none').sort((a, b) => Math.abs(b.r) - Math.abs(a.r))[0]
+  if (topCorr) reasons.push(`${topCorr.title} shows a ${topCorr.strength} ${topCorr.r >= 0 ? 'positive' : 'negative'} link (r ${topCorr.r.toFixed(2)}, n ${topCorr.n})`)
+  if (recovery.fatigueScore >= 30) reasons.push(`fatigue load is ${recovery.fatigueScore}/100`)
+  if (rhrSlope > 0.2) reasons.push('resting HR is creeping up week over week')
+  else if (rhrSlope < -0.2) reasons.push('resting HR is easing week over week')
+  if (sleep.consistency === 'erratic') reasons.push('sleep timing is erratic — a likely lever')
+  const narrative = reasons.length ? `${reasons.join(' · ')}.` : 'Signals are steady — no standout correlations or drift this period.'
+
+  return { narrative, correlations, signals }
 }

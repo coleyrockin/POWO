@@ -6,11 +6,13 @@ import { analyzeRecovery, analyzeSleep, buildRestRecommendation } from '@/lib/he
 
 interface Props { data: HealthData }
 
+// Tints are color-mixed over --color-card so they adapt to light/dark automatically.
+const tint = (accent: string) => `linear-gradient(180deg, color-mix(in srgb, ${accent} 15%, var(--color-card)), color-mix(in srgb, ${accent} 6%, var(--color-card)))`
 const STATUS_THEME: Record<string, { bg: string; border: string; accent: string; chip: string; chipText: string; label: string }> = {
-  recover:  { bg: 'linear-gradient(180deg, #1d0810 0%, #100407 100%)', border: '#43202a', accent: 'var(--accent-coral)',  chip: 'var(--accent-coral)',  chipText: 'var(--color-black)', label: 'PULL BACK' },
-  taper:    { bg: 'linear-gradient(180deg, #2a1a05 0%, #170d02 100%)', border: '#5c4214', accent: 'var(--accent-amber)',  chip: 'var(--accent-amber)',  chipText: 'var(--color-black)', label: 'TAPER' },
-  maintain: { bg: 'linear-gradient(180deg, #002648 0%, #00132a 100%)', border: '#003d7a', accent: 'var(--accent-blue)',   chip: 'var(--accent-blue)',   chipText: 'var(--color-black)', label: 'STEADY' },
-  push:     { bg: 'linear-gradient(180deg, #0e2a14 0%, #07140a 100%)', border: '#1a5c2a', accent: 'var(--accent-green)',  chip: 'var(--accent-green)',  chipText: 'var(--color-black)', label: 'GREEN LIGHT' },
+  recover:  { bg: tint('var(--accent-coral)'),  border: 'color-mix(in srgb, var(--accent-coral) 35%, var(--color-card))', accent: 'var(--accent-coral)',  chip: 'var(--accent-coral)',  chipText: 'var(--color-black)', label: 'PULL BACK' },
+  taper:    { bg: tint('var(--accent-amber)'),  border: 'color-mix(in srgb, var(--accent-amber) 35%, var(--color-card))', accent: 'var(--accent-amber)',  chip: 'var(--accent-amber)',  chipText: 'var(--color-black)', label: 'TAPER' },
+  maintain: { bg: tint('var(--accent-blue)'),   border: 'color-mix(in srgb, var(--accent-blue) 35%, var(--color-card))',  accent: 'var(--accent-blue)',   chip: 'var(--accent-blue)',   chipText: 'var(--color-black)', label: 'STEADY' },
+  push:     { bg: tint('var(--accent-green)'),  border: 'color-mix(in srgb, var(--accent-green) 35%, var(--color-card))', accent: 'var(--accent-green)',  chip: 'var(--accent-green)',  chipText: 'var(--color-black)', label: 'GREEN LIGHT' },
 }
 
 export default function RestRecommendation({ data }: Props) {

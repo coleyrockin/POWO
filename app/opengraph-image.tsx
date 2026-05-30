@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { healthData } from '@/lib/data'
 
 export const alt = 'POWO — Proof of Workout'
@@ -7,6 +9,10 @@ export const contentType = 'image/png'
 
 export default async function Image() {
   const pushups = healthData.pushups.weeks.reduce((total, week) => total + week.total, 0)
+  const [bebas, dmSans] = await Promise.all([
+    readFile(join(process.cwd(), 'public/fonts/BebasNeue-Regular.ttf')),
+    readFile(join(process.cwd(), 'public/fonts/DMSans-Regular.ttf')),
+  ])
 
   return new ImageResponse(
     (
@@ -20,7 +26,7 @@ export default async function Image() {
           background: '#080808',
           color: '#f0ede6',
           padding: '80px',
-          fontFamily: 'sans-serif',
+          fontFamily: 'DM Sans',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -48,9 +54,10 @@ export default async function Image() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div
             style={{
-              fontSize: '220px',
+              fontFamily: 'Bebas Neue',
+              fontSize: '240px',
               lineHeight: 0.9,
-              letterSpacing: '-0.04em',
+              letterSpacing: '0.01em',
               color: '#f0ede6',
               display: 'flex',
             }}
@@ -91,6 +98,12 @@ export default async function Image() {
         </div>
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [
+        { name: 'Bebas Neue', data: bebas, weight: 400, style: 'normal' },
+        { name: 'DM Sans', data: dmSans, weight: 400, style: 'normal' },
+      ],
+    },
   )
 }

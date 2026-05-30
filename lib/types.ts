@@ -154,6 +154,25 @@ export interface SleepData {
   summary: SleepSummary
 }
 
+export type ActivityBucket = 0 | 1 | 2 | 3 | 4
+
+export interface DayConsistency {
+  date: string
+  bucket: ActivityBucket
+  exerciseMin: number | null
+  activeKcal: number | null
+  workoutCount: number
+  isPartial: boolean
+}
+
+export interface ConsistencyResult {
+  days: DayConsistency[]
+  currentStreak: number
+  longestStreak: number
+  totalActiveDays: number
+  pctActive: number
+}
+
 export interface HealthData {
   meta: Meta
   profile: Profile

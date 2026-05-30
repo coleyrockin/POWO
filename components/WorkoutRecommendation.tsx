@@ -7,9 +7,9 @@ import { buildWorkoutRecommendation } from '@/lib/helpers'
 interface Props { data: HealthData }
 
 const INTENSITY_CHIP: Record<string, { bg: string; fg: string; label: string }> = {
-  low:  { bg: '#0e2a14', fg: 'var(--accent-green)',   label: 'LOW'  },
-  mod:  { bg: '#0d1f2a', fg: '#5fb0ff',                label: 'MOD'  },
-  high: { bg: '#2a1a05', fg: 'var(--accent-amber)',   label: 'HIGH' },
+  low:  { bg: 'color-mix(in srgb, var(--accent-green) 16%, var(--color-card))', fg: 'var(--accent-green)', label: 'LOW'  },
+  mod:  { bg: 'color-mix(in srgb, var(--accent-blue) 16%, var(--color-card))',  fg: 'var(--accent-blue)',  label: 'MOD'  },
+  high: { bg: 'color-mix(in srgb, var(--accent-amber) 16%, var(--color-card))', fg: 'var(--accent-amber)', label: 'HIGH' },
 }
 
 export default function WorkoutRecommendation({ data }: Props) {
@@ -24,7 +24,7 @@ export default function WorkoutRecommendation({ data }: Props) {
       {/* Headline card */}
       <motion.div
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-        style={{ background: 'linear-gradient(180deg, #0a2018 0%, #050f0c 100%)', padding: '18px 16px', boxShadow: '0 0 24px rgba(0,212,170,0.08)' }}
+        style={{ background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-teal) 11%, var(--color-card)), color-mix(in srgb, var(--accent-teal) 4%, var(--color-card)))', padding: '18px 16px', boxShadow: '0 0 24px rgba(0,212,170,0.08)' }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--accent-teal)', letterSpacing: '0.5px' }}>{rec.cycle_name}</div>
@@ -40,7 +40,7 @@ export default function WorkoutRecommendation({ data }: Props) {
             { l: 'Hi blocks', v: totalIntensityCount.high },
             { l: 'Z1/Z2 days',v: rec.days.filter(d => d.zone.includes('Z1') || d.zone.includes('Z2')).length },
           ].map(s => (
-            <div key={s.l} style={{ background: 'rgba(0,0,0,0.4)', padding: '8px 6px', borderRadius: '3px', textAlign: 'center' }}>
+            <div key={s.l} style={{ background: 'color-mix(in srgb, var(--color-white) 8%, transparent)', padding: '8px 6px', borderRadius: '3px', textAlign: 'center' }}>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--accent-teal)', lineHeight: 1 }}>{s.v}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase', marginTop: '3px' }}>{s.l}</div>
             </div>

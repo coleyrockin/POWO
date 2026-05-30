@@ -73,7 +73,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                 <motion.tr
                   key={d.date}
                   initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.03 }}
-                  style={{ background: '#0a0a0a', height: '44px' }}
+                  style={{ background: 'var(--color-track)', height: '44px' }}
                 >
                   <td style={{ padding: '11px 4px 11px 10px', textAlign: 'left', fontFamily: 'var(--font-sans)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap', color: calLeader ? 'var(--accent-amber)' : stepsLeader ? 'var(--accent-green)' : 'var(--color-white)' }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
@@ -89,7 +89,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                   </td>
                   <td style={{ padding: '11px 4px', textAlign: 'right', fontFamily: 'var(--font-display)', fontSize: '15px', color: stepsLeader ? 'var(--accent-green)' : 'var(--color-white)' }}>{d.steps.toLocaleString()}</td>
                   <td style={{ padding: '11px 4px', minWidth: '40px' }}>
-                    <div style={{ height: '5px', borderRadius: '3px', background: '#0a0a0a', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
+                    <div style={{ height: '5px', borderRadius: '3px', background: 'var(--color-track)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
                       <div
                         className="powo-comet"
                         style={{

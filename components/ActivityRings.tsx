@@ -1,8 +1,10 @@
 'use client'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ACTIVITY_SVG_ICONS } from '@/lib/icons'
 import type { DailyMetric, Workout } from '@/lib/types'
 import SectionHeader from './SectionHeader'
+import ChartCursorBar from './ChartCursorBar'
 
 interface Props {
   daily: DailyMetric[]
@@ -28,6 +30,21 @@ export default function ActivityRings({ daily, workouts }: Props) {
   const totalCal = last14.reduce((a, d) => a + (d.active_kcal ?? 0), 0)
   const partialDays = last14.filter(d => d.active_kcal === null)
 
+  const gridRef = useRef<HTMLDivElement>(null)
+  const draggingRef = useRef(false)
+  const [activeIdx, setActiveIdx] = useState<number | null>(null)
+  const idxFromClientX = (clientX: number): number | null => {
+    const el = gridRef.current
+    if (!el) return null
+    const r = el.getBoundingClientRect()
+    if (r.width === 0) return null
+    const i = Math.floor(((clientX - r.left) / r.width) * last14.length)
+    return Math.max(0, Math.min(last14.length - 1, i))
+  }
+  const active = activeIdx !== null ? last14[activeIdx] : null
+  const activeWorkouts = active ? (workoutsByDate[active.date] ?? []) : []
+  const activeIsPeak = active != null && active.active_kcal !== null && active.active_kcal === maxCal && maxCal > 0
+
   return (
     <section>
       <SectionHeader
@@ -35,7 +52,23 @@ export default function ActivityRings({ daily, workouts }: Props) {
         meta={`${Math.round(totalCal).toLocaleString()} kcal${partialDays.length > 0 ? ` · ${partialDays.length} partial` : ''}`}
       />
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '20px 14px 18px' }}>
-        <div className="powo-burn" style={{ display: 'grid', gap: '3px', alignItems: 'flex-end' }}>
+        <div
+          ref={gridRef}
+          className="powo-burn"
+          style={{ display: 'grid', gap: '3px', alignItems: 'flex-end', position: 'relative', touchAction: 'pan-y' }}
+          onPointerDown={e => { if (e.pointerType === 'touch') { draggingRef.current = true; try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* noop */ } const i = idxFromClientX(e.clientX); if (i !== null) setActiveIdx(i) } }}
+          onPointerMove={e => { if (e.pointerType === 'touch' && draggingRef.current) { const i = idxFromClientX(e.clientX); if (i !== null) setActiveIdx(i) } }}
+          onPointerUp={e => { if (e.pointerType === 'touch') { draggingRef.current = false; setActiveIdx(null) } }}
+          onPointerLeave={e => { if (e.pointerType !== 'touch') setActiveIdx(null) }}
+        >
+          {active && (
+            <ChartCursorBar
+              leftPct={((activeIdx! + 0.5) / last14.length) * 100}
+              label={new Date(active.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              lines={[active.active_kcal === null ? 'partial data' : `${Math.round(active.active_kcal).toLocaleString()} kcal`, activeWorkouts.length ? activeWorkouts.join(' · ') : 'no workout']}
+              accentColor={activeIsPeak ? 'var(--accent-amber)' : 'var(--accent-blue)'}
+            />
+          )}
           {last14.map((d, i) => {
             const isPartial = d.active_kcal === null
             const cal = d.active_kcal
@@ -53,7 +86,8 @@ export default function ActivityRings({ daily, workouts }: Props) {
                 role="img"
                 aria-label={`${d.date}: ${calLabel}${workoutLabel}`}
                 title={`${d.date}: ${calLabel}${workoutLabel}`}
-                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}
+                onPointerEnter={e => { if (e.pointerType !== 'touch') setActiveIdx(i) }}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', background: activeIdx === i ? 'rgba(255,255,255,0.05)' : 'transparent', borderRadius: '4px' }}
               >
                 {isPeak && (
                   <motion.div

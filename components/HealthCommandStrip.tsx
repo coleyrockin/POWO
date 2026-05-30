@@ -46,7 +46,7 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
       aria-label="Data quality and coach takeaway"
       style={{
         padding: '14px',
-        background: 'linear-gradient(180deg, rgba(8,8,8,0.98), rgba(8,8,8,0.82))',
+        background: 'var(--color-panel)',
       }}
     >
       <div
@@ -55,7 +55,7 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
           boxShadow: 'var(--shadow-card)',
         }}
       >
-        <div style={{ background: 'linear-gradient(180deg, rgba(17,17,19,0.96), rgba(11,11,13,0.96))', padding: '13px 14px' }}>
+        <div style={{ background: 'var(--color-card)', padding: '13px 14px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent-blue)', marginBottom: '7px', fontWeight: 700 }}>
             Data Quality
           </div>
@@ -75,7 +75,7 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
                   minHeight: '22px',
                   padding: '4px 7px',
                   borderRadius: '4px',
-                  background: item.includes('partial') ? 'rgba(255,170,34,0.08)' : 'rgba(255,255,255,0.025)',
+                  background: item.includes('partial') ? 'rgba(255,170,34,0.10)' : 'var(--color-panel)',
                   color: item.includes('partial') ? 'var(--accent-amber)' : 'var(--color-mid)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '9px',
@@ -90,7 +90,7 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
           </div>
         </div>
 
-        <div style={{ background: 'linear-gradient(180deg, rgba(13,24,21,0.96), rgba(8,15,13,0.96))', padding: '13px 14px' }}>
+        <div style={{ background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-teal) 10%, var(--color-card)), color-mix(in srgb, var(--accent-teal) 4%, var(--color-card)))', padding: '13px 14px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent-teal)', marginBottom: '6px', fontWeight: 700 }}>
             Coach Takeaway
           </div>

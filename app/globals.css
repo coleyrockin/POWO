@@ -31,7 +31,67 @@
 :root {
   --radius-card: 6px;
   --shadow-card: 0 12px 34px rgba(0, 0, 0, 0.28);
+  /* Semantic surface tokens (dark defaults) — replace hardcoded literals so they flip with theme */
+  --color-track: #0a0a0a;   /* progress-bar tracks */
+  --tooltip-bg:  #0d0d0d;   /* chart tooltips (kept dark in light mode too) */
+  --hairline:    rgba(255, 255, 255, 0.06);
 }
+
+/* ── Light theme ──
+   --color-black stays DARK on purpose: it's used both as a surface and as
+   text-on-bright-accent (badges, peak stars). Keeping it dark preserves accent
+   contrast; the page background is flipped explicitly below instead. */
+html.light {
+  --color-white:  #17170f;  /* primary text → near-black */
+  --color-card:   #ffffff;
+  --color-panel:  #f6f5ef;
+  --color-raised: #eceae2;
+  --color-mid:    #57575c;  /* secondary text — AA on white */
+  --color-faint:  #6c6c72;
+  --color-dim:    #d6d4cb;  /* dividers / decorative */
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-track:  #e9e7df;
+  --tooltip-bg:   #1c1c1e;  /* dark tooltip on light chart — readable, on-brand */
+  --hairline:     rgba(0, 0, 0, 0.07);
+  --shadow-card:  0 10px 30px rgba(20, 20, 20, 0.10);
+  --ambient-tint:   rgba(10, 132, 255, 0.10);
+  --ambient-tint-2: rgba(255, 170, 34, 0.05);
+  color-scheme: light;
+}
+html.light body {
+  background:
+    linear-gradient(90deg, #efeee7 0%, #f4f3ec 20%, #f8f7f1 50%, #f4f3ec 80%, #efeee7 100%),
+    #f4f3ec;
+}
+html.light .powo-shell {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), #faf9f3 42%, #f4f3ec 100%);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10);
+}
+html.light body::after { opacity: 0.018; }  /* softer grain on light */
+
+/* Class-based dark surfaces → light equivalents (inline styles handled per-component). */
+html.light .powo-lift {
+  background: linear-gradient(180deg, #ffffff 0%, #f7f6f0 100%) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+html.light .powo-lift:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f0e9 100%) !important;
+  box-shadow: 0 10px 28px rgba(10, 132, 255, 0.10), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+html.light .powo-trophy {
+  background:
+    radial-gradient(ellipse 110% 75% at 50% 18%, color-mix(in srgb, var(--trophy-color) 15%, transparent) 0%, transparent 60%),
+    linear-gradient(180deg, #ffffff, #f5f4ed);
+}
+html.light .powo-nav { background: rgba(244, 243, 236, 0.88); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08); }
+html.light .powo-nav-btn { background: rgba(0, 0, 0, 0.045); box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.03); }
+html.light .powo-shell::before {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.02)),
+    linear-gradient(180deg, rgba(10, 132, 255, 0.05), transparent 260px);
+}
+html.light .powo-panel { background: linear-gradient(180deg, #ffffff, #f6f5ef); }
+html.light tbody tr:hover { background: #ecebe4 !important; }
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -210,8 +270,8 @@ body::after {
      table stretched sparse; in the masonry they render at a right-sized width.
      The plan (11) is spanned because, even packed, its height would dominate a
      column; full-width it renders short and wide (two-up day list) instead. */
-  .powo-sections > :nth-child(-n + 3),
-  .powo-sections > :nth-child(n + 11) {
+  .powo-sections > :nth-child(-n + 4),
+  .powo-sections > :nth-child(n + 14) {
     column-span: all;
   }
 }

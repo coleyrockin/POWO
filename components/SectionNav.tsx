@@ -2,8 +2,11 @@
 import { useEffect, useRef, useState } from 'react'
 
 const SECTIONS = [
+  { id: 'explore',    label: 'Explore',  tint: 'rgba(10, 132, 255, 0.20)',  tint2: 'rgba(0, 212, 170, 0.06)'  },
   { id: 'period',     label: 'Period',   tint: 'rgba(10, 132, 255, 0.20)',  tint2: 'rgba(52, 199, 89, 0.06)'  },
   { id: 'week-change',label: 'WoW',      tint: 'rgba(179, 102, 255, 0.20)', tint2: 'rgba(10, 132, 255, 0.06)' },
+  { id: 'insights',   label: 'Insights', tint: 'rgba(0, 212, 170, 0.20)',   tint2: 'rgba(179, 102, 255, 0.06)' },
+  { id: 'consistency',label: 'Streak',   tint: 'rgba(52, 199, 89, 0.22)',   tint2: 'rgba(0, 212, 170, 0.06)' },
   { id: 'vo2',        label: 'VO₂',      tint: 'rgba(0, 212, 170, 0.22)',   tint2: 'rgba(255, 170, 34, 0.10)' },
   { id: 'cardiac',    label: 'Cardiac',  tint: 'rgba(255, 107, 107, 0.20)', tint2: 'rgba(52, 199, 89, 0.06)'  },
   { id: 'sleep',      label: 'Sleep',    tint: 'rgba(179, 102, 255, 0.22)', tint2: 'rgba(0, 212, 170, 0.06)'  },
@@ -12,6 +15,7 @@ const SECTIONS = [
   { id: 'rest',       label: 'Rest',     tint: 'rgba(0, 212, 170, 0.20)',   tint2: 'rgba(179, 102, 255, 0.06)'},
   { id: 'training',   label: 'Train',    tint: 'rgba(52, 199, 89, 0.20)',   tint2: 'rgba(10, 132, 255, 0.06)' },
   { id: 'awards',     label: 'Awards',   tint: 'rgba(255, 170, 34, 0.22)',  tint2: 'rgba(255, 107, 107, 0.06)'},
+  { id: 'share',      label: 'Share',    tint: 'rgba(10, 132, 255, 0.20)',  tint2: 'rgba(0, 212, 170, 0.06)' },
 ]
 
 export default function SectionNav() {

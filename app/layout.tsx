@@ -4,6 +4,7 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import MotionRoot from '@/components/MotionRoot'
+import ThemeToggle from '@/components/ThemeToggle'
 import {
   SITE_AUTHOR,
   SITE_DESCRIPTION,
@@ -80,18 +81,25 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#080808',
-  colorScheme: 'dark',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#080808' },
+    { media: '(prefers-color-scheme: light)', color: '#f4f3ec' },
+  ],
+  colorScheme: 'dark light',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable}`}>
       <body>
+        <Script id="powo-theme" strategy="beforeInteractive">
+          {`(function(){try{var t=localStorage.getItem('powo-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.classList.add(t);}catch(e){document.documentElement.classList.add('dark');}})();`}
+        </Script>
         <Script id="powo-jsonld" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(jsonLd)}
         </Script>
         <MotionRoot>{children}</MotionRoot>
+        <ThemeToggle />
         {shouldLoadVercelTelemetry ? (
           <>
             <Analytics />

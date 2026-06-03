@@ -19,7 +19,7 @@ export default function Insights({ data }: Props) {
         {/* Auto-narrative */}
         <div style={{ background: 'linear-gradient(180deg, rgba(0,212,170,0.07), transparent)', borderRadius: '6px', padding: '12px 12px', marginBottom: '16px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: 'var(--accent-teal)', textTransform: 'uppercase', marginBottom: '6px' }}>Read</div>
-          <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.55, color: 'var(--color-white)' }}>{narrative}</div>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: '14.5px', lineHeight: 1.6, color: 'var(--color-white)' }}>{narrative}</div>
         </div>
 
         {/* Correlation cards */}
@@ -42,7 +42,7 @@ export default function Insights({ data }: Props) {
                 <span>{c.xLabel} → {c.yLabel}</span>
                 <span style={{ color: c.smallSample ? 'var(--accent-amber)' : 'var(--color-mid)' }}>n={c.n}{c.smallSample ? ' · small n' : ''}</span>
               </div>
-              <div style={{ marginTop: '6px', fontFamily: 'var(--font-sans)', fontSize: '12px', lineHeight: 1.5, color: 'var(--color-faint)' }}>{c.read}</div>
+              <div style={{ marginTop: '6px', fontFamily: 'var(--font-serif)', fontSize: '13px', lineHeight: 1.5, color: 'var(--color-faint)' }}>{c.read}</div>
             </m.div>
           ))}
         </div>

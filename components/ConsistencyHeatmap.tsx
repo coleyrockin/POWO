@@ -2,7 +2,7 @@
 import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import CountUp from './CountUp'
-import { buildConsistency, glowClassForAccent } from '@/lib/helpers'
+import { buildConsistency } from '@/lib/helpers'
 import type { DailyMetric, Workout } from '@/lib/types'
 
 interface Props {
@@ -84,7 +84,9 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
               <div
                 key={cell.day.date}
                 title={`${cell.day.date} · ${cell.day.isPartial ? 'no data' : `${cell.day.activeKcal ?? '--'} kcal · ${cell.day.exerciseMin ?? '--'} min${cell.day.workoutCount ? ` · ${cell.day.workoutCount} workout${cell.day.workoutCount > 1 ? 's' : ''}` : ''}`}`}
-                style={{ width: 'var(--heat-cell)', height: 'var(--heat-cell)', borderRadius: '2px', background: BUCKET_COLORS[cell.day.bucket] }}
+                style={cell.day.isPartial
+                  ? { width: 'var(--heat-cell)', height: 'var(--heat-cell)', borderRadius: '2px', background: 'transparent', boxShadow: 'inset 0 0 0 1px var(--hairline)' }
+                  : { width: 'var(--heat-cell)', height: 'var(--heat-cell)', borderRadius: '2px', background: BUCKET_COLORS[cell.day.bucket] }}
               />
             ),
           )}
@@ -97,6 +99,8 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
             <span key={i} aria-hidden style={{ width: '9px', height: '9px', borderRadius: '2px', background: bg, display: 'inline-block' }} />
           ))}
           <span>MORE</span>
+          <span aria-hidden style={{ width: '9px', height: '9px', borderRadius: '2px', background: 'transparent', boxShadow: 'inset 0 0 0 1px var(--hairline)', display: 'inline-block', marginLeft: '10px' }} />
+          <span>NO DATA</span>
         </div>
 
         {/* Streak stat tiles */}
@@ -111,8 +115,8 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-mid)', position: 'relative', zIndex: 2 }}>{t.label}</span>
               <CountUp
                 value={t.val}
-                className={glowClassForAccent(t.color)}
-                style={{ fontFamily: 'var(--font-display)', fontSize: '30px', lineHeight: 1, color: t.color, position: 'relative', zIndex: 2 }}
+                className="powo-glow-white"
+                style={{ fontFamily: 'var(--font-display)', fontSize: '30px', lineHeight: 1, color: 'var(--color-white)', position: 'relative', zIndex: 2 }}
               />
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-faint)', position: 'relative', zIndex: 2 }}>{t.unit}</span>
             </m.div>

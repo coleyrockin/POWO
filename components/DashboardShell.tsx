@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { m as Motion } from 'framer-motion'
 import SectionHeader from './SectionHeader'
-import { lastNDays, sum, avg, buildConsistency, glowClassForAccent } from '@/lib/helpers'
+import { lastNDays, sum, avg, buildConsistency } from '@/lib/helpers'
 import type { DailyMetric, Workout } from '@/lib/types'
 
 interface Props { daily: DailyMetric[]; workouts: Workout[] }
@@ -57,14 +57,17 @@ export default function DashboardShell({ daily, workouts }: Props) {
     : ''
 
   type Tile = { label: string; value: string; raw: number | null; prev: number | null; good: 'up' | 'down'; color: string }
+  // Explore leads with the recovery/consistency lens (RHR/HRV/active days) — the
+  // angle the vibrant hero totals strip doesn't emphasize — then volume. This,
+  // plus the windowing + vs-prior deltas, differentiates it from the hero row.
   const tiles: Tile[] = [
+    { label: 'Avg RHR', value: m.rhr !== null ? m.rhr.toFixed(0) : '—', raw: m.rhr, prev: pm?.rhr ?? null, good: 'down', color: 'var(--accent-teal)' },
+    { label: 'Avg HRV', value: m.hrv !== null ? m.hrv.toFixed(0) : '—', raw: m.hrv, prev: pm?.hrv ?? null, good: 'up', color: 'var(--accent-purple)' },
+    { label: 'Active days', value: `${Math.round(m.activePct)}%`, raw: m.activePct, prev: pm?.activePct ?? null, good: 'up', color: 'var(--accent-green)' },
     { label: 'Steps', value: m.steps >= 100000 ? `${(m.steps / 1000).toFixed(0)}K` : fmtInt(m.steps), raw: m.steps, prev: pm?.steps ?? null, good: 'up', color: 'var(--accent-green)' },
     { label: 'Active kcal', value: m.kcal >= 100000 ? `${(m.kcal / 1000).toFixed(0)}K` : fmtInt(m.kcal), raw: m.kcal, prev: pm?.kcal ?? null, good: 'up', color: 'var(--accent-amber)' },
     { label: 'Exercise min', value: fmtInt(m.exMin), raw: m.exMin, prev: pm?.exMin ?? null, good: 'up', color: 'var(--accent-blue)' },
     { label: 'Workouts', value: String(m.workouts), raw: m.workouts, prev: pm?.workouts ?? null, good: 'up', color: 'var(--accent-coral)' },
-    { label: 'Avg RHR', value: m.rhr !== null ? m.rhr.toFixed(0) : '—', raw: m.rhr, prev: pm?.rhr ?? null, good: 'down', color: 'var(--accent-teal)' },
-    { label: 'Avg HRV', value: m.hrv !== null ? m.hrv.toFixed(0) : '—', raw: m.hrv, prev: pm?.hrv ?? null, good: 'up', color: 'var(--accent-purple)' },
-    { label: 'Active days', value: `${Math.round(m.activePct)}%`, raw: m.activePct, prev: pm?.activePct ?? null, good: 'up', color: 'var(--accent-green)' },
   ]
 
   const deltaFor = (t: Tile): { txt: string; color: string } | null => {
@@ -133,7 +136,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
                 style={{ ['--trophy-color' as string]: t.color, borderRadius: '8px', padding: '12px 8px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', textAlign: 'center', isolation: 'isolate' }}
               >
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-mid)', position: 'relative', zIndex: 2 }}>{t.label}</span>
-                <span className={glowClassForAccent(t.color)} style={{ fontFamily: 'var(--font-display)', fontSize: '24px', lineHeight: 1, color: t.color, position: 'relative', zIndex: 2 }}>{t.value}</span>
+                <span className="powo-glow-white" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', lineHeight: 1, color: 'var(--color-white)', position: 'relative', zIndex: 2 }}>{t.value}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', minHeight: '12px', color: d?.color ?? 'transparent', position: 'relative', zIndex: 2 }}>{d?.txt ?? '·'}</span>
               </Motion.div>
             )

@@ -5,7 +5,7 @@ import SectionHeader from './SectionHeader'
 import { useChartCursor } from './useChartCursor'
 import { ChartLiveRegion } from './ChartCursor'
 import type { DailyMetric, HealthData } from '@/lib/types'
-import { avg, maxOf, minOf, glowClassForAccent } from '@/lib/helpers'
+import { avg, maxOf, minOf } from '@/lib/helpers'
 
 interface Props { data: HealthData }
 
@@ -110,7 +110,7 @@ export default function CardiacMetrics({ data }: Props) {
               style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '154px', height: '100%', display: 'flex', flexDirection: 'column' }}
             >
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-white)', marginBottom: '6px' }}>{v.label}</div>
-              <div className={glowClassForAccent(v.color)} style={{ fontFamily: 'var(--font-display)', fontSize: '24px', lineHeight: 1, color: v.color }}>{v.baseline.toFixed(v.decimals)}</div>
+              <div className="powo-glow-white" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', lineHeight: 1, color: 'var(--color-white)' }}>{v.baseline.toFixed(v.decimals)}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginTop: '4px' }}>{v.unit} · {data.meta.period.days}-day baseline</div>
               <div style={{ marginTop: '8px' }}>
                 <Sparkline values={v.vals} color={v.color} max={v.sparkMax} min={v.sparkMin} dates={last14.map(d => d.date)} unit={v.unit} decimals={v.decimals} />

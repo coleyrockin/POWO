@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Bebas_Neue, DM_Mono, DM_Sans } from 'next/font/google'
+import { Bebas_Neue, DM_Mono, DM_Sans, Newsreader } from 'next/font/google'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -49,6 +49,16 @@ const dmSans = DM_Sans({
   display: 'swap',
 })
 
+// Editorial voice — literary screen serif for narrative beats (headline, coach,
+// insights). Contrasts the mono "instrument panel" labels.
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  style: ['normal', 'italic'],
+  variable: '--font-newsreader',
+  display: 'swap',
+})
+
 const shouldLoadVercelTelemetry = process.env.VERCEL === '1'
 
 export const metadata: Metadata = {
@@ -90,7 +100,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable} ${newsreader.variable}`}>
       <body>
         <Script id="powo-theme" strategy="beforeInteractive">
           {`(function(){try{var t=localStorage.getItem('powo-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.classList.add(t);}catch(e){document.documentElement.classList.add('dark');}})();`}

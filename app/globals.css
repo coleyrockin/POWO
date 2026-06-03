@@ -26,6 +26,7 @@
   --font-display: var(--font-bebas-neue), sans-serif;
   --font-mono:    var(--font-dm-mono), monospace;
   --font-sans:    var(--font-dm-sans), sans-serif;
+  --font-serif:   var(--font-newsreader), Georgia, 'Times New Roman', serif;
 }
 
 :root {
@@ -230,6 +231,20 @@ body::after {
 /* iPad + Desktop — fill the full viewport width, no side gutters. */
 @media (min-width: 641px) {
   .powo-shell { max-width: 100%; box-shadow: none; }
+}
+/* Wide screens — cap the canvas into a centered editorial column so the
+   full-bleed top strips don't stretch into 1400px-long lines. (Masonry still
+   packs 2 columns at this width — no column-count change.) */
+@media (min-width: 1200px) {
+  .powo-shell {
+    max-width: 1200px;
+    margin-inline: auto;
+    box-shadow: 0 0 0 1px var(--hairline), 0 40px 120px rgba(0, 0, 0, 0.5);
+  }
+}
+html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
+@media (min-width: 1200px) {
+  html.light .powo-shell { box-shadow: 0 0 0 1px var(--hairline), 0 40px 120px rgba(0, 0, 0, 0.12); }
 }
 
 /* ── Body wrapper (nav + sections) ──

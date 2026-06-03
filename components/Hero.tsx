@@ -31,6 +31,15 @@ export default function Hero({ data }: Props) {
   const since = ((v.peak.value - v.first.value) / v.first.value) * 100
   const vo2Weeks = Math.max(1, Math.round((new Date(`${v.peak.date}T00:00:00`).getTime() - new Date(`${v.first.date}T00:00:00`).getTime()) / (7 * 86_400_000)))
 
+  // Dec–Jan "ramp" → spring resting-HR story (only surfaces on a clear drop).
+  const rhrCut = new Date(`${data.meta.period.start}T00:00:00`)
+  rhrCut.setDate(rhrCut.getDate() + 60)
+  const rhrCutISO = rhrCut.toISOString().slice(0, 10)
+  const meanOf = (xs: number[]) => (xs.length ? xs.reduce((p, q) => p + q, 0) / xs.length : null)
+  const rhrEarly = meanOf(data.daily.filter(d => d.date < rhrCutISO && d.resting_hr != null).map(d => d.resting_hr as number))
+  const rhrLate = meanOf(data.daily.filter(d => d.date >= rhrCutISO && d.resting_hr != null).map(d => d.resting_hr as number))
+  const rhrStory = rhrEarly != null && rhrLate != null && rhrEarly - rhrLate >= 3
+
   // Sparkline series — smoothed where the raw signal is jagged
   const stepsSeries  = rolling(data.daily.map(d => d.steps), 5)
   const kcalSeries   = rolling(data.daily.map(d => d.active_kcal ?? 0), 5)
@@ -204,8 +213,8 @@ export default function Hero({ data }: Props) {
         zIndex: 1,
       }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: 'var(--accent-teal)', textTransform: 'uppercase', marginBottom: '6px' }}>Headline</div>
-        <div style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', lineHeight: 1.55, color: 'var(--color-white)' }}>
-          VO₂ max climbed from <span style={{ color: 'var(--accent-teal)', fontWeight: 600 }}>{v.first.value.toFixed(1)}</span> to a peak of <span style={{ color: 'var(--accent-amber)', fontWeight: 600 }}>{v.peak.value.toFixed(2)}</span> on {fmtShort(v.peak.date)} — <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>+{since.toFixed(1)}%</span> in {vo2Weeks} weeks. Daily averages: <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{a.avg_daily_steps.toLocaleString()} steps</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_active_kcal)} kcal</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_exercise_min)} exercise min</span>.
+        <div style={{ fontFamily: 'var(--font-serif)', fontSize: '15.5px', lineHeight: 1.6, letterSpacing: '0.005em', color: 'var(--color-white)' }}>
+          VO₂ max climbed from <span style={{ color: 'var(--accent-teal)', fontWeight: 600 }}>{v.first.value.toFixed(1)}</span> to a peak of <span style={{ color: 'var(--accent-amber)', fontWeight: 600 }}>{v.peak.value.toFixed(2)}</span> on {fmtShort(v.peak.date)} — <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>+{since.toFixed(1)}%</span> in {vo2Weeks} weeks. Daily averages: <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{a.avg_daily_steps.toLocaleString()} steps</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_active_kcal)} kcal</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_exercise_min)} exercise min</span>.{rhrStory && (<> Resting HR eased from a <span style={{ color: 'var(--accent-coral)', fontWeight: 600 }}>{Math.round(rhrEarly as number)}</span>-bpm winter baseline to <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>{Math.round(rhrLate as number)}</span>.</>)}
         </div>
       </m.div>
     </header>

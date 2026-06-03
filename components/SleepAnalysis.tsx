@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import { useChartCursor } from './useChartCursor'
 import { ChartLiveRegion } from './ChartCursor'
@@ -59,6 +60,7 @@ export default function SleepAnalysis({ sleep }: Props) {
   }
 
   const points = nights.map((n, i) => `${xFor(i)},${yFor(n.in_bed_hours)}`).join(' ')
+  const linePath = `M ${points.split(' ').join(' L ')}`
   const areaPath = `M ${xFor(0)},${H - PAD_Y} L ${points} L ${xFor(nights.length - 1)},${H - PAD_Y} Z`
   const goalY = yFor(GOAL_HOURS)
 
@@ -84,7 +86,7 @@ export default function SleepAnalysis({ sleep }: Props) {
         {tiles.map(t => (
           <div key={t.label} className="powo-lift" style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '92px', height: '100%', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>{t.label}</div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: t.color, lineHeight: 1 }}>{t.val}</div>
+            <div className="powo-glow-white" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--color-white)', lineHeight: 1 }}>{t.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', marginTop: '3px' }}>{t.unit}</div>
           </div>
         ))}
@@ -117,7 +119,18 @@ export default function SleepAnalysis({ sleep }: Props) {
             {/* 8-hour goal line */}
             <line x1={PAD_X} y1={goalY} x2={W - PAD_X} y2={goalY} stroke="var(--accent-green)" strokeWidth="1" strokeDasharray="4 4" opacity={0.5} />
             <path d={areaPath} fill="url(#sleepArea)" />
-            <polyline points={points} fill="none" stroke="var(--accent-purple)" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
+            <m.path
+              d={linePath}
+              fill="none"
+              stroke="var(--accent-purple)"
+              strokeWidth="1.6"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              whileInView={{ pathLength: 1, opacity: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            />
             {longest && <circle cx={xFor(nights.indexOf(longest))} cy={yFor(longest.in_bed_hours)} r="3" fill="var(--accent-amber)" />}
             {shortest && <circle cx={xFor(nights.indexOf(shortest))} cy={yFor(shortest.in_bed_hours)} r="3" fill="var(--accent-coral)" />}
             {active && <circle cx={activeX} cy={yFor(active.in_bed_hours)} r="3.2" fill="var(--accent-purple)" />}

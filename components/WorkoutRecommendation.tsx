@@ -30,7 +30,7 @@ export default function WorkoutRecommendation({ data }: Props) {
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--accent-teal)', letterSpacing: '0.5px' }}>{rec.cycle_name}</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-mid)' }}>{rec.start_date} → {rec.end_date}</div>
         </div>
-        <div style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.55 }}>{rec.rationale}</div>
+        <div style={{ fontFamily: 'var(--font-serif)', fontSize: '13.5px', color: 'var(--color-white)', lineHeight: 1.55 }}>{rec.rationale}</div>
 
         {/* Mini stat strip */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginTop: '14px' }}>

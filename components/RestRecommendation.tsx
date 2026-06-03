@@ -97,7 +97,7 @@ export default function RestRecommendation({ data }: Props) {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: '10px', fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--color-mid)', lineHeight: 1.55 }}>
+        <div style={{ marginTop: '10px', fontFamily: 'var(--font-serif)', fontSize: '13px', color: 'var(--color-mid)', lineHeight: 1.55 }}>
           <span style={{ color: 'var(--color-mid)', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em' }}>RATIONALE</span><br />
           {rec.rationale}
         </div>

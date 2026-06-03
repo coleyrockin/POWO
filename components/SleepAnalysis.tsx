@@ -1,8 +1,8 @@
 'use client'
-import { useState } from 'react'
-import { m } from 'framer-motion'
+import { useRef } from 'react'
 import SectionHeader from './SectionHeader'
-import ChartCursorBar from './ChartCursorBar'
+import { useChartCursor } from './useChartCursor'
+import { ChartLiveRegion } from './ChartCursor'
 import type { SleepData } from '@/lib/types'
 
 interface Props { sleep: SleepData }
@@ -11,98 +11,139 @@ function fmtDate(iso: string) {
   const d = new Date(iso + 'T00:00:00')
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()
 }
-
 function fmtHM(hours: number) {
   const h = Math.floor(hours)
-  const m = Math.round((hours - h) * 60)
-  return `${h}h ${m}m`
+  const mm = Math.round((hours - h) * 60)
+  return `${h}h ${mm}m`
 }
 
+const GOAL_HOURS = 8
+
 export default function SleepAnalysis({ sleep }: Props) {
-  const nights = sleep.nights
+  const nights = sleep.nights.filter(n => !n.isNap)
   const s = sleep.summary
-  const longest = nights.reduce((a, b) => (b.total_sleep_hours > a.total_sleep_hours ? b : a))
-  const shortest = nights.reduce((a, b) => (b.total_sleep_hours < a.total_sleep_hours ? b : a))
-  const rangeLabel = `${fmtDate(nights[0].date)} → ${fmtDate(nights[nights.length - 1].date)}`
+  const svgRef = useRef<SVGSVGElement>(null)
 
-  // Per-night composition bars (proportional to total)
-  const maxTotal = Math.max(...nights.map(n => n.total_sleep_hours))
+  const W = 600, H = 132, PAD_X = 6, PAD_Y = 14
+  const vals = nights.map(n => n.in_bed_hours)
+  const dataMin = vals.length ? Math.min(...vals) : 0
+  const dataMax = vals.length ? Math.max(...vals) : 0
+  const yMin = Math.min(dataMin, 6.5)
+  const yMax = Math.max(dataMax, GOAL_HOURS + 0.5)
+  const yRange = yMax - yMin || 1
+  const xFor = (i: number) => PAD_X + (nights.length <= 1 ? 0 : (i / (nights.length - 1)) * (W - PAD_X * 2))
+  const yFor = (v: number) => H - PAD_Y - ((v - yMin) / yRange) * (H - PAD_Y * 2)
 
-  const [activeIdx, setActiveIdx] = useState<number | null>(null)
-  const an = activeIdx !== null ? nights[activeIdx] : null
+  const coords = nights.map((n, i) => ({ x: xFor(i), i, v: n.in_bed_hours }))
+  const { activeIndex, handlers } = useChartCursor({ coords, svgRef, enabled: nights.length >= 2 })
+
+  const longest = nights.length ? nights.reduce((a, b) => (b.in_bed_hours > a.in_bed_hours ? b : a)) : null
+  const shortest = nights.length ? nights.reduce((a, b) => (b.in_bed_hours < a.in_bed_hours ? b : a)) : null
+
+  const tiles = [
+    { label: 'Avg in bed', val: s.avg_in_bed_hours.toFixed(1), unit: 'hrs / night', color: 'var(--accent-blue)' },
+    { label: 'Consistency', val: '±' + s.stdev_hours.toFixed(1), unit: 'hrs stdev', color: 'var(--accent-purple)' },
+    { label: 'Typical bed', val: s.typical_bedtime || '—', unit: 'lights out', color: 'var(--accent-teal)' },
+    { label: 'Typical wake', val: s.typical_wake || '—', unit: 'up', color: 'var(--accent-amber)' },
+  ]
+
+  if (nights.length === 0) {
+    return (
+      <section id="sleep">
+        <SectionHeader label="Sleep Analysis" meta="no nights tracked" />
+        <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '18px 14px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-mid)' }}>
+          {sleep.coverage_note || 'No sleep sessions in this export window.'}
+        </div>
+      </section>
+    )
+  }
+
+  const points = nights.map((n, i) => `${xFor(i)},${yFor(n.in_bed_hours)}`).join(' ')
+  const areaPath = `M ${xFor(0)},${H - PAD_Y} L ${points} L ${xFor(nights.length - 1)},${H - PAD_Y} Z`
+  const goalY = yFor(GOAL_HOURS)
+
+  const active = activeIndex !== null ? nights[activeIndex] : null
+  const activeX = activeIndex !== null ? xFor(activeIndex) : 0
+  const leftPct = (activeX / W) * 100
+  const tipLeft = Math.max(14, Math.min(leftPct, 86))
 
   return (
     <section id="sleep">
-      <SectionHeader label="Sleep Analysis" meta={`${s.nights_with_data} nights · stages tracked`} />
+      <SectionHeader label="Sleep Analysis" meta={`${s.nights_with_data} nights · in-bed duration`} />
 
-      {/* Coverage note — moved to top so reader sees the gap before the data */}
-      <div style={{ background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-amber) 13%, var(--color-card)), color-mix(in srgb, var(--accent-amber) 5%, var(--color-card)))', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 5px', borderRadius: '2px', fontWeight: 700, letterSpacing: '0.14em', flexShrink: 0, marginTop: '1px' }}>GAP</span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>{sleep.coverage_note}</span>
-      </div>
+      {/* Coverage note — sets expectations before the data */}
+      {sleep.coverage_note && (
+        <div style={{ background: 'linear-gradient(180deg, color-mix(in srgb, var(--accent-amber) 13%, var(--color-card)), color-mix(in srgb, var(--accent-amber) 5%, var(--color-card)))', padding: '10px 14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 5px', borderRadius: '2px', fontWeight: 700, letterSpacing: '0.14em', flexShrink: 0, marginTop: '1px' }}>NOTE</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', lineHeight: 1.5 }}>{sleep.coverage_note}</span>
+        </div>
+      )}
 
       {/* Summary stat strip */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
-        {[
-          { label: 'Avg Total',  val: s.avg_total_hours.toFixed(2),  unit: 'hrs',  color: 'var(--accent-blue)'   },
-          { label: 'Avg Deep',   val: s.avg_deep_pct.toFixed(1) + '%', unit: 'of TST', color: 'var(--accent-coral)' },
-          { label: 'Avg REM',    val: s.avg_rem_pct.toFixed(1) + '%',  unit: 'of TST', color: 'var(--accent-amber)' },
-          { label: 'Stdev',      val: '±' + s.stdev_hours.toFixed(2), unit: 'consistency', color: 'var(--accent-purple)' },
-        ].map(t => (
+        {tiles.map(t => (
           <div key={t.label} className="powo-lift" style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '92px', height: '100%', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>{t.label}</div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '22px', color: t.color, lineHeight: 1 }}>{t.val}</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: t.color, lineHeight: 1 }}>{t.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', marginTop: '3px' }}>{t.unit}</div>
           </div>
         ))}
       </div>
 
-      {/* Per-night stage bars */}
+      {/* Duration trend */}
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>Stage Composition · {rangeLabel}</div>
-        <div style={{ display: 'flex', gap: '12px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)', marginBottom: '10px' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-coral)', borderRadius: '2px' }} /> Deep</span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-amber)', borderRadius: '2px' }} /> REM</span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', background: 'var(--accent-blue)', borderRadius: '2px' }} /> Core</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '10px', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>In-bed hours / night</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-faint)' }}>{fmtDate(nights[0].date)} → {fmtDate(nights[nights.length - 1].date)}</span>
         </div>
-        <div
-          style={{ display: 'flex', flexDirection: 'column', gap: '7px', position: 'relative' }}
-          onPointerLeave={e => { if (e.pointerType !== 'touch') setActiveIdx(null) }}
-        >
-          {an && (
-            <ChartCursorBar
-              leftPct={50}
-              label={fmtDate(an.date)}
-              lines={[`${fmtHM(an.total_sleep_hours)} total`, `Deep ${fmtHM(an.deep_hours)} · REM ${fmtHM(an.rem_hours)} · Core ${fmtHM(an.core_hours)}`]}
-              accentColor="var(--accent-blue)"
-            />
+
+        <div style={{ position: 'relative' }}>
+          <svg
+            ref={svgRef}
+            viewBox={`0 0 ${W} ${H}`}
+            role="application"
+            aria-roledescription="interactive sleep-duration chart"
+            aria-label={`In-bed hours across ${nights.length} nights, averaging ${s.avg_in_bed_hours.toFixed(1)} hours${active ? `. ${fmtDate(active.date)}: ${active.in_bed_hours.toFixed(1)} hours` : '. Use arrow keys to inspect.'}`}
+            {...handlers}
+            style={{ width: '100%', height: '132px', display: 'block', ...handlers.style }}
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="sleepArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="var(--accent-purple)" stopOpacity="0.34" />
+                <stop offset="100%" stopColor="var(--accent-purple)" stopOpacity="0.02" />
+              </linearGradient>
+            </defs>
+            {/* 8-hour goal line */}
+            <line x1={PAD_X} y1={goalY} x2={W - PAD_X} y2={goalY} stroke="var(--accent-green)" strokeWidth="1" strokeDasharray="4 4" opacity={0.5} />
+            <path d={areaPath} fill="url(#sleepArea)" />
+            <polyline points={points} fill="none" stroke="var(--accent-purple)" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
+            {longest && <circle cx={xFor(nights.indexOf(longest))} cy={yFor(longest.in_bed_hours)} r="3" fill="var(--accent-amber)" />}
+            {shortest && <circle cx={xFor(nights.indexOf(shortest))} cy={yFor(shortest.in_bed_hours)} r="3" fill="var(--accent-coral)" />}
+            {active && <circle cx={activeX} cy={yFor(active.in_bed_hours)} r="3.2" fill="var(--accent-purple)" />}
+          </svg>
+
+          {active && (
+            <>
+              <div aria-hidden style={{ position: 'absolute', top: 0, bottom: 0, left: `${leftPct}%`, width: '1px', background: 'var(--accent-purple)', opacity: 0.55, pointerEvents: 'none' }} />
+              <div aria-hidden style={{ position: 'absolute', bottom: '100%', left: `${tipLeft}%`, transform: 'translate(-50%, -2px)', background: 'var(--tooltip-bg)', border: '1px solid var(--accent-purple)', borderRadius: '4px', padding: '4px 8px', whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 6, boxShadow: '0 4px 12px rgba(0,0,0,0.45)' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-faint)' }}>{fmtDate(active.date)}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', color: 'var(--accent-purple)', lineHeight: 1.1 }}>{fmtHM(active.in_bed_hours)}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)' }}>{active.bedtime_local} → {active.wake_time_local}</div>
+              </div>
+            </>
           )}
-          {nights.map((n, i) => {
-            const isLongest = n.date === longest.date
-            const isShortest = n.date === shortest.date
-            const totalPct = (n.total_sleep_hours / maxTotal) * 100
-            const deepPct = (n.deep_hours / n.total_sleep_hours) * 100
-            const remPct = (n.rem_hours / n.total_sleep_hours) * 100
-            const corePct = (n.core_hours / n.total_sleep_hours) * 100
-            return (
-              <m.div key={n.date}
-                initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-                onPointerEnter={e => { if (e.pointerType !== 'touch') setActiveIdx(i) }}
-                style={{ display: 'grid', gridTemplateColumns: '52px 1fr 64px', alignItems: 'center', gap: '8px', background: activeIdx === i ? 'var(--color-raised)' : 'transparent', borderRadius: '4px' }}
-              >
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: isLongest ? 'var(--accent-amber)' : isShortest ? 'var(--accent-coral)' : 'var(--color-mid)', fontWeight: isLongest || isShortest ? 600 : 400 }}>{fmtDate(n.date)}</span>
-                <div style={{ height: '14px', borderRadius: '3px', background: 'var(--color-track)', display: 'flex', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.4)', width: `${totalPct}%` }}>
-                  <m.div initial={{ width: 0 }} whileInView={{ width: `${deepPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 }} style={{ background: 'var(--accent-coral)', height: '100%' }} />
-                  <m.div initial={{ width: 0 }} whileInView={{ width: `${remPct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.05 }} style={{ background: 'var(--accent-amber)', height: '100%' }} />
-                  <m.div initial={{ width: 0 }} whileInView={{ width: `${corePct}%` }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 + 0.1 }} style={{ background: 'var(--accent-blue)', height: '100%' }} />
-                </div>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', color: isLongest ? 'var(--accent-amber)' : 'var(--color-white)', textAlign: 'right' }}>{fmtHM(n.total_sleep_hours)}</span>
-              </m.div>
-            )
-          })}
+          <ChartLiveRegion message={active ? `${fmtDate(active.date)}: ${active.in_bed_hours.toFixed(1)} hours, ${active.bedtime_local} to ${active.wake_time_local}` : ''} />
+        </div>
+
+        {/* Legend */}
+        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '10px', fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', letterSpacing: '0.06em' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '12px', height: '2px', background: 'var(--accent-green)', display: 'inline-block' }} /> 8h goal</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-amber)', display: 'inline-block' }} /> longest {longest ? fmtHM(longest.in_bed_hours) : ''}</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-coral)', display: 'inline-block' }} /> shortest {shortest ? fmtHM(shortest.in_bed_hours) : ''}</span>
+          {s.naps > 0 && <span>· {s.naps} nap{s.naps > 1 ? 's' : ''} excluded</span>}
         </div>
       </div>
-
     </section>
   )
 }

@@ -5,7 +5,7 @@ export const SITE_NAME = 'POWO'
 export const SITE_TITLE = 'POWO — Proof of Workout'
 export const SITE_AUTHOR = 'Coley Roberts'
 export const SITE_DESCRIPTION =
-  'Proof of Workout turns Apple Health into a mobile-first dashboard with VO2 trajectory, sleep stages, cardiac trends, workout volume, and training recommendations.'
+  'Proof of Workout turns Apple Health into a mobile-first dashboard with VO2 trajectory, sleep duration, cardiac trends, workout volume, and training recommendations.'
 export const SITE_MARKETING_DESCRIPTION =
-  'A mobile-first fitness dashboard that turns 91 days of Apple Health data into a cinematic, editorial-grade interface.'
+  'A mobile-first fitness dashboard that turns 6 months of Apple Health data into a cinematic, editorial-grade interface.'
 export const SITE_LAST_MODIFIED = latestHealthExport.export_date

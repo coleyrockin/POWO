@@ -26,7 +26,7 @@ import type { DailyMetric, HealthData, SleepNight } from '../lib/types.ts'
 
 // ─── joinSleepToDaily ───────────────────────────────────────
 function night(date: string, total: number): SleepNight {
-  return { date, total_sleep_hours: total, core_hours: total * 0.6, deep_hours: total * 0.15, rem_hours: total * 0.25, deep_pct: 15, rem_pct: 25 }
+  return { date, in_bed_hours: total, bedtime_local: '23:00', wake_time_local: '07:00', isNap: false }
 }
 function day(date: string, hrv: number | null): DailyMetric {
   return {
@@ -79,12 +79,12 @@ function day(date: string, hrv: number | null): DailyMetric {
     sleep: {
       nights: [],
       coverage_note: '',
-      summary: { nights_with_data: 0, avg_total_hours: 0, min_total_hours: 0, max_total_hours: 0, stdev_hours: 0, avg_deep_pct: 0, avg_rem_pct: 0, avg_deep_hours: 0, avg_rem_hours: 0 },
+      summary: { nights_with_data: 0, avg_in_bed_hours: 0, min_in_bed_hours: 0, max_in_bed_hours: 0, stdev_hours: 0, typical_bedtime: '', typical_wake: '', naps: 0 },
     },
   } as unknown as HealthData
   const s = analyzeSleep(data)
-  assert.equal(s.bestNight.total_sleep_hours, 0, 'analyzeSleep with no nights → neutral bestNight, no crash')
-  assert.equal(s.worstNight.total_sleep_hours, 0, 'analyzeSleep with no nights → neutral worstNight')
+  assert.equal(s.bestNight.in_bed_hours, 0, 'analyzeSleep with no nights → neutral bestNight, no crash')
+  assert.equal(s.worstNight.in_bed_hours, 0, 'analyzeSleep with no nights → neutral worstNight')
 }
 
 console.log('insights.test: all assertions passed')

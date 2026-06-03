@@ -88,7 +88,7 @@ html.light .powo-section-header { background: linear-gradient(180deg, #ffffff, #
 /* Class-based dark surfaces → light equivalents (inline styles handled per-component). */
 html.light .powo-lift {
   background: linear-gradient(180deg, #ffffff 0%, #f7f6f0 100%) !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 html.light .powo-lift:hover {
   background: linear-gradient(180deg, #ffffff 0%, #f1f0e9 100%) !important;
@@ -199,6 +199,12 @@ body::after {
   pointer-events: none;
   z-index: 9999;
 }
+/* Grain over-textures small screens — soften on phones. */
+@media (max-width: 640px) { body::after { opacity: 0.02; } }
+
+/* Consistency heatmap cell sizing — CSS-driven so SSR == client (no #418 flash). */
+.powo-heat { --heat-cell: 10px; --heat-gap: 2px; }
+@media (min-width: 641px) { .powo-heat { --heat-cell: 13px; --heat-gap: 3px; } }
 
 /* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -247,13 +253,22 @@ body::after {
 .powo-sections {
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  padding: 0 14px 30px;
+  gap: 26px;
+  padding: 0 16px 28px;
 }
 @media (min-width: 641px) {
   .powo-sections {
     gap: 34px;
     padding: 0 22px 40px;
+  }
+}
+/* iPad portrait: keep cards in a centered editorial column, not full-bleed.
+   Scoped below 1024 so the desktop masonry (which sets its own layout) is untouched. */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .powo-sections {
+    max-width: 760px;
+    margin-inline: auto;
+    width: 100%;
   }
 }
 
@@ -459,8 +474,8 @@ section[id] {
 
 .powo-nav-btn {
   flex-shrink: 0;
-  min-height: 30px;
-  padding: 5px 12px;
+  min-height: 40px;
+  padding: 9px 14px;
   background: rgba(255, 255, 255, 0.045);
   color: var(--color-white);
   border: none;
@@ -477,11 +492,13 @@ section[id] {
 }
 
 .powo-nav-btn.is-active {
-  background: linear-gradient(180deg, #4ca4ff, var(--accent-blue));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-blue) 70%, white), var(--accent-blue));
   color: var(--color-black);
   font-weight: 700;
   box-shadow: 0 0 14px rgba(10, 132, 255, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
+/* Active pill carries the blue bg → blue focus ring vanishes; use white. */
+.powo-nav-btn.is-active:focus-visible { outline-color: var(--color-white); }
 
 /* Desktop: vertical left rail */
 @media (min-width: 1024px) {
@@ -530,7 +547,7 @@ tbody tr:hover {
 /* ── Card depth — gradient surface + inset highlight + outer shadow ── */
 .powo-lift {
   background: linear-gradient(180deg, #18181b 0%, #0f0f11 100%) !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.44);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.045);
   transition:
     transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 220ms ease,
@@ -548,13 +565,17 @@ tbody tr:hover {
 }
 
 /* ── Glow utilities — soft halo behind big stats ── */
-.powo-glow-blue   { text-shadow: 0 0 24px rgba(10, 132, 255, 0.55), 0 0 6px rgba(10, 132, 255, 0.30); }
-.powo-glow-green  { text-shadow: 0 0 28px rgba(52, 199, 89, 0.35); }
-.powo-glow-amber  { text-shadow: 0 0 28px rgba(255, 170, 34, 0.40); }
-.powo-glow-coral  { text-shadow: 0 0 28px rgba(255, 107, 107, 0.35); }
-.powo-glow-purple { text-shadow: 0 0 28px rgba(179, 102, 255, 0.35); }
+/* One intensity curve across accents so KPI numbers read as a single family
+   (blue was previously hotter than the rest). */
+.powo-glow-blue   { text-shadow: 0 0 26px rgba(10, 132, 255, 0.40); }
+.powo-glow-green  { text-shadow: 0 0 26px rgba(52, 199, 89, 0.38); }
+.powo-glow-amber  { text-shadow: 0 0 26px rgba(255, 170, 34, 0.40); }
+.powo-glow-coral  { text-shadow: 0 0 26px rgba(255, 107, 107, 0.38); }
+.powo-glow-purple { text-shadow: 0 0 26px rgba(179, 102, 255, 0.38); }
 .powo-glow-white  { text-shadow: 0 0 22px rgba(240, 237, 230, 0.18); }
-.powo-glow-teal   { text-shadow: 0 0 28px rgba(0, 212, 170, 0.35); }
+.powo-glow-teal   { text-shadow: 0 0 26px rgba(0, 212, 170, 0.38); }
+/* Glows smear on white — off in light mode. */
+html.light [class*='powo-glow-'] { text-shadow: none; }
 
 /* ── Section header tick — subtle bloom ── */
 .powo-tick { box-shadow: 0 0 8px rgba(10, 132, 255, 0.7); }

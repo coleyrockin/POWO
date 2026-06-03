@@ -3,7 +3,7 @@ import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 
 const CARDS = [
-  { variant: 'overview', label: 'Overview', desc: '91-day totals', color: 'var(--accent-blue)' },
+  { variant: 'overview', label: 'Overview', desc: '6-month totals', color: 'var(--accent-blue)' },
   { variant: 'week', label: 'This Week', desc: 'Week-over-week', color: 'var(--accent-green)' },
   { variant: 'activity', label: 'By Activity', desc: 'Workout breakdown', color: 'var(--accent-amber)' },
   { variant: 'story', label: 'Story', desc: '9:16 for IG/TikTok', color: 'var(--accent-purple)' },

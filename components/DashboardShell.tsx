@@ -7,8 +7,7 @@ import type { DailyMetric, Workout } from '@/lib/types'
 
 interface Props { daily: DailyMetric[]; workouts: Workout[] }
 
-const WINDOWS = [7, 30, 91] as const
-type Win = (typeof WINDOWS)[number]
+const BASE_WINDOWS = [7, 30, 90] as const
 
 interface WindowMetrics {
   steps: number
@@ -35,8 +34,11 @@ function buildWindowMetrics(daily: DailyMetric[], workouts: Workout[]): WindowMe
 const fmtInt = (n: number) => Math.round(n).toLocaleString()
 
 export default function DashboardShell({ daily, workouts }: Props) {
-  const [win, setWin] = useState<Win>(91)
+  const ALL = daily.length
+  const windows: number[] = [...BASE_WINDOWS.filter(w => w < ALL), ALL]
+  const [win, setWin] = useState<number>(() => daily.length)
   const [compareOn, setCompareOn] = useState(false)
+  const isAll = win >= ALL
 
   const sliced = lastNDays(daily, win)
   const cutoff = sliced[0]?.date ?? ''
@@ -46,7 +48,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
   const prevCutoff = prev[0]?.date ?? ''
   const prevW = prev.length ? workouts.filter(w => w.date >= prevCutoff && w.date < cutoff) : []
 
-  const compare = compareOn && win !== 91 && prev.length > 0
+  const compare = compareOn && !isAll && prev.length > 0
   const m = buildWindowMetrics(sliced, slicedW)
   const pm = compare ? buildWindowMetrics(prev, prevW) : null
 
@@ -81,7 +83,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
         {/* Controls */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div role="group" aria-label="Select window" style={{ display: 'inline-flex', background: 'var(--color-track, #0a0a0a)', borderRadius: '8px', padding: '3px', gap: '2px' }}>
-            {WINDOWS.map(w => {
+            {windows.map(w => {
               const active = w === win
               return (
                 <button
@@ -96,26 +98,26 @@ export default function DashboardShell({ daily, workouts }: Props) {
                     transition: 'background 0.15s, color 0.15s',
                   }}
                 >
-                  {w === 91 ? 'ALL' : `${w}D`}
+                  {w === ALL ? 'ALL' : `${w}D`}
                 </button>
               )
             })}
           </div>
           <button
             onClick={() => setCompareOn(v => !v)}
-            disabled={win === 91}
-            aria-pressed={compareOn && win !== 91}
+            disabled={isAll}
+            aria-pressed={compareOn && !isAll}
             style={{
               fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase',
-              padding: '7px 12px', borderRadius: '6px', cursor: win === 91 ? 'not-allowed' : 'pointer',
+              padding: '7px 12px', borderRadius: '6px', cursor: isAll ? 'not-allowed' : 'pointer',
               border: `1px solid ${compare ? 'var(--accent-blue)' : 'var(--color-dim)'}`,
               background: compare ? 'rgba(10,132,255,0.12)' : 'transparent',
-              color: win === 91 ? 'var(--color-dim)' : compare ? 'var(--accent-blue)' : 'var(--color-mid)',
-              opacity: win === 91 ? 0.5 : 1,
+              color: isAll ? 'var(--color-dim)' : compare ? 'var(--accent-blue)' : 'var(--color-mid)',
+              opacity: isAll ? 0.5 : 1,
             }}
-            title={win === 91 ? 'No prior period to compare against at full range' : 'Compare to the previous equal window'}
+            title={isAll ? 'No prior period to compare against at full range' : 'Compare to the previous equal window'}
           >
-            {compare ? '✓ ' : ''}vs prior {win === 91 ? '' : `${win}d`}
+            {compare ? '✓ ' : ''}vs prior {isAll ? '' : `${win}d`}
           </button>
         </div>
 

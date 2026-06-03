@@ -1,5 +1,4 @@
 'use client'
-import { useEffect, useState } from 'react'
 import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import CountUp from './CountUp'
@@ -21,19 +20,8 @@ const BUCKET_COLORS = [
 ]
 
 export default function ConsistencyHeatmap({ daily, workouts }: Props) {
-  // Cell sizing in JS (Tailwind v4 doesn't emit ad-hoc custom-prop classes here).
-  // Phone-first default (10px) matches SSR; widens to 13px on tablet/desktop.
-  const [wide, setWide] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 641px)')
-    const update = () => setWide(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-  const cellPx = wide ? 13 : 10
-  const gapPx = wide ? 3 : 2
-
+  // Cell/gap size is CSS-driven (.powo-heat sets --heat-cell / --heat-gap, widened
+  // at >=641px) so SSR and client render identically — no hydration flash.
   if (daily.length === 0) return null
 
   const c = buildConsistency(daily, workouts)
@@ -67,6 +55,7 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
     <section id="consistency">
       <SectionHeader label="Consistency" meta={`${c.totalActiveDays} active · ${Math.round(c.pctActive)}%`} />
       <m.div
+        className="powo-heat"
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '18px 14px' }}
       >
@@ -75,7 +64,7 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
           {monthLabels.map(m => (
             <span
               key={m.label}
-              style={{ position: 'absolute', left: `${m.col * (cellPx + gapPx)}px`, top: 0, fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)' }}
+              style={{ position: 'absolute', left: `calc(${m.col} * (var(--heat-cell) + var(--heat-gap)))`, top: 0, fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)' }}
             >
               {m.label}
             </span>
@@ -86,16 +75,16 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
         <div
           role="img"
           aria-label={`Daily activity heatmap, ${daily.length} days. ${c.totalActiveDays} active days, ${Math.round(c.pctActive)} percent. Current streak ${c.currentStreak} days, longest ${c.longestStreak}.`}
-          style={{ display: 'grid', gridAutoFlow: 'column', gridTemplateRows: `repeat(7, ${cellPx}px)`, gridAutoColumns: `${cellPx}px`, gap: `${gapPx}px` }}
+          style={{ display: 'grid', gridAutoFlow: 'column', gridTemplateRows: 'repeat(7, var(--heat-cell))', gridAutoColumns: 'var(--heat-cell)', gap: 'var(--heat-gap)' }}
         >
           {cells.map((cell, i) =>
             cell.kind === 'pad' ? (
-              <div key={`p${i}`} aria-hidden style={{ width: cellPx, height: cellPx }} />
+              <div key={`p${i}`} aria-hidden style={{ width: 'var(--heat-cell)', height: 'var(--heat-cell)' }} />
             ) : (
               <div
                 key={cell.day.date}
                 title={`${cell.day.date} · ${cell.day.isPartial ? 'no data' : `${cell.day.activeKcal ?? '--'} kcal · ${cell.day.exerciseMin ?? '--'} min${cell.day.workoutCount ? ` · ${cell.day.workoutCount} workout${cell.day.workoutCount > 1 ? 's' : ''}` : ''}`}`}
-                style={{ width: cellPx, height: cellPx, borderRadius: '2px', background: BUCKET_COLORS[cell.day.bucket] }}
+                style={{ width: 'var(--heat-cell)', height: 'var(--heat-cell)', borderRadius: '2px', background: BUCKET_COLORS[cell.day.bucket] }}
               />
             ),
           )}

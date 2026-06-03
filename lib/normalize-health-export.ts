@@ -3,31 +3,23 @@ import type {
   HealthData,
   MonthlyStats,
   PushupWeek,
+  SleepData,
+  SleepNight,
   Summary,
   VO2Point,
   Workout,
   WorkoutTypeSummary,
 } from './types'
-import type { ImportedDailyMetric, ImportedHealthExport, ImportedWorkout } from './imported-health-export'
-
-const shiftedSignalStart = '2026-02-19'
+import type {
+  ImportedDailyMetric,
+  ImportedHealthExport,
+  ImportedSleepNight,
+  ImportedWorkout,
+} from './imported-health-export'
 
 function round(value: number, digits = 1): number {
   const scale = 10 ** digits
   return Math.round(value * scale) / scale
-}
-
-function addDays(iso: string, days: number): string {
-  const d = new Date(`${iso}T00:00:00`)
-  d.setDate(d.getDate() + days)
-  return d.toISOString().slice(0, 10)
-}
-
-function earliestDate(values: string[]): string | null {
-  return values.reduce<string | null>((earliest, value) => {
-    if (earliest === null || value < earliest) return value
-    return earliest
-  }, null)
 }
 
 function numericValues(values: (number | null | undefined)[]): number[] {
@@ -65,55 +57,29 @@ function mapDailyOverride(day: ImportedDailyMetric): DailyMetric {
     distance_m: round(day.walking_running_distance_km * 1000),
     exercise_min: day.exercise_minutes,
     stand_min: null,
-    flights_climbed: 0,
+    flights_climbed: day.flights_climbed,
     daylight_sec: null,
     avg_hr: day.heart_rate_avg_bpm,
     resting_hr: day.resting_heart_rate_bpm,
     hrv_ms: day.hrv_sdnn_ms,
     walking_hr: day.walking_hr_avg_bpm,
-    respiratory_rate: null,
+    respiratory_rate: day.respiratory_rate_brpm,
     spo2_pct: day.blood_oxygen_pct,
   }
 }
 
-function withShiftedSignals(day: DailyMetric, nextDay: DailyMetric | undefined): DailyMetric {
-  if (day.date < shiftedSignalStart || !nextDay) return day
-
-  const active = nextDay.active_kcal
-  const basal = day.basal_kcal
-
-  return {
-    ...day,
-    active_kcal: active,
-    total_kcal: active !== null && basal !== null ? round(active + basal) : null,
-    exercise_min: nextDay.exercise_min,
-    avg_hr: nextDay.avg_hr,
-    resting_hr: nextDay.resting_hr,
-    hrv_ms: nextDay.hrv_ms,
-    walking_hr: nextDay.walking_hr,
-    respiratory_rate: nextDay.respiratory_rate,
-    spo2_pct: nextDay.spo2_pct,
-  }
-}
-
-function buildDaily(base: HealthData, latest: ImportedHealthExport): DailyMetric[] {
-  const byDate = new Map(base.daily.map(day => [day.date, day]))
-  const overrides = new Map(latest.dailyOverrides.map(day => [day.date, mapDailyOverride(day)]))
-  const firstOverrideDate = earliestDate(latest.dailyOverrides.map(day => day.date)) ?? addDays(latest.period.end, 1)
-
-  const carriedBase = base.daily
-    .filter(day => day.date >= latest.period.start && day.date < firstOverrideDate)
-    .map(day => withShiftedSignals(day, byDate.get(addDays(day.date, 1))))
-
-  return [...carriedBase, ...overrides.values()]
+// The 6-month export is the complete dataset (no base-carry / signal-shift).
+function buildDaily(latest: ImportedHealthExport): DailyMetric[] {
+  return latest.dailyOverrides
+    .map(mapDailyOverride)
     .filter(day => day.date >= latest.period.start && day.date <= latest.period.end)
     .sort((a, b) => a.date.localeCompare(b.date))
 }
 
 function normalizeWorkoutType(type: string): string {
-  if (type === 'Other') return 'Pickleball'
+  if (type === 'Other' || type === 'Unknown Activity') return 'Pickleball'
   if (type === 'Paddle Sports') return 'Paddling'
-  if (type === 'Skateboarding') return 'Skating'
+  if (type === 'Skateboarding' || type === 'Skating Sports') return 'Skating'
   return type
 }
 
@@ -129,23 +95,12 @@ function mapWorkout(workout: ImportedWorkout): Workout {
   }
 }
 
-function buildWorkouts(base: HealthData, latest: ImportedHealthExport): Workout[] {
-  const firstImportedWorkoutDate =
-    earliestDate(latest.workouts.map(workout => workout.start.slice(0, 10))) ?? addDays(latest.period.end, 1)
-
-  const carriedBase = base.workouts.filter(workout =>
-    workout.date >= latest.period.start && workout.date < firstImportedWorkoutDate
-  )
-
-  return [...latest.workouts.map(mapWorkout), ...carriedBase]
-    .sort((a, b) => b.start.localeCompare(a.start))
+function buildWorkouts(latest: ImportedHealthExport): Workout[] {
+  return latest.workouts.map(mapWorkout).sort((a, b) => b.start.localeCompare(a.start))
 }
 
 function buildVO2(latest: ImportedHealthExport): VO2Point[] {
-  return latest.vo2Max.map(point => ({
-    date: point.week_end,
-    value: point.value_ml_kg_min,
-  }))
+  return latest.vo2Max.map(point => ({ date: point.date, value: point.value_ml_kg_min }))
 }
 
 function buildWorkoutSummary(workouts: Workout[]): WorkoutTypeSummary[] {
@@ -246,9 +201,68 @@ function buildPushupWeeks(latest: ImportedHealthExport): PushupWeek[] {
   }))
 }
 
+// ── Sleep (duration/timing — no stage segments in this export) ──
+function hmToMin(hm: string): number {
+  const [h, m] = hm.split(':').map(Number)
+  return h * 60 + m
+}
+function minToHM(min: number): string {
+  const m = ((Math.round(min) % 1440) + 1440) % 1440
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+}
+function median(xs: number[]): number {
+  if (xs.length === 0) return 0
+  const s = [...xs].sort((a, b) => a - b)
+  const mid = Math.floor(s.length / 2)
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2
+}
+// Circular median for clock times that wrap midnight: shift evening hours
+// (>=18:00) to negative so a 23:30 / 00:30 cluster centers on midnight, not noon.
+function typicalClock(hms: string[]): string {
+  if (hms.length === 0) return ''
+  return minToHM(median(hms.map(hmToMin).map(m => (m >= 18 * 60 ? m - 1440 : m))))
+}
+
+function buildSleep(latest: ImportedHealthExport): SleepData {
+  const nights: SleepNight[] = latest.sleep
+    .map((n: ImportedSleepNight) => {
+      const bedHour = hmToMin(n.bedtime_local) / 60
+      // Short or clearly daytime sessions are naps, excluded from nightly stats.
+      const isNap = n.total_in_bed_min < 180 || (bedHour >= 6 && bedHour < 18)
+      return {
+        date: n.wake_date,
+        in_bed_hours: round(n.total_in_bed_min / 60, 2),
+        bedtime_local: n.bedtime_local,
+        wake_time_local: n.wake_time_local,
+        isNap,
+      }
+    })
+    .sort((a, b) => a.date.localeCompare(b.date))
+
+  const real = nights.filter(n => !n.isNap)
+  const hours = real.map(n => n.in_bed_hours)
+  const mean = hours.length ? sum(hours) / hours.length : 0
+  const variance = hours.length ? sum(hours.map(h => (h - mean) ** 2)) / hours.length : 0
+
+  return {
+    nights,
+    coverage_note: latest.sleepCoverage,
+    summary: {
+      nights_with_data: real.length,
+      avg_in_bed_hours: round(mean, 2),
+      min_in_bed_hours: hours.length ? round(Math.min(...hours), 2) : 0,
+      max_in_bed_hours: hours.length ? round(Math.max(...hours), 2) : 0,
+      stdev_hours: round(Math.sqrt(variance), 2),
+      typical_bedtime: typicalClock(real.map(n => n.bedtime_local)),
+      typical_wake: minToHM(median(real.map(n => hmToMin(n.wake_time_local)))),
+      naps: nights.length - real.length,
+    },
+  }
+}
+
 export function normalizeHealthExport(base: HealthData, latest: ImportedHealthExport): HealthData {
-  const daily = buildDaily(base, latest)
-  const workouts = buildWorkouts(base, latest)
+  const daily = buildDaily(latest)
+  const workouts = buildWorkouts(latest)
   const vo2Max = buildVO2(latest)
   const days = daysInclusive(latest.period.start, latest.period.end)
   const weightKg = round(latest.bodyMeasurement.weight_kg, 2)
@@ -266,7 +280,7 @@ export function normalizeHealthExport(base: HealthData, latest: ImportedHealthEx
         `Latest export from ${latest.generatedBy}; timezone ${latest.timezone}.`,
         `Weight reading: ${weightKg} kg (${weightLbs} lbs) on ${latest.bodyMeasurement.measured_date}.`,
         latest.bodyMeasurement.note,
-        'Workout type normalization preserved: Other -> Pickleball, Paddle Sports -> Paddling, Skateboarding -> Skating.',
+        'Workout types normalized: Unknown Activity/Other -> Pickleball, Paddle Sports -> Paddling, Skating Sports/Skateboarding -> Skating.',
         latest.pushupsManualLog.note,
       ].join(' '),
     },
@@ -286,5 +300,6 @@ export function normalizeHealthExport(base: HealthData, latest: ImportedHealthEx
       unit: 'reps',
       weeks: buildPushupWeeks(latest),
     },
+    sleep: buildSleep(latest),
   }
 }

@@ -43,7 +43,7 @@ export default function RestRecommendation({ data }: Props) {
     { k: 'Walking HR 14d',v: r.walkingHrRecent !== null ? `${r.walkingHrRecent.toFixed(0)} bpm` : '—', tone: r.walkingHrRecent !== null && r.walkingHrRecent > 130 ? 'bad' : 'flat' },
     { k: 'Load 7d→7d',    v: `${loadArrow} ${r.loadDeltaMin > 0 ? '+' : ''}${r.loadDeltaMin} min`,    tone: r.loadTrend === 'rising' ? 'bad' : r.loadTrend === 'declining' ? 'good' : 'flat' },
     { k: 'Sleep stdev',   v: `±${s.variability.toFixed(2)} h`,                  tone: s.consistency === 'erratic' ? 'bad' : s.consistency === 'tight' ? 'good' : 'flat' },
-    { k: 'Deep sleep avg',v: `${s.avgDeepPct.toFixed(1)}%`,                     tone: s.deepBelowTarget ? 'bad' : 'good' },
+    { k: 'Avg in bed',    v: `${s.avgHours.toFixed(1)} h`,                      tone: s.avgHours >= 7.5 ? 'good' : s.avgHours >= 7 ? 'flat' : 'bad' },
     { k: 'Constraints',   v: `${data.profile.current_constraints.length} active`, tone: data.profile.current_constraints.length > 0 ? 'bad' : 'good' },
   ]
   const toneColor = (t: string) => t === 'bad' ? 'var(--accent-coral)' : t === 'good' ? 'var(--accent-green)' : 'var(--color-white)'

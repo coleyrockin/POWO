@@ -1,4 +1,4 @@
-// lib/types.ts — POWO 91-day schema (v2)
+// lib/types.ts — POWO health schema (v3)
 
 export interface Meta {
   owner: string
@@ -126,26 +126,26 @@ export interface PushupData {
   weeks: PushupWeek[]
 }
 
+// Duration/timing sleep model. The source export provides in-bed duration +
+// bed/wake clock times (no Core/Deep/REM stage segments), so the dashboard is
+// built around how long and how regularly sleep happens.
 export interface SleepNight {
-  date: string
-  total_sleep_hours: number
-  core_hours: number
-  deep_hours: number
-  rem_hours: number
-  deep_pct: number
-  rem_pct: number
+  date: string            // wake date (YYYY-MM-DD)
+  in_bed_hours: number    // total in-bed span (includes brief wakes)
+  bedtime_local: string   // "HH:MM" local
+  wake_time_local: string // "HH:MM" local
+  isNap: boolean          // short/daytime entry, excluded from nightly stats
 }
 
 export interface SleepSummary {
-  nights_with_data: number
-  avg_total_hours: number
-  min_total_hours: number
-  max_total_hours: number
-  stdev_hours: number
-  avg_deep_pct: number
-  avg_rem_pct: number
-  avg_deep_hours: number
-  avg_rem_hours: number
+  nights_with_data: number  // real nights (naps excluded)
+  avg_in_bed_hours: number
+  min_in_bed_hours: number
+  max_in_bed_hours: number
+  stdev_hours: number       // duration consistency
+  typical_bedtime: string   // "HH:MM" median bedtime
+  typical_wake: string      // "HH:MM" median wake
+  naps: number
 }
 
 export interface SleepData {

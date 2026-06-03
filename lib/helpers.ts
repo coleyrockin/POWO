@@ -244,31 +244,27 @@ export function analyzeRecovery(data: HealthData): RecoverySignals {
 
 // ─── Sleep signals ───────────────────────────────────────────────
 export interface SleepSignals {
-  avgTotal: number
-  avgDeepPct: number
-  avgRemPct: number
-  deepBelowTarget: boolean
+  avgHours: number
   variability: number
   consistency: 'tight' | 'moderate' | 'erratic'
+  typicalBedtime: string
   bestNight: SleepNight
   worstNight: SleepNight
 }
 
 export function analyzeSleep(data: HealthData): SleepSignals {
   const s = data.sleep.summary
-  const nights = data.sleep.nights
-  const emptyNight: SleepNight = { date: '', total_sleep_hours: 0, core_hours: 0, deep_hours: 0, rem_hours: 0, deep_pct: 0, rem_pct: 0 }
-  const bestNight = nights.length ? nights.reduce((a, b) => (b.total_sleep_hours > a.total_sleep_hours ? b : a)) : emptyNight
-  const worstNight = nights.length ? nights.reduce((a, b) => (b.total_sleep_hours < a.total_sleep_hours ? b : a)) : emptyNight
+  const nights = data.sleep.nights.filter(n => !n.isNap)
+  const emptyNight: SleepNight = { date: '', in_bed_hours: 0, bedtime_local: '', wake_time_local: '', isNap: false }
+  const bestNight = nights.length ? nights.reduce((a, b) => (b.in_bed_hours > a.in_bed_hours ? b : a)) : emptyNight
+  const worstNight = nights.length ? nights.reduce((a, b) => (b.in_bed_hours < a.in_bed_hours ? b : a)) : emptyNight
   const consistency: 'tight' | 'moderate' | 'erratic' =
     s.stdev_hours < 0.7 ? 'tight' : s.stdev_hours < 1.2 ? 'moderate' : 'erratic'
   return {
-    avgTotal: s.avg_total_hours,
-    avgDeepPct: s.avg_deep_pct,
-    avgRemPct: s.avg_rem_pct,
-    deepBelowTarget: s.avg_deep_pct < 13,
+    avgHours: s.avg_in_bed_hours,
     variability: s.stdev_hours,
     consistency,
+    typicalBedtime: s.typical_bedtime,
     bestNight, worstNight,
   }
 }
@@ -315,7 +311,8 @@ export function buildRestRecommendation(data: HealthData): RestRecommendation {
   if (r.rhrDelta !== null && r.rhrDelta > 3) reasons.push(`RHR +${r.rhrDelta.toFixed(1)} bpm above ${data.meta.period.days}-day baseline`)
   if (r.hrvDelta !== null && r.hrvDelta < -5) reasons.push(`HRV ${r.hrvDelta.toFixed(1)} ms below baseline`)
   if (r.walkingHrRecent && r.walkingHrRecent > 130) reasons.push(`Walking HR ${r.walkingHrRecent.toFixed(0)} bpm — elevated`)
-  if (s.deepBelowTarget) reasons.push(`Deep sleep ${s.avgDeepPct.toFixed(1)}% — below 13% target`)
+  if (s.avgHours > 0 && s.avgHours < 7) reasons.push(`Sleep avg ${s.avgHours.toFixed(1)}h — below 7h`)
+  if (s.consistency === 'erratic') reasons.push(`Sleep timing erratic (±${s.variability.toFixed(1)}h)`)
   if (data.profile.current_constraints.length > 0) reasons.push(`Active constraints: ${data.profile.current_constraints.length} flagged`)
 
   const rationale = reasons.length > 0
@@ -355,8 +352,8 @@ export function buildRestRecommendation(data: HealthData): RestRecommendation {
   const hrvSlope = trendSlope(last3Hrv)
   const hrvMet = hrvSlope > 0
   const shoulderMet = false // user-reported flag, no objective measure
-  const last2DeepHours = data.sleep.nights.slice(-2).map(n => n.deep_hours)
-  const deepMet = last2DeepHours.length === 2 && last2DeepHours.every(h => h >= 1.0)
+  const last2Nights = data.sleep.nights.filter(n => !n.isNap).slice(-2).map(n => n.in_bed_hours)
+  const sleepMet = last2Nights.length === 2 && last2Nights.every(h => h >= 7.5)
 
   const return_criteria: ReturnCriterion[] = [
     {
@@ -378,10 +375,10 @@ export function buildRestRecommendation(data: HealthData): RestRecommendation {
       met: shoulderMet,
     },
     {
-      label: 'Deep sleep ≥ 60 min · 2 nights running',
-      target: '≥ 1.0 h deep',
-      current: last2DeepHours.length > 0 ? `last 2: ${last2DeepHours.map(h => (h * 60).toFixed(0)).join(', ')} min` : 'gap in data',
-      met: deepMet,
+      label: 'Sleep ≥ 7.5 h · 2 nights running',
+      target: '≥ 7.5 h in bed',
+      current: last2Nights.length > 0 ? `last 2: ${last2Nights.map(h => h.toFixed(1)).join(', ')} h` : 'gap in data',
+      met: sleepMet,
     },
   ]
 
@@ -505,7 +502,7 @@ export function buildWorkoutRecommendation(data: HealthData): WorkoutRecommendat
       duration_min: 60,
       shoulder_safe: true,
       rationale: 'Parasympathetic day. Drives HRV up before weekend output.',
-      cites: [`Deep sleep ${sleep.avgDeepPct.toFixed(1)}% — below 13% target`, `Sleep stdev ±${sleep.variability.toFixed(2)}h — consistency ${sleep.consistency}`],
+      cites: [`Sleep avg ${sleep.avgHours.toFixed(1)}h · ${sleep.consistency} consistency`, `Sleep stdev ±${sleep.variability.toFixed(2)}h`],
       blocks: [
         { name: 'Yoga flow',  detail: '30 min · slow pace · hold poses 5 breaths · hip + thoracic focus', intensity: 'low' },
         { name: 'Walk',       detail: '30 min · outdoor · phone-free', intensity: 'low' },
@@ -785,18 +782,18 @@ export function buildInsights(data: HealthData): InsightsResult {
       (r, s) => s === 'none' ? 'No clear link — burn isn’t elevating next-morning resting HR.'
         : r > 0 ? `Bigger burn days nudge next-morning RHR up (${s}) — autonomic load showing through.`
         : `More burn tracks with lower next-day RHR (${s}) — fitness adaptation outpacing fatigue.`),
-    mkCorr('sleep-hrv', 'Sleep duration → next-day HRV', 'Sleep hrs', 'Next-day HRV',
-      pairDrop(joinSleepToDaily(data, 1), p => p.night.total_sleep_hours, p => p.next.hrv_ms),
+    mkCorr('sleep-hrv', 'Sleep duration → next-day HRV', 'In-bed hrs', 'Next-day HRV',
+      pairDrop(joinSleepToDaily(data, 1), p => p.night.in_bed_hours, p => p.next.hrv_ms),
       'var(--accent-purple)',
       (r, s) => s === 'none' ? 'No clear link in the sleep-tracked window.'
         : r > 0 ? `More sleep tends to lift next-day HRV (${s}) — recovery responds to rest.`
         : `Longer sleep tracks with lower next-day HRV (${s}) — unusual; likely small-sample noise.`),
-    mkCorr('deep-rhr', 'Deep sleep → next-day resting HR', 'Deep hrs', 'Next-day RHR',
-      pairDrop(joinSleepToDaily(data, 1), p => p.night.deep_hours, p => p.next.resting_hr),
+    mkCorr('sleep-rhr', 'Sleep duration → next-day resting HR', 'In-bed hrs', 'Next-day RHR',
+      pairDrop(joinSleepToDaily(data, 1), p => p.night.in_bed_hours, p => p.next.resting_hr),
       'var(--accent-blue)',
       (r, s) => s === 'none' ? 'No clear link in the sleep-tracked window.'
-        : r < 0 ? `More deep sleep tracks with a lower next-morning RHR (${s}) — restorative.`
-        : `More deep sleep tracks with higher next-day RHR (${s}) — likely small-sample noise.`),
+        : r < 0 ? `More sleep tracks with a lower next-morning RHR (${s}) — restorative.`
+        : `More sleep tracks with higher next-day RHR (${s}) — likely small-sample noise.`),
   ]
 
   // Latent signals (computed elsewhere, never surfaced as cards)
@@ -805,7 +802,7 @@ export function buildInsights(data: HealthData): InsightsResult {
   const signals: SignalInsight[] = [
     {
       key: 'sleep-extremes', title: 'Sleep range',
-      value: `${hm(sleep.bestNight.total_sleep_hours)} / ${hm(sleep.worstNight.total_sleep_hours)}`,
+      value: `${hm(sleep.bestNight.in_bed_hours)} / ${hm(sleep.worstNight.in_bed_hours)}`,
       detail: `Best ${fmtShort(sleep.bestNight.date)} · Worst ${fmtShort(sleep.worstNight.date)} · ${sleep.consistency} consistency`,
       accent: 'var(--accent-purple)',
     },

@@ -117,7 +117,7 @@ export default function Hero({ data }: Props) {
       }}>
         <span style={{ padding: '8px 10px', color: 'var(--color-white)', fontWeight: 600 }}>{data.meta.owner.toUpperCase()}</span>
         <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'var(--hairline)' }} />
-        <span style={{ padding: '8px 10px', color: 'var(--color-mid)', whiteSpace: 'nowrap' }}>{fmtShort(data.meta.period.start)} – {fmtShort(data.meta.period.end)}, 2026</span>
+        <span style={{ padding: '8px 10px', color: 'var(--color-mid)', whiteSpace: 'nowrap' }}>{fmtShort(data.meta.period.start)} – {fmtShort(data.meta.period.end)}, {data.meta.period.start.slice(0, 4) === data.meta.period.end.slice(0, 4) ? data.meta.period.end.slice(0, 4) : `${data.meta.period.start.slice(0, 4)}–${data.meta.period.end.slice(0, 4)}`}</span>
         <span aria-hidden style={{ alignSelf: 'stretch', width: '1px', background: 'var(--hairline)' }} />
         <span style={{ display: 'inline-block', color: 'var(--accent-blue)', padding: '8px 10px', letterSpacing: '0.12em', fontSize: '10px', fontWeight: 700, background: 'rgba(10,132,255,0.09)' }}>
           {data.meta.period.days} DAYS

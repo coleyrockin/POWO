@@ -186,7 +186,7 @@ async function checkManifest() {
   assert(manifest.short_name === 'POWO', 'manifest short_name is incorrect')
   assert(manifest.start_url === '/', 'manifest start_url is incorrect')
   assert(manifest.display === 'standalone', 'manifest display is incorrect')
-  assert(manifest.description?.includes('91 days of Apple Health'), 'manifest description is missing POWO identity')
+  assert(manifest.description?.includes('6 months of Apple Health'), 'manifest description is missing POWO identity')
 }
 
 async function checkRobots() {

@@ -22,7 +22,8 @@
     "smoke:build": "npm run build && npm run smoke",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
-    "qa": "npm run verify && npm run audit:prod && npm run smoke"
+    "qa": "npm run verify && npm run audit:prod && npm run smoke",
+    "refresh": "node scripts/convert-export.mjs && npm run qa"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

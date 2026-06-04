@@ -678,3 +678,16 @@ html.light [class*='powo-glow-'] { text-shadow: none; }
   /* The ambient-tint glow cross-fades 900ms on every section scroll — disable it. */
   body::before { transition: none; }
 }
+
+/* ── Never-blank safety net ──
+   Entrance animations start hidden (framer serializes initial={opacity:0} into the
+   SSR HTML). If scripting is unavailable, those styles would persist and the page
+   would render blank. When scripting is off, force the hidden entrance state to
+   visible so content always shows. (!important beats framer's inline style.) */
+@media (scripting: none) {
+  [style*="opacity:0"],
+  [style*="opacity: 0"] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

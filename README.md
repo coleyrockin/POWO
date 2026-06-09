@@ -6,6 +6,27 @@ Coley's 6-month Apple Health export, turned into a living, editorial-grade train
 
 ---
 
+## Dashboard
+
+<p align="center">
+  <img src="./docs/screenshots/dashboard-desktop.png" alt="POWO dashboard on desktop" width="100%">
+</p>
+
+<table>
+  <tr>
+    <td width="68%">
+      <img src="./docs/screenshots/dashboard-ipad.png" alt="POWO dashboard on iPad">
+    </td>
+    <td width="32%">
+      <img src="./docs/screenshots/dashboard-iphone.png" alt="POWO dashboard on iPhone">
+    </td>
+  </tr>
+</table>
+
+The same dashboard is deliberately composed for desktop, iPad, and iPhone rather than merely scaled between them.
+
+---
+
 ## What it is
 
 A personal site, not a product. POWO takes raw Apple Health data — 183 days, 214 workouts, 57 nights of sleep, a resting heart rate that dropped 16 bpm — and renders it as something worth looking at. Every chart, card, and line of copy is specific to one athlete's real numbers.
@@ -36,6 +57,7 @@ npm run dev          # local dev server → localhost:3000
 npm run refresh      # ingest a new Apple Health export, run the full gate
 npm run qa           # full release gate: lint + test + typecheck + build + audit + smoke
 npm run preview      # build then serve the production output locally
+npm run screenshots:readme # rebuild and refresh the responsive README gallery
 ```
 
 ### Refreshing the data
@@ -61,6 +83,7 @@ Vercel picks it up. The site rebuilds in about a minute.
 | `npm run verify` | lint + test + typecheck + build |
 | `npm run audit:prod` | Dependency audit (prod-only) |
 | `npm run smoke` | Verify routes, metadata, and headers against the built output |
+| `npm run screenshots:readme` | Rebuild and capture desktop, iPad, and iPhone README images |
 | `npm run qa` | Full gate — run before every push |
 | `npm run refresh` | Convert new export → run qa |
 

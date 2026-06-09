@@ -18,14 +18,16 @@ The smoke gate defaults to port `3010`. Use `POWO_SMOKE_PORT=4010 npm run smoke`
 
 ## Visual QA
 
+- Follow `docs/VISUAL_QA_STANDARD.md`.
 - Check the home page at phone (`375px`, `390px`, `430px`), iPad (`641px`, `768px`, `820px`), and desktop (`1280px`, `1440px`) widths.
 - Verify no horizontal overflow, clipped text, broken chart labels, or blank Framer Motion reveal states.
-- Confirm `docs/screenshot.jpg` and the public screenshots still match the current data window and hero totals.
+- Confirm the three `docs/screenshots/dashboard-*.png` images match the current data window and hero totals.
 - Check reduced-motion mode for readable non-jarring states.
+- Run `npm run screenshots:readme` after the final build and review every generated image.
 
 ## Public Repo Review
 
-- README live link, screenshot, setup commands, script table, and deployment notes are current.
+- README live link, responsive screenshot gallery, setup commands, script table, and deployment notes are current.
 - `SECURITY.md` is present and private health export folders remain ignored.
 - No raw Apple Health exports, `.env` files, or generated preview artifacts are staged.
 - `app/manifest.ts`, `app/robots.ts`, `app/sitemap.ts`, OG image, Twitter image, custom 404, and error boundary still build.

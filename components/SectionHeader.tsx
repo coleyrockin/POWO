@@ -24,7 +24,7 @@ export default function SectionHeader({ label, meta }: Props) {
         position: 'relative',
       }}
     >
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: '1 1 auto' }}>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', flex: '0 0 auto' }}>
         <m.span
           aria-hidden
           initial={{ scaleY: 0 }}
@@ -51,8 +51,6 @@ export default function SectionHeader({ label, meta }: Props) {
             textTransform: 'uppercase',
             color: 'var(--color-white)',
             whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
           }}
         >
           {label}
@@ -68,7 +66,10 @@ export default function SectionHeader({ label, meta }: Props) {
             color: 'var(--accent-blue-dim)',
             whiteSpace: 'nowrap',
             textAlign: 'right',
-            flex: '0 1 auto',
+            minWidth: 0,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            flex: '1 1 auto',
           }}
         >
           {meta}

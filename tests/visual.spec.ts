@@ -36,6 +36,17 @@ test('dashboard full page', async ({ page }) => {
   // Let scroll-triggered reveals settle into their final (motion-reduced) state.
   await page.waitForTimeout(500)
 
+  const layout = await page.evaluate(() => ({
+    viewportWidth: document.documentElement.clientWidth,
+    pageWidth: document.documentElement.scrollWidth,
+    clippedSectionHeadings: [...document.querySelectorAll<HTMLElement>('section h2')]
+      .filter(heading => heading.scrollWidth > heading.clientWidth + 1)
+      .map(heading => heading.textContent?.trim() ?? ''),
+  }))
+
+  expect(layout.pageWidth).toBe(layout.viewportWidth)
+  expect(layout.clippedSectionHeadings).toEqual([])
+
   await expect(page).toHaveScreenshot('dashboard.png', {
     fullPage: true,
   })

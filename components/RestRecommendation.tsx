@@ -58,12 +58,12 @@ export default function RestRecommendation({ data }: Props) {
         style={{
           background: theme.bg, padding: '18px 16px',
           boxShadow: `inset 0 1px 0 ${theme.accent}26, 0 0 18px ${theme.accent}12`,
-          display: 'grid', gridTemplateColumns: '160px 1fr', gap: '14px', alignItems: 'center',
+          display: 'grid', gridTemplateColumns: 'min(160px, 42%) 1fr', gap: '14px', alignItems: 'center',
         }}
       >
         {/* Gauge */}
-        <div style={{ position: 'relative', width: '160px', height: '90px' }}>
-          <svg viewBox="0 0 160 90" style={{ width: '100%', height: '100%' }}>
+        <div style={{ position: 'relative', width: '100%', maxWidth: '160px', aspectRatio: '160 / 90' }}>
+          <svg viewBox="0 0 160 90" aria-hidden style={{ width: '100%', height: '100%' }}>
             <path d={`M ${start.x} ${start.y} A ${arcR} ${arcR} 0 1 1 ${fullEnd.x} ${fullEnd.y}`} stroke="var(--hairline)" strokeWidth="10" fill="none" strokeLinecap="round" />
             <m.path
               initial={{ pathLength: 0 }} whileInView={{ pathLength: F / 100 }} viewport={{ once: true }} transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}

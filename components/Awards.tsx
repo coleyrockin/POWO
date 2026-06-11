@@ -36,7 +36,7 @@ export default function Awards({ data }: Props) {
   ]
 
   return (
-    <section id="awards">
+    <section id="awards" className="powo-full">
       <SectionHeader label="Achievements" meta={`${data.meta.period.days}-day highlights`} />
       <div className="powo-grid-awards" style={{ display: 'grid', alignItems: 'stretch', gap: '8px', padding: '10px', background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {AWARDS.map((a, i) => (

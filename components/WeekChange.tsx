@@ -28,7 +28,7 @@ export default function WeekChange({ data }: Props) {
   const GLOW_CLASSES = ['powo-glow-green', 'powo-glow-amber', 'powo-glow-blue', 'powo-glow-coral', 'powo-glow-teal']
 
   return (
-    <section id="week-change">
+    <section id="week-change" className="powo-full">
       <SectionHeader label="Week-Over-Week" meta={`${fmt(start)} – ${fmt(end)} vs prior 7d`} />
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div className="powo-grid-wow" style={{ display: 'grid', gap: '8px' }}>

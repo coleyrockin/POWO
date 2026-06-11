@@ -44,7 +44,7 @@ export default function DailyTable({ daily, workouts }: Props) {
   return (
     <section>
       <SectionHeader label="Daily Breakdown" meta="last 14 days" />
-      <div style={{ overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none', border: '1px solid var(--color-border)', borderTop: 'none' }} className="no-scrollbar">
+      <div style={{ overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none', border: '1px solid var(--color-border)', borderTop: 'none' }} className="no-scrollbar powo-hfade">
         <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'auto' }}>
           <caption style={srOnly}>Daily fitness breakdown, last 14 days</caption>
           <thead>
@@ -105,7 +105,7 @@ export default function DailyTable({ daily, workouts }: Props) {
                     {cal === null ? (
                       <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px', lineHeight: 1 }}>
                         <span>—</span>
-                        <span style={{ fontSize: '7px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent-amber)' }}>partial</span>
+                        <span style={{ fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent-amber)' }}>partial</span>
                       </span>
                     ) : Math.round(cal).toLocaleString()}
                   </td>

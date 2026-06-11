@@ -80,7 +80,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
   }
 
   return (
-    <section id="explore">
+    <section id="explore" className="powo-full">
       <SectionHeader label="Explore" meta={rangeLabel} />
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         {/* Controls */}
@@ -96,6 +96,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.06em', fontWeight: 600,
                     padding: '6px 14px', borderRadius: '6px', cursor: 'pointer', border: 'none',
+                    minHeight: '40px', display: 'inline-flex', alignItems: 'center',
                     background: active ? 'var(--accent-blue)' : 'transparent',
                     color: active ? 'var(--on-accent)' : 'var(--color-mid)',
                     transition: 'background 0.15s, color 0.15s',
@@ -113,9 +114,10 @@ export default function DashboardShell({ daily, workouts }: Props) {
             style={{
               fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase',
               padding: '7px 12px', borderRadius: '6px', cursor: isAll ? 'not-allowed' : 'pointer',
+              minHeight: '40px', display: 'inline-flex', alignItems: 'center',
               border: `1px solid ${compare ? 'var(--accent-blue)' : 'var(--color-dim)'}`,
               background: compare ? 'rgba(10,132,255,0.12)' : 'transparent',
-              color: isAll ? 'var(--color-dim)' : compare ? 'var(--accent-blue)' : 'var(--color-mid)',
+              color: isAll ? 'var(--color-faint)' : compare ? 'var(--accent-blue)' : 'var(--color-mid)',
               opacity: isAll ? 0.5 : 1,
             }}
             title={isAll ? 'No prior period to compare against at full range' : 'Compare to the previous equal window'}

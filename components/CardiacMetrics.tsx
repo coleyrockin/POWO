@@ -52,7 +52,7 @@ function Sparkline({ values, color, max, min, dates, unit, decimals }: { values:
         <>
           <div aria-hidden style={{ position: 'absolute', top: 0, bottom: 0, left: `${leftPct}%`, width: '1px', background: color, opacity: 0.6, pointerEvents: 'none' }} />
           <div aria-hidden style={{ position: 'absolute', bottom: '100%', left: `${tipLeft}%`, transform: 'translate(-50%, -3px)', background: 'var(--tooltip-bg)', border: `1px solid ${color}`, borderRadius: '4px', padding: '3px 7px', whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 6, boxShadow: '0 4px 12px rgba(0,0,0,0.45)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#b9b9bd' }}>{activeDate} · </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--tooltip-label)' }}>{activeDate} · </span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600, color }}>{active.v.toFixed(decimals)} {unit}</span>
           </div>
         </>
@@ -98,7 +98,7 @@ export default function CardiacMetrics({ data }: Props) {
 
   return (
     <section id="cardiac">
-      <SectionHeader label="Cardiac Metrics" meta={`${data.meta.period.days}-day baseline · 14-day trend`} />
+      <SectionHeader label="Cardiac Metrics" meta={`${data.meta.period.days}d baseline · 14d trend`} />
       <div className="powo-grid-cardiac" style={{ display: 'grid', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map((v, i) => {
           const dirArrow = v.delta === null ? '' : v.delta > 0 ? '↑' : v.delta < 0 ? '↓' : '·'

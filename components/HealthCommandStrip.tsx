@@ -94,7 +94,7 @@ export default function HealthCommandStrip({ data, partialDate }: Props) {
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent-teal)', marginBottom: '6px', fontWeight: 700 }}>
             Coach Takeaway
           </div>
-          <p style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', lineHeight: 1.55, color: 'var(--color-white)', margin: 0 }}>
+          <p style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', lineHeight: 1.55, color: 'var(--color-white)', margin: 0, maxWidth: '60ch' }}>
             {buildCoachTakeaway(data)}
           </p>
         </div>

@@ -1,4 +1,5 @@
 'use client'
+import { useMemo } from 'react'
 import { m } from 'framer-motion'
 import CountUp from './CountUp'
 import Sparkline from './Sparkline'
@@ -40,16 +41,20 @@ export default function Hero({ data }: Props) {
   const rhrLate = meanOf(data.daily.filter(d => d.date >= rhrCutISO && d.resting_hr != null).map(d => d.resting_hr as number))
   const rhrStory = rhrEarly != null && rhrLate != null && rhrEarly - rhrLate >= 3
 
-  // Sparkline series — smoothed where the raw signal is jagged
-  const stepsSeries  = rolling(data.daily.map(d => d.steps), 5)
-  const kcalSeries   = rolling(data.daily.map(d => d.active_kcal ?? 0), 5)
-  const distSeries   = rolling(data.daily.map(d => d.distance_m / 1000), 5)
-  const exMinSeries  = rolling(data.daily.map(d => d.exercise_min ?? 0), 5)
-  const vo2Series    = data.vo2_max.map(p => p.value)
-  // Workouts per day, smoothed
-  const workoutByDay = new Map<string, number>()
-  for (const w of data.workouts) workoutByDay.set(w.date, (workoutByDay.get(w.date) ?? 0) + 1)
-  const workoutSeries = rolling(data.daily.map(d => workoutByDay.get(d.date) ?? 0), 7)
+  // Sparkline series — smoothed where the raw signal is jagged. Memoized: the
+  // rolling() passes walk the full 183-day set ×6 and the data prop is static.
+  const { stepsSeries, kcalSeries, distSeries, exMinSeries, vo2Series, workoutSeries } = useMemo(() => {
+    const workoutByDay = new Map<string, number>()
+    for (const w of data.workouts) workoutByDay.set(w.date, (workoutByDay.get(w.date) ?? 0) + 1)
+    return {
+      stepsSeries:   rolling(data.daily.map(d => d.steps), 5),
+      kcalSeries:    rolling(data.daily.map(d => d.active_kcal ?? 0), 5),
+      distSeries:    rolling(data.daily.map(d => d.distance_m / 1000), 5),
+      exMinSeries:   rolling(data.daily.map(d => d.exercise_min ?? 0), 5),
+      vo2Series:     data.vo2_max.map(p => p.value),
+      workoutSeries: rolling(data.daily.map(d => workoutByDay.get(d.date) ?? 0), 7),
+    }
+  }, [data.daily, data.workouts, data.vo2_max])
 
   const kpis = [
     { node: <CountUp value={v.current.value} decimals={1} />,                 label: 'VO₂ MAX',  color: 'var(--accent-teal)',   spark: vo2Series },
@@ -213,7 +218,7 @@ export default function Hero({ data }: Props) {
         zIndex: 1,
       }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: 'var(--accent-teal)', textTransform: 'uppercase', marginBottom: '6px' }}>Headline</div>
-        <div style={{ fontFamily: 'var(--font-serif)', fontSize: '15.5px', lineHeight: 1.6, letterSpacing: '0.005em', color: 'var(--color-white)' }}>
+        <div style={{ fontFamily: 'var(--font-serif)', fontSize: '15.5px', lineHeight: 1.6, letterSpacing: '0.005em', color: 'var(--color-white)', maxWidth: '72ch' }}>
           VO₂ max climbed from <span style={{ color: 'var(--accent-teal)', fontWeight: 600 }}>{v.first.value.toFixed(1)}</span> to a peak of <span style={{ color: 'var(--accent-amber)', fontWeight: 600 }}>{v.peak.value.toFixed(2)}</span> on {fmtShort(v.peak.date)} — <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>+{since.toFixed(1)}%</span> in {vo2Weeks} weeks. Daily averages: <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{a.avg_daily_steps.toLocaleString()} steps</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_active_kcal)} kcal</span> · <span style={{ color: 'var(--color-white)', fontWeight: 600 }}>{Math.round(a.avg_exercise_min)} exercise min</span>.{rhrStory && (<> Resting HR eased from a <span style={{ color: 'var(--accent-coral)', fontWeight: 600 }}>{Math.round(rhrEarly as number)}</span>-bpm winter baseline to <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>{Math.round(rhrLate as number)}</span>.</>)}
         </div>
       </m.div>

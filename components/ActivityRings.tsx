@@ -33,6 +33,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
 
   const gridRef = useRef<HTMLDivElement>(null)
   const draggingRef = useRef(false)
+  const touchDismissRef = useRef<number | null>(null)
   const [activeIdx, setActiveIdx] = useState<number | null>(null)
   const idxFromClientX = (clientX: number): number | null => {
     const el = gridRef.current
@@ -58,7 +59,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
   }
 
   return (
-    <section>
+    <section className="powo-full">
       <SectionHeader
         label="14-Day Burn"
         meta={`${Math.round(totalCal).toLocaleString()} kcal${partialDays.length > 0 ? ` · ${partialDays.length} partial` : ''}`}
@@ -74,9 +75,9 @@ export default function ActivityRings({ daily, workouts }: Props) {
           style={{ display: 'grid', gap: '3px', alignItems: 'flex-end', position: 'relative', touchAction: 'pan-y' }}
           onKeyDown={onKey}
           onBlur={() => setActiveIdx(null)}
-          onPointerDown={e => { if (e.pointerType === 'touch') { draggingRef.current = true; try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* noop */ } const i = idxFromClientX(e.clientX); if (i !== null) setActiveIdx(i) } }}
+          onPointerDown={e => { if (e.pointerType === 'touch') { if (touchDismissRef.current !== null) window.clearTimeout(touchDismissRef.current); draggingRef.current = true; try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* noop */ } const i = idxFromClientX(e.clientX); if (i !== null) setActiveIdx(i) } }}
           onPointerMove={e => { if (e.pointerType === 'touch' && draggingRef.current) { const i = idxFromClientX(e.clientX); if (i !== null) setActiveIdx(i) } }}
-          onPointerUp={e => { if (e.pointerType === 'touch') { draggingRef.current = false; setActiveIdx(null) } }}
+          onPointerUp={e => { if (e.pointerType === 'touch') { draggingRef.current = false; /* keep the tooltip readable after a tap, then auto-dismiss */ touchDismissRef.current = window.setTimeout(() => setActiveIdx(null), 2200) } }}
           onPointerLeave={e => { if (e.pointerType !== 'touch') setActiveIdx(null) }}
         >
           {active && (

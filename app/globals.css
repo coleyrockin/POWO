@@ -35,6 +35,10 @@
   /* Semantic surface tokens (dark defaults) — replace hardcoded literals so they flip with theme */
   --color-track: #0a0a0a;   /* progress-bar tracks */
   --tooltip-bg:  #0d0d0d;   /* chart tooltips (kept dark in light mode too) */
+  /* Tooltip text rides on --tooltip-bg, which stays dark in BOTH themes —
+     these must NOT flip with the theme like --color-white/--color-mid do. */
+  --tooltip-fg:    #f0ede6; /* tooltip primary text */
+  --tooltip-label: #b9b9bd; /* tooltip secondary label */
   --hairline:    rgba(255, 255, 255, 0.06);
   --on-accent:   #080808;   /* text/icon color on a bright accent background */
 }
@@ -200,16 +204,28 @@ body::after {
   pointer-events: none;
   z-index: 9999;
 }
-/* Grain over-textures small screens — soften on phones. */
-@media (max-width: 640px) { body::after { opacity: 0.02; } }
+/* Grain over-textures small screens — soften on phones.
+   639px (not 640) so this and the ≥640px shell rules tile with no gap. */
+@media (max-width: 639px) { body::after { opacity: 0.02; } }
 
 /* Consistency heatmap cell sizing — CSS-driven so SSR == client (no #418 flash). */
 .powo-heat { --heat-cell: 10px; --heat-gap: 2px; }
-@media (min-width: 641px) { .powo-heat { --heat-cell: 13px; --heat-gap: 3px; } }
+@media (min-width: 640px) { .powo-heat { --heat-cell: 13px; --heat-gap: 3px; } }
 
 /* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Right-edge fade on horizontally-scrollable content whose scrollbar is hidden
+   (the Daily table on phones) — signals there's more to the right, same device
+   language as the nav strip's mask. Desktop fits the table → fade never shows
+   because the content edge sits inside the faded zone only when it overflows. */
+@media (max-width: 639px) {
+  .powo-hfade {
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), rgba(0,0,0,0.25) 100%);
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), rgba(0,0,0,0.25) 100%);
+  }
+}
 
 /* ── App shell ── */
 /* Phone is the base (no media query) — it cannot change unless these base
@@ -229,21 +245,19 @@ body::after {
 }
 
 /* iPad + Desktop — fill the full viewport width, no side gutters. */
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .powo-shell { max-width: 100%; box-shadow: none; }
 }
 /* Wide screens — cap the canvas into a centered editorial column so the
    full-bleed top strips don't stretch into 1400px-long lines. (Masonry still
    packs 2 columns at this width — no column-count change.) */
+html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
 @media (min-width: 1200px) {
   .powo-shell {
     max-width: 1200px;
     margin-inline: auto;
     box-shadow: 0 0 0 1px var(--hairline), 0 40px 120px rgba(0, 0, 0, 0.5);
   }
-}
-html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
-@media (min-width: 1200px) {
   html.light .powo-shell { box-shadow: 0 0 0 1px var(--hairline), 0 40px 120px rgba(0, 0, 0, 0.12); }
 }
 
@@ -271,7 +285,7 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
   gap: 26px;
   padding: 0 16px 28px;
 }
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .powo-sections {
     gap: 34px;
     padding: 0 22px 40px;
@@ -279,7 +293,7 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
 }
 /* iPad portrait: keep cards in a centered editorial column, not full-bleed.
    Scoped below 1024 so the desktop masonry (which sets its own layout) is untouched. */
-@media (min-width: 641px) and (max-width: 1023px) {
+@media (min-width: 640px) and (max-width: 1023px) {
   .powo-sections {
     max-width: 760px;
     margin-inline: auto;
@@ -309,13 +323,13 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
     break-inside: avoid;
     margin: 0 0 24px;
   }
-  /* Full-width (column-span: all): top control/summary strips — Explore (1),
-     14-day burn (2), Period (3), Week-over-week (4) — and the bottom wide
-     sections — Training plan (14), Achievements (15), Share cards (16). The
-     analytical cards (5–13: Insights, Streak, Daily table, VO₂, Cardiac, Sleep,
+  /* Full-width (column-span: all): each full-width section carries .powo-full
+     in its JSX (Explore, 14-day burn, Period, Week-over-week, Training plan,
+     Achievements, Share cards) — class-based so a conditionally-rendered
+     section (e.g. VO₂ with no data) can't shift which cards span. The
+     analytical cards (Insights, Streak, Daily table, VO₂, Cardiac, Sleep,
      Workouts, Pushups, Rest) flow in the masonry columns at a right-sized width. */
-  .powo-sections > :nth-child(-n + 4),
-  .powo-sections > :nth-child(n + 14) {
+  .powo-sections > .powo-full {
     column-span: all;
   }
 }
@@ -335,7 +349,7 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
    iPad up, columns hug their content (auto) and left-anchor, so the values sit
    in a tight tabular block instead of stretching ragged across the canvas. */
 .powo-monthly-grid { grid-template-columns: 48px 1fr 1fr 1fr 1fr; column-gap: 8px; }
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .powo-monthly-grid {
     grid-template-columns: 48px auto auto auto auto;
     justify-content: start;
@@ -356,7 +370,7 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
    promote to a single tight 4-up row instead. */
 .powo-grid-profile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .powo-grid-kpi     { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .powo-grid-cardiac { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .powo-grid-awards  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -411,7 +425,7 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
 .powo-hero-ghost { font-size: clamp(110px, 31vw, 162px); }
 .powo-hero-title { font-size: clamp(72px, 22vw, 106px); }
 
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .powo-hero-ghost { font-size: 168px; }
   .powo-hero-title { font-size: 106px; }
 }
@@ -423,7 +437,7 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
 
 /* Hero is a full-width banner (outside .powo-body). Wider side padding on
    desktop/iPad so content isn't jammed to the edges, but it fills the width. */
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .powo-hero { padding-inline: 32px; }
 }
 

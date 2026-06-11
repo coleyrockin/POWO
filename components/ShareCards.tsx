@@ -11,7 +11,7 @@ const CARDS = [
 
 export default function ShareCards() {
   return (
-    <section id="share">
+    <section id="share" className="powo-full">
       <SectionHeader label="Share" meta="Download stat cards" />
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
         {CARDS.map((c, i) => (

@@ -25,9 +25,12 @@ export default function SectionNav() {
   const manualActiveRef = useRef<string | null>(null)
   const manualTimerRef = useRef<number | null>(null)
 
+  const tintIdRef = useRef<string | null>(null)
   const applyTint = (id: string) => {
+    if (tintIdRef.current === id) return // skip no-op writes — each one forces a full-page style recalc
     const s = SECTIONS.find(x => x.id === id)
     if (!s) return
+    tintIdRef.current = id
     const root = document.documentElement
     root.style.setProperty('--ambient-tint', s.tint)
     root.style.setProperty('--ambient-tint-2', s.tint2)

@@ -58,6 +58,7 @@ export default function SectionHeader({ label, meta }: Props) {
       </span>
       {meta && (
         <span
+          title={meta}
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: 'clamp(10px, calc(8px + 0.45vw), 12px)',

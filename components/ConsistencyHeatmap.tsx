@@ -92,6 +92,11 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
           )}
         </div>
 
+        {/* Screen-reader detail the role="img" grid can't convey cell-by-cell */}
+        <p style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+          {`Of ${daily.length} days: ${c.totalActiveDays} active, ${c.days.filter(d => d.isPartial).length} without data. Activity runs ${c.days[0]?.date ?? ''} through ${c.days[c.days.length - 1]?.date ?? ''}.`}
+        </p>
+
         {/* Legend */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '12px', fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', letterSpacing: '0.08em' }}>
           <span>LESS</span>

@@ -36,11 +36,11 @@ export default function ChartCursorBar({ leftPct, label, lines, accentColor }: P
         textAlign: 'center',
       }}
     >
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: '#b9b9bd', textTransform: 'uppercase' }}>{label}</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--tooltip-label)', textTransform: 'uppercase' }}>{label}</div>
       {lines.map((ln, i) => (
         <div
           key={i}
-          style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600, color: i === 0 ? accentColor : '#f0ede6', marginTop: i === 0 ? 1 : 0 }}
+          style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600, color: i === 0 ? accentColor : 'var(--tooltip-fg)', marginTop: i === 0 ? 1 : 0 }}
         >
           {ln}
         </div>

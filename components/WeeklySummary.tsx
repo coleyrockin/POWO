@@ -43,7 +43,7 @@ export default function WeeklySummary({ data }: Props) {
     `${new Date(s + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${new Date(e + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
 
   return (
-    <section id="period">
+    <section id="period" className="powo-full">
       <SectionHeader label="Period Summary" meta={`${data.meta.period.days} days · ${data.meta.period.start.slice(0, 4) === data.meta.period.end.slice(0, 4) ? data.meta.period.end.slice(0, 4) : `${data.meta.period.start.slice(0, 4)}–${data.meta.period.end.slice(0, 4)}`}`} />
       <div className="powo-grid-summary" style={{ display: 'grid', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map((t, i) => (
@@ -98,7 +98,7 @@ export default function WeeklySummary({ data }: Props) {
             return (
               <m.div key={w.weekStart}
                 initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.025 }}
-                style={{ display: 'grid', gridTemplateColumns: '92px 1fr 64px', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px' }}
+                style={{ display: 'grid', gridTemplateColumns: 'minmax(92px, max-content) 1fr minmax(56px, max-content)', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px' }}
               >
                 <span style={{ color: isBest || isWorst ? color : 'var(--color-mid)', fontWeight: isBest || isWorst ? 600 : 400 }}>{fmtRange(w.weekStart, w.weekEnd)}</span>
                 <div style={{ height: '7px', borderRadius: '3px', background: 'var(--color-track)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>

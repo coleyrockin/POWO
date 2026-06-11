@@ -315,7 +315,10 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
 @media (min-width: 1024px) {
   .powo-sections {
     display: block;
-    column-width: 400px;
+    /* Exactly 2 columns — column-width:400 collapsed to ONE full-width column
+       in 1024–1080px windows (cards stretched edge-to-edge), and the shell's
+       1200px cap means a 3rd column never usefully fits anyway. */
+    column-count: 2;
     column-gap: 24px;
     padding: 0;
   }
@@ -324,11 +327,12 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
     margin: 0 0 24px;
   }
   /* Full-width (column-span: all): each full-width section carries .powo-full
-     in its JSX (Explore, 14-day burn, Period, Week-over-week, Training plan,
-     Achievements, Share cards) — class-based so a conditionally-rendered
-     section (e.g. VO₂ with no data) can't shift which cards span. The
-     analytical cards (Insights, Streak, Daily table, VO₂, Cardiac, Sleep,
-     Workouts, Pushups, Rest) flow in the masonry columns at a right-sized width. */
+     in its JSX (Explore, 14-day burn, Period, Week-over-week, Rest, Training
+     plan, Achievements, Share cards) — class-based so a conditionally-rendered
+     section (e.g. VO₂ with no data) can't shift which cards span. Rest spans
+     because its ~1,300px unbreakable card left a giant void in the short
+     column. The analytical cards (Insights, Streak, Daily table, VO₂, Cardiac,
+     Sleep, Workouts, Pushups) flow in the masonry columns at a right-sized width. */
   .powo-sections > .powo-full {
     column-span: all;
   }

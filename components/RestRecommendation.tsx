@@ -49,7 +49,7 @@ export default function RestRecommendation({ data }: Props) {
   const toneColor = (t: string) => t === 'bad' ? 'var(--accent-coral)' : t === 'good' ? 'var(--accent-green)' : 'var(--color-white)'
 
   return (
-    <section id="rest">
+    <section id="rest" className="powo-full">
       <SectionHeader label="Recommended Rest Period" meta={`fatigue ${F}/100`} />
 
       {/* Top status card */}

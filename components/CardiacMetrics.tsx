@@ -22,7 +22,7 @@ function Sparkline({ values, color, max, min, dates, unit, decimals }: { values:
   if (present.length < 2) return (
     <div style={{ height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
       <div aria-hidden style={{ position: 'absolute', left: 0, right: 0, top: '50%', height: '1px', background: 'var(--hairline)' }} />
-      <span style={{ position: 'relative', fontFamily: 'var(--font-mono)', fontSize: '8.5px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-faint)', background: 'var(--color-card)', padding: '0 6px' }}>no recent data</span>
+      <span style={{ position: 'relative', fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-faint)', background: 'var(--color-card)', padding: '0 6px' }}>no recent data</span>
     </div>
   )
   const points = present.map(({ i, v }) => {

@@ -83,6 +83,7 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
             ) : (
               <div
                 key={cell.day.date}
+                className="powo-heat-cell"
                 title={`${cell.day.date} · ${cell.day.isPartial ? 'no data' : `${cell.day.activeKcal ?? '--'} kcal · ${cell.day.exerciseMin ?? '--'} min${cell.day.workoutCount ? ` · ${cell.day.workoutCount} workout${cell.day.workoutCount > 1 ? 's' : ''}` : ''}`}`}
                 style={cell.day.isPartial
                   ? { width: 'var(--heat-cell)', height: 'var(--heat-cell)', borderRadius: '2px', background: 'transparent', boxShadow: 'inset 0 0 0 1px var(--hairline)' }

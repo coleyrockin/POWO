@@ -93,6 +93,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
                   key={w}
                   onClick={() => setWin(w)}
                   aria-pressed={active}
+                  className="powo-window-btn"
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.06em', fontWeight: 600,
                     padding: '6px 14px', borderRadius: '6px', cursor: 'pointer', border: 'none',
@@ -111,6 +112,7 @@ export default function DashboardShell({ daily, workouts }: Props) {
             onClick={() => setCompareOn(v => !v)}
             disabled={isAll}
             aria-pressed={compareOn && !isAll}
+            className="powo-compare-btn"
             style={{
               fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase',
               padding: '7px 12px', borderRadius: '6px', cursor: isAll ? 'not-allowed' : 'pointer',

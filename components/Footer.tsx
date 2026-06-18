@@ -33,7 +33,7 @@ export default function Footer({
           <span style={{ color: 'var(--color-dim)' }}>·</span>
           <span>
             Built by{' '}
-            <a href="https://github.com/coleyrockin" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-blue)', textDecoration: 'none', display: 'inline-block', padding: '13px 6px', margin: '-13px -6px' }}>
+            <a href="https://github.com/coleyrockin" target="_blank" rel="noopener noreferrer" className="powo-ext-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', display: 'inline-block', padding: '13px 6px', margin: '-13px -6px' }}>
               @coleyrockin
             </a>
           </span>

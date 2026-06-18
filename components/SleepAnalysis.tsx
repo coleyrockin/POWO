@@ -85,9 +85,9 @@ export default function SleepAnalysis({ sleep }: Props) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {tiles.map(t => (
           <div key={t.label} className="powo-lift" style={{ background: 'var(--color-card)', padding: '16px 14px', minHeight: '92px', height: '100%', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '4px' }}>{t.label}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '6px' }}>{t.label}</div>
             <div className="powo-glow-white" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--color-white)', lineHeight: 1 }}>{t.val}</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', marginTop: '3px' }}>{t.unit}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-mid)', marginTop: '4px' }}>{t.unit}</div>
           </div>
         ))}
       </div>

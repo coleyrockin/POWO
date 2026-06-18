@@ -139,8 +139,9 @@ body {
   font-feature-settings: 'ss01', 'tnum';
 }
 
-/* Tabular numbers everywhere DM Mono is used */
-[style*='font-mono'], code, pre {
+/* Tabular numbers wherever DM Mono OR Bebas display numerals are used — keeps
+   columns aligned and stops the hero count-up from jittering digit widths. */
+[style*='font-mono'], [style*='font-display'], code, pre {
   font-variant-numeric: tabular-nums;
 }
 
@@ -588,6 +589,16 @@ section[id] {
 }
 /* Active pill carries the blue bg → blue focus ring vanishes; use white. */
 .powo-nav-btn.is-active:focus-visible { outline-color: var(--color-white); }
+/* Hover affordance between resting and active (was missing — pills did nothing on hover) */
+.powo-nav-btn:hover:not(.is-active) { background: rgba(255, 255, 255, 0.10); }
+html.light .powo-nav-btn:hover:not(.is-active) { background: rgba(0, 0, 0, 0.06); }
+
+/* Explore window selector + compare button: hover affordance. Inline styles set
+   the resting background, so the hover override needs !important to win. */
+.powo-window-btn, .powo-compare-btn { transition: background .15s ease, color .15s ease, border-color .15s ease; }
+.powo-window-btn:hover:not([aria-pressed="true"]) { background: rgba(255, 255, 255, 0.08) !important; color: var(--color-white) !important; }
+html.light .powo-window-btn:hover:not([aria-pressed="true"]) { background: rgba(0, 0, 0, 0.06) !important; color: var(--color-ink, #1a1a1a) !important; }
+.powo-compare-btn:not(:disabled):hover { border-color: var(--accent-blue) !important; color: var(--accent-blue) !important; }
 
 /* Desktop: vertical left rail */
 @media (min-width: 1024px) {
@@ -652,6 +663,16 @@ tbody tr:hover {
     0 2px 4px rgba(0, 0, 0, 0.5);
   z-index: 2;
 }
+/* Press feedback for clickable lift-cards (download links) — dips back down. */
+a.powo-lift:active, button.powo-lift:active { transform: translateY(0); transition-duration: 90ms; }
+
+/* Heatmap day cells brighten under the cursor (the native title tooltip lags ~500ms). */
+.powo-heat-cell { transition: filter 120ms ease; }
+.powo-heat-cell:hover { filter: brightness(1.35); }
+
+/* External text link (footer) — confirm it's a link on hover. */
+.powo-ext-link { transition: opacity 140ms ease; }
+.powo-ext-link:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; opacity: 0.85; }
 
 /* ── Glow utilities — soft halo behind big stats ── */
 /* One intensity curve across accents so KPI numbers read as a single family

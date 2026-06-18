@@ -10,9 +10,9 @@ function applyTheme(t: Theme) {
 }
 
 /**
- * Reads the theme the no-flash script already applied, follows system changes
- * until the user makes an explicit choice, and persists choices to localStorage.
- * Mirrors the matchMedia + change-listener pattern used in ConsistencyHeatmap.
+ * Reads the theme the no-flash script already applied and persists toggle
+ * choices to localStorage. Default is dark; light is only reached by an
+ * explicit toggle (OS preference is intentionally not followed).
  */
 export function useTheme(): { theme: Theme; toggle: () => void } {
   const [theme, setTheme] = useState<Theme>('dark')
@@ -22,15 +22,6 @@ export function useTheme(): { theme: Theme; toggle: () => void } {
     // server + first client render are 'dark', this corrects post-mount).
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark')
-    const mq = window.matchMedia('(prefers-color-scheme: light)')
-    const onChange = () => {
-      if (localStorage.getItem('powo-theme')) return // user override wins
-      const sys: Theme = mq.matches ? 'light' : 'dark'
-      setTheme(sys)
-      applyTheme(sys)
-    }
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
   }, [])
 
   const toggle = () => {

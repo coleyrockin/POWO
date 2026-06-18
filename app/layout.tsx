@@ -103,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning className={`${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable} ${newsreader.variable}`}>
       <body>
         <Script id="powo-theme" strategy="beforeInteractive">
-          {`(function(){try{var t=localStorage.getItem('powo-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.classList.add(t);}catch(e){document.documentElement.classList.add('dark');}})();`}
+          {`(function(){try{var t=localStorage.getItem('powo-theme');if(t!=='light'&&t!=='dark')t='dark';document.documentElement.classList.add(t);}catch(e){document.documentElement.classList.add('dark');}})();`}
         </Script>
         <Script id="powo-jsonld" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(jsonLd)}

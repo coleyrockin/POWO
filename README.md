@@ -29,7 +29,7 @@ The same dashboard is deliberately composed for desktop, iPad, and iPhone rather
 
 ## What it is
 
-A personal site, not a product. POWO takes raw Apple Health data — 183 days, 214 workouts, 57 nights of sleep, a resting heart rate that dropped 16 bpm — and renders it as something worth looking at. Every chart, card, and line of copy is specific to one athlete's real numbers.
+A personal site, not a product. POWO takes raw Apple Health data — 199 days, 244 workouts, 65 nights of sleep, a resting heart rate that dropped 16 bpm — and renders it as something worth looking at. Every chart, card, and line of copy is specific to one athlete's real numbers.
 
 The technical choices serve that goal: no UI library because every surface needs to look exactly right; no charting library because the data tells a specific story; static output because the page should load in under a second on a phone with bad signal.
 
@@ -66,6 +66,15 @@ Export from the Apple Health app (Profile → Export All Health Data), place the
 
 ```bash
 npm run refresh
+git push origin main
+```
+
+A **PULSE.health.v1** export (different schema, often a shorter window) is adapted to the legacy shape and merged into the existing history first — new values win on overlapping dates, older months are preserved:
+
+```bash
+node scripts/adapt-pulse.mjs <pulse-export.json> /tmp/adapted.json
+node scripts/merge-export.mjs <old-export.json> /tmp/adapted.json /tmp/merged.json
+node scripts/convert-export.mjs /tmp/merged.json && npm run qa
 git push origin main
 ```
 

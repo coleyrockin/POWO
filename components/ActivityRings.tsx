@@ -136,7 +136,7 @@ export default function ActivityRings({ daily, workouts }: Props) {
                       background: isPartial
                         ? 'repeating-linear-gradient(180deg, rgba(185,185,189,0.32) 0 3px, rgba(185,185,189,0.08) 3px 6px)'
                         : isPeak
-                        ? 'linear-gradient(180deg, #ffc857 0%, var(--accent-amber) 60%, #d98e0a 100%)'
+                        ? 'linear-gradient(180deg, color-mix(in srgb, var(--accent-amber) 72%, white) 0%, var(--accent-amber) 60%, color-mix(in srgb, var(--accent-amber) 82%, black) 100%)'
                         : `linear-gradient(180deg, rgba(80, 173, 255, ${0.45 + pct * 0.55}), rgba(10, 132, 255, ${0.35 + pct * 0.65}))`,
                       boxShadow: isPartial
                         ? 'inset 0 1px 0 rgba(255,255,255,0.08)'

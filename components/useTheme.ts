@@ -25,6 +25,11 @@ export function useTheme(): { theme: Theme; toggle: () => void } {
   }, [])
 
   const toggle = () => {
+    // Briefly enable a surface-color transition so dark↔light melts instead of
+    // snapping. Self-removing so it never affects scroll/hover or first paint.
+    const el = document.documentElement
+    el.classList.add('theme-animating')
+    window.setTimeout(() => el.classList.remove('theme-animating'), 300)
     setTheme(prev => {
       const next: Theme = prev === 'dark' ? 'light' : 'dark'
       applyTheme(next)

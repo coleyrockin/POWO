@@ -18,7 +18,13 @@ function Sparkline({ values, color, max, min, dates, unit, decimals }: { values:
     .filter((p): p is { i: number; v: number } => p !== null)
   const coords = present.map(({ i, v }) => ({ x: (i / (values.length - 1)) * (W - PAD * 2) + PAD, i, v }))
   const { activeIndex, handlers } = useChartCursor({ coords, svgRef, enabled: present.length >= 2 })
-  if (present.length < 2) return null
+  // Graceful empty state — keep the tile's rhythm, read as designed not broken.
+  if (present.length < 2) return (
+    <div style={{ height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+      <div aria-hidden style={{ position: 'absolute', left: 0, right: 0, top: '50%', height: '1px', background: 'var(--hairline)' }} />
+      <span style={{ position: 'relative', fontFamily: 'var(--font-mono)', fontSize: '8.5px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-faint)', background: 'var(--color-card)', padding: '0 6px' }}>no recent data</span>
+    </div>
+  )
   const points = present.map(({ i, v }) => {
     const x = (i / (values.length - 1)) * (W - PAD * 2) + PAD
     const y = H - PAD - ((v - min) / range) * (H - PAD * 2)

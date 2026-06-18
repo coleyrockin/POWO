@@ -365,6 +365,35 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
 @media (scripting: none) { .powo-collapse-body { grid-template-rows: 1fr !important; } }
 @media (prefers-reduced-motion: reduce) { .powo-collapse-body, .powo-collapse-chevron { transition: none; } }
 
+/* ── Theme toggle (fixed, bottom-right) — hover lift + crossfading sun/moon ── */
+.powo-theme-toggle {
+  position: fixed; right: 16px; bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 10000; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--color-card); border: 1px solid var(--color-dim);
+  color: var(--color-white); box-shadow: var(--shadow-card); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+  transition: transform .2s cubic-bezier(.34, 1.56, .64, 1), border-color .2s ease, box-shadow .2s ease;
+}
+.powo-theme-toggle:hover { transform: scale(1.09); border-color: var(--accent-teal); box-shadow: 0 0 0 1px var(--accent-teal), var(--shadow-card); }
+.powo-theme-toggle:active { transform: scale(0.95); }
+.powo-theme-toggle:focus-visible { outline: 2px solid var(--accent-teal); outline-offset: 2px; }
+.powo-tt-icon { position: absolute; display: flex; align-items: center; justify-content: center; transition: opacity .28s ease, transform .28s cubic-bezier(.34, 1.56, .64, 1); }
+.powo-tt-sun  { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+.powo-tt-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+.powo-theme-toggle[data-theme="dark"]  .powo-tt-sun  { opacity: 1; transform: rotate(0) scale(1); }
+.powo-theme-toggle[data-theme="light"] .powo-tt-moon { opacity: 1; transform: rotate(0) scale(1); }
+@media (prefers-reduced-motion: reduce) { .powo-theme-toggle, .powo-tt-icon { transition: none; } }
+
+/* Theme melt: surface colors ease only while switching (class is added on toggle
+   then self-removes ~300ms later) — no first-paint flash, off for reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-animating,
+  html.theme-animating body,
+  html.theme-animating *:not(svg):not(path):not(.powo-tt-icon) {
+    transition: background-color .26s ease, color .26s ease, border-color .26s ease, fill .26s ease, box-shadow .26s ease !important;
+  }
+}
+
 /* Training plan day-list: stacked on phone/iPad, two-up on the wide desktop
    card so the full-width section is short instead of a long single column. */
 .powo-train-days { display: flex; flex-direction: column; }

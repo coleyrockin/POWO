@@ -1,22 +1,18 @@
-# HANDOFF — Next 3 Improvements
+# HANDOFF — Next Improvements
 
-> For the next working session. State as of `de854cd`: live site verified at 390/768/1100/1440, both themes, `npm run qa` green, desktop masonry locked at 2 columns with no voids. These are the three highest-leverage improvements, in order.
+> For the next working session. State as of `ddeab30`: live site verified at 390/768/1280/1440, both themes, `npm run qa` green. Desktop masonry locked at 2 columns with no voids; full-width strips densified (Rest signals 4-col, prose capped); mobile Training/Rest now collapse. The two remaining high-leverage improvements are below.
 
 ---
 
-## 1. Mobile density — collapse Training & Rest day cards (biggest UX win)
+## ✓ SHIPPED (ddeab30) — Mobile density + desktop densification
 
-**Problem (measured):** On iPhone 390px the Training section is **3,008px tall** (7 stacked day-cards at 276–460px each) — about 20% of the entire 14,787px page. Rest's Daily Protocol tiles add another ~860px stacked. Scrolling fatigue is the #1 remaining mobile issue.
+**Mobile (≤639px):** new `components/Collapsible.tsx` (CSS grid-rows `0fr→1fr`, hydration-safe, never-blank + reduced-motion guards). Training day-cards collapse (day 1 open, 2–7 tap-to-expand); Rest's Daily Protocol + Return-to-Train blocks collapse. iPad/desktop byte-identical (toggle `pointer-events:none`, chevron hidden, bodies forced open ≥640px, `aria-expanded`/`aria-controls`).
+- Page **14,799 → 12,546px**; Training **3,008 → 1,330px**; Rest **1,405 → 829px**.
+- Do/Avoid intentionally NOT collapsed (no single header → would add a desktop-visible label). Period left expanded (its 12 stat tiles are the payoff).
 
-**Approach (mobile-only, ≤639px; iPad/desktop untouched):**
-- In `components/WorkoutRecommendation.tsx`, render each day card collapsed by default on mobile: day number + title + zone chip + duration visible (~64px row); tap expands the detail block.
-- Use a state toggle with `aria-expanded`, animate height via the CSS `grid-template-rows: 0fr → 1fr` trick (no layout-shift jank, no JS measurement).
-- Same treatment for the three Daily Protocol tiles in `components/RestRecommendation.tsx` (Sleep window / Do / Avoid).
-- Target: Training <1,000px collapsed; full page ~14,800px → ~11,500px.
+**Desktop (≥1024px):** killed the internal "wasted space" in the full-width strips — Rest Recovery Signals 2-col → 4-col (447px cells → 216px), and capped stretched prose (guardrails 910→591px, protocol 790→558px, rationale → 72ch).
 
-**Guardrail:** this changes mobile presentation — show Boyd a preview before pushing.
-
-## 2. Freshness stamp — "synced N days ago" (the alive signal)
+## 1. Freshness stamp — "synced N days ago" (the alive signal)
 
 **Problem:** The site's whole premise is "alive," but nothing on screen says how fresh the data is. `meta.generated_at` (export date) is only in the footer, formatted as a date.
 
@@ -26,7 +22,7 @@
 - Color it: ≤7 days `--accent-green`, ≤21 `--accent-amber`, older `--accent-coral` — gentle pressure to run `npm run refresh`.
 - ~20 lines. Zero risk. Ship same day.
 
-## 3. Hero "2-second wow" — the signature reveal (ROADMAP H1.5)
+## 2. Hero "2-second wow" — the signature reveal (ROADMAP H1.5)
 
 **Problem:** The hero is strong but static. The first 2 seconds are the screenshot moment and the thing people remember.
 
@@ -44,4 +40,4 @@
 - Add `import 'server-only'` to `lib/imported-health-export.ts` (emit it from `scripts/convert-export.mjs` — the file is auto-generated) so the 100KB data module can never reach a client bundle.
 
 ## How to verify any of it
-`npm run qa` (lint · 3 test suites · typecheck · build · audit · smoke) must pass before push. Then check 390×844 / 768×1024 / 1440×900 in both themes. Push `main` → Vercel deploys.
+`npm run qa` (lint · 3 test suites · typecheck · build · audit · smoke) must pass before push. Then check 390×844 / 768×1024 / 1280×900 / 1440×900 in both themes. Push `main` → Vercel deploys.

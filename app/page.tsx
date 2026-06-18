@@ -24,7 +24,8 @@ import Footer from '@/components/Footer'
 export default function Page() {
   const d = healthData
   const partialDay = [...d.daily].reverse().find(day =>
-    day.active_kcal === null || day.exercise_min === null || day.avg_hr === null || day.hrv_ms === null
+    // all-day HR is optional in newer exports, so it isn't a completeness signal
+    day.active_kcal === null || day.exercise_min === null || day.hrv_ms === null
   )
   return (
     <main className="powo-shell">

@@ -33,7 +33,8 @@ function buildCoachTakeaway(data: HealthData): string {
 
 export default function HealthCommandStrip({ data, partialDate }: Props) {
   const partialDays = data.daily.filter(day =>
-    day.active_kcal === null || day.exercise_min === null || day.avg_hr === null || day.hrv_ms === null
+    // all-day HR is optional in newer exports, so it isn't a completeness signal
+    day.active_kcal === null || day.exercise_min === null || day.hrv_ms === null
   )
   const partialCopy = partialDate ? `${fmtMonthDay(partialDate)} partial` : 'No partial days'
   const partialCountCopy = `${partialDays.length} partial day${partialDays.length === 1 ? '' : 's'}`

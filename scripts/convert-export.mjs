@@ -41,6 +41,7 @@ const exMin = seriesMap('exerciseMinutes')
 const flights = seriesMap('flightsClimbed')
 const dist = seriesMap('distanceWalkingRunning')
 const hr = seriesMap('heartRate')
+const walkHr = seriesMap('walkingHeartRate')
 const rhr = seriesMap('restingHeartRate')
 const hrv = seriesMap('hrv')
 const spo2 = seriesMap('oxygenSaturation') // already ×100 in this file
@@ -60,7 +61,7 @@ const dailyOverrides = dates.map((date) => ({
   heart_rate_avg_bpm: hr.has(date) ? round(hr.get(date), 1) : null,
   resting_heart_rate_bpm: rhr.has(date) ? rhr.get(date) : null,
   hrv_sdnn_ms: hrv.has(date) ? round(hrv.get(date), 1) : null,
-  walking_hr_avg_bpm: null, // not present in this export
+  walking_hr_avg_bpm: walkHr.has(date) ? round(walkHr.get(date), 1) : null,
   blood_oxygen_pct: spo2.has(date) ? round(spo2.get(date), 1) : null,
   flights_climbed: flights.get(date) ?? 0,
   respiratory_rate_brpm: resp.has(date) ? round(resp.get(date), 1) : null,

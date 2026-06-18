@@ -1,6 +1,7 @@
 'use client'
 import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
+import Collapsible from './Collapsible'
 import type { HealthData } from '@/lib/types'
 import { analyzeRecovery, analyzeSleep, buildRestRecommendation } from '@/lib/helpers'
 
@@ -89,7 +90,7 @@ export default function RestRecommendation({ data }: Props) {
       {/* Rationale signals grid */}
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '10px' }}>Recovery Signals</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px 16px' }}>
+        <div className="powo-rest-signals">
           {signals.map(sg => (
             <div key={sg.k} style={{ display: 'flex', justifyContent: 'space-between', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', padding: '5px 0' }}>
               <span style={{ color: 'var(--color-mid)' }}>{sg.k}</span>
@@ -97,7 +98,7 @@ export default function RestRecommendation({ data }: Props) {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: '10px', fontFamily: 'var(--font-serif)', fontSize: '13px', color: 'var(--color-mid)', lineHeight: 1.55 }}>
+        <div style={{ marginTop: '10px', fontFamily: 'var(--font-serif)', fontSize: '13px', color: 'var(--color-mid)', lineHeight: 1.55, maxWidth: '72ch' }}>
           <span style={{ color: 'var(--color-mid)', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em' }}>RATIONALE</span><br />
           {rec.rationale}
         </div>
@@ -105,18 +106,19 @@ export default function RestRecommendation({ data }: Props) {
 
       {/* Daily protocol */}
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '10px' }}>Daily Protocol</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {rec.daily_protocol.map((p, i) => (
-            <m.div key={p.label}
-              initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-              style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '10px', padding: '7px 0' }}
-            >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: theme.accent, fontWeight: 600, letterSpacing: '0.05em' }}>{p.label}</span>
-              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.45 }}>{p.detail}</span>
-            </m.div>
-          ))}
-        </div>
+        <Collapsible header={<div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--color-mid)', textTransform: 'uppercase', marginBottom: '10px' }}>Daily Protocol</div>}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {rec.daily_protocol.map((p, i) => (
+              <m.div key={p.label}
+                initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
+                style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '10px', padding: '7px 0' }}
+              >
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: theme.accent, fontWeight: 600, letterSpacing: '0.05em' }}>{p.label}</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.45, maxWidth: '68ch' }}>{p.detail}</span>
+              </m.div>
+            ))}
+          </div>
+        </Collapsible>
       </div>
 
       {/* Do / Avoid */}
@@ -147,10 +149,12 @@ export default function RestRecommendation({ data }: Props) {
 
       {/* Living return criteria */}
       <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '16px 14px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '6px', marginBottom: '10px' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: theme.accent, textTransform: 'uppercase' }}>Return-to-Train · Live</div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)' }}>{rec.return_criteria.filter(c => c.met).length}/{rec.return_criteria.length} ready</div>
-        </div>
+        <Collapsible header={
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '6px', marginBottom: '10px' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: theme.accent, textTransform: 'uppercase' }}>Return-to-Train · Live</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-mid)' }}>{rec.return_criteria.filter(c => c.met).length}/{rec.return_criteria.length} ready</div>
+          </div>
+        }>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {rec.return_criteria.map(c => (
             <m.div key={c.label}
@@ -175,6 +179,7 @@ export default function RestRecommendation({ data }: Props) {
             </m.div>
           ))}
         </div>
+        </Collapsible>
       </div>
     </section>
   )

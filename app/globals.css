@@ -338,6 +338,33 @@ html.light .powo-shell { box-shadow: 0 28px 90px rgba(0, 0, 0, 0.10); }
   }
 }
 
+/* Recovery-signals grid (Rest section) — 2-up on phone/iPad, 4-up on desktop so
+   the 8 tiny label/value pairs sit in a tight block instead of two 447px cells
+   with ~340px of dead air each. */
+.powo-rest-signals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
+@media (min-width: 1024px) { .powo-rest-signals { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* Mobile-only collapse (<=639px). Header stays visible; body collapses on phone,
+   always open on iPad/desktop. SSR default is collapsed → no hydration flash;
+   no-JS and reduced-motion fall back to fully expanded. See Collapsible.tsx. */
+.powo-collapse-toggle { all: unset; display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; }
+.powo-collapse-toggle:focus-visible { outline: 2px solid var(--accent-teal); outline-offset: 2px; }
+.powo-collapse-head { flex: 1; min-width: 0; }
+.powo-collapse-chevron { flex-shrink: 0; transition: transform .2s ease; color: var(--color-mid); }
+.powo-collapse[data-open="true"] .powo-collapse-chevron { transform: rotate(180deg); }
+.powo-collapse-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
+.powo-collapse[data-open="true"] .powo-collapse-body { grid-template-rows: 1fr; }
+.powo-collapse-body > * { overflow: hidden; min-height: 0; }
+/* iPad + desktop: always expanded, header non-interactive → look is identical to today */
+@media (min-width: 640px) {
+  .powo-collapse-body { grid-template-rows: 1fr !important; }
+  .powo-collapse-toggle { pointer-events: none; cursor: default; }
+  .powo-collapse-chevron { display: none; }
+}
+/* Never-blank + accessibility guards */
+@media (scripting: none) { .powo-collapse-body { grid-template-rows: 1fr !important; } }
+@media (prefers-reduced-motion: reduce) { .powo-collapse-body, .powo-collapse-chevron { transition: none; } }
+
 /* Training plan day-list: stacked on phone/iPad, two-up on the wide desktop
    card so the full-width section is short instead of a long single column. */
 .powo-train-days { display: flex; flex-direction: column; }

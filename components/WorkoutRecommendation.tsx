@@ -1,6 +1,7 @@
 'use client'
 import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
+import Collapsible from './Collapsible'
 import type { HealthData } from '@/lib/types'
 import { buildWorkoutRecommendation } from '@/lib/helpers'
 
@@ -56,6 +57,7 @@ export default function WorkoutRecommendation({ data }: Props) {
             className="powo-lift"
             style={{ background: 'var(--color-card)', padding: '16px 14px' }}
           >
+            <Collapsible defaultOpen={i === 0} header={
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
               <div>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-teal)', fontWeight: 700 }}>{day.day.toUpperCase()}</span>
@@ -68,6 +70,7 @@ export default function WorkoutRecommendation({ data }: Props) {
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-white)', fontWeight: 600 }}>{day.duration_min} min</span>
               </div>
             </div>
+            }>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginBottom: '8px' }}>
               {day.blocks.map((b, j) => {
@@ -97,6 +100,7 @@ export default function WorkoutRecommendation({ data }: Props) {
                 ))}
               </div>
             )}
+            </Collapsible>
           </m.div>
         ))}
       </div>
@@ -106,7 +110,7 @@ export default function WorkoutRecommendation({ data }: Props) {
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent-coral)', textTransform: 'uppercase', marginBottom: '8px' }}>Guardrails</div>
         <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {rec.guardrails.map(g => (
-            <li key={g} style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.5, display: 'flex', gap: '6px' }}>
+            <li key={g} style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--color-white)', lineHeight: 1.5, display: 'flex', gap: '6px', maxWidth: '72ch' }}>
               <span style={{ color: 'var(--accent-coral)', flexShrink: 0 }}>!</span>
               <span>{g}</span>
             </li>

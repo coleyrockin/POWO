@@ -24,7 +24,8 @@
     "test:visual:update": "playwright test --update-snapshots",
     "screenshots:readme": "npm run build && node scripts/capture-readme-screenshots.mjs",
     "qa": "npm run verify && npm run audit:prod && npm run smoke",
-    "refresh": "node scripts/convert-export.mjs && npm run qa"
+    "refresh": "node scripts/refresh-health.mjs && npm run qa",
+    "refresh:deploy": "npm run refresh && git push origin main"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

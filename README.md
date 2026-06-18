@@ -62,23 +62,16 @@ npm run screenshots:readme # rebuild and refresh the responsive README gallery
 
 ### Refreshing the data
 
-Export from the Apple Health app (Profile → Export All Health Data), place the JSON at the path in `scripts/convert-export.mjs`, then:
+Drop a new export into the iCloud `AI/` folder (the Claude iOS app produces a `PULSE.health.v1` JSON from HealthKit), then one command:
 
 ```bash
-npm run refresh
-git push origin main
+npm run refresh        # find newest export → adapt → merge → convert → QA
+git push origin main   # Vercel rebuilds in ~a minute
 ```
 
-A **PULSE.health.v1** export (different schema, often a shorter window) is adapted to the legacy shape and merged into the existing history first — new values win on overlapping dates, older months are preserved:
+`npm run refresh` ([`scripts/refresh-health.mjs`](scripts/refresh-health.mjs)) finds the newest export by data date, adapts the PULSE schema to the legacy shape ([`adapt-pulse.mjs`](scripts/adapt-pulse.mjs)), merges it into a growing baseline ([`merge-export.mjs`](scripts/merge-export.mjs)) — new values win on overlapping dates, older months preserved, sparse metrics overlaid — then regenerates the committed module. The baseline lives in iCloud, never in the repo (raw health data stays private). **Sanity guards** in the converter reject physically-impossible values (e.g. >100 km/day), so a bad export fails the run instead of shipping.
 
-```bash
-node scripts/adapt-pulse.mjs <pulse-export.json> /tmp/adapted.json
-node scripts/merge-export.mjs <old-export.json> /tmp/adapted.json /tmp/merged.json
-node scripts/convert-export.mjs /tmp/merged.json && npm run qa
-git push origin main
-```
-
-Vercel picks it up. The site rebuilds in about a minute.
+`npm run refresh:deploy` does the same and pushes for you.
 
 ### Scripts
 
@@ -94,7 +87,8 @@ Vercel picks it up. The site rebuilds in about a minute.
 | `npm run smoke` | Verify routes, metadata, and headers against the built output |
 | `npm run screenshots:readme` | Rebuild and capture desktop, iPad, and iPhone README images |
 | `npm run qa` | Full gate — run before every push |
-| `npm run refresh` | Convert new export → run qa |
+| `npm run refresh` | Find newest export → adapt + merge + convert (sanity-checked) → qa |
+| `npm run refresh:deploy` | `refresh` then push to main |
 
 ---
 

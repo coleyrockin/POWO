@@ -101,7 +101,9 @@ const sleep = raw.sleep.data.map((n) => ({
   bedtime_local: n.bedtime_local,
   wake_time_local: n.wake_time_local,
 }))
-const sleepCoverage = raw.sleep?.notes?.coverage ?? ''
+// Sleep coverage is intentionally not surfaced: nights are presented as-is and
+// missing nights read as normal, not as a "watch not worn" warning banner.
+const sleepCoverage = ''
 
 // ── body weight ──
 const w0 = raw.bodyMeasurements.weight.data[0]
@@ -123,6 +125,44 @@ const pushupsManualLog = {
     { week: '2026-04-13 to 2026-04-18', total: 190, sessions: [] },
     { week: '2026-04-20 to 2026-04-26', total: 100, note: 'Reduced - shoulder fatigue', sessions: [] },
   ],
+}
+
+// ── Sanity guards: fail loudly on physically-impossible values so a bad export
+//    (e.g. a unit mismatch) can never silently ship. Bounds are generous —
+//    they catch order-of-magnitude errors, not borderline real days. ──
+const SANITY = {
+  steps: [0, 60000],
+  active_calories_kcal: [0, 8000],
+  walking_running_distance_km: [0, 100],
+  exercise_minutes: [0, 1440],
+  resting_heart_rate_bpm: [25, 130],
+  heart_rate_avg_bpm: [25, 200],
+  walking_hr_avg_bpm: [40, 220],
+  hrv_sdnn_ms: [1, 400],
+  blood_oxygen_pct: [70, 100],
+  flights_climbed: [0, 500],
+  respiratory_rate_brpm: [4, 40],
+}
+const violations = []
+for (const d of dailyOverrides) {
+  for (const [k, [lo, hi]] of Object.entries(SANITY)) {
+    const v = d[k]
+    if (v != null && (v < lo || v > hi)) violations.push(`${d.date} ${k}=${v} (expected ${lo}–${hi})`)
+  }
+}
+for (const w of workouts) {
+  if (w.duration_min < 0 || w.duration_min > 1440) violations.push(`workout ${w.start} duration_min=${w.duration_min}`)
+  if (w.calories < 0 || w.calories > 10000) violations.push(`workout ${w.start} calories=${w.calories}`)
+  if (w.distance_km != null && (w.distance_km < 0 || w.distance_km > 200)) violations.push(`workout ${w.start} distance_km=${w.distance_km}`)
+}
+for (const p of vo2Max) {
+  if (p.value_ml_kg_min < 10 || p.value_ml_kg_min > 80) violations.push(`vo2 ${p.date}=${p.value_ml_kg_min}`)
+}
+for (const n of sleep) {
+  if (n.total_in_bed_min < 0 || n.total_in_bed_min > 1440) violations.push(`sleep ${n.wake_date} in_bed_min=${n.total_in_bed_min}`)
+}
+if (violations.length) {
+  throw new Error(`Refusing to convert — ${violations.length} implausible value(s):\n  ${violations.slice(0, 12).join('\n  ')}${violations.length > 12 ? `\n  …and ${violations.length - 12} more` : ''}`)
 }
 
 const exportObj = {

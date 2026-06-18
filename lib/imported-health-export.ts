@@ -621,7 +621,7 @@ export const latestHealthExport: ImportedHealthExport = {
     {"wake_date":"2026-06-16","total_in_bed_min":502,"bedtime_local":"22:44","wake_time_local":"07:06"},
     {"wake_date":"2026-06-17","total_in_bed_min":476,"bedtime_local":"23:05","wake_time_local":"07:00"},
   ],
-  sleepCoverage: "57 nights captured Feb 26 – Jun 1, 2026. Dec 2025 – mid-Feb 2026 data sparse or unavailable (watch not worn overnight or data not captured).",
+  sleepCoverage: "",
   bodyMeasurement: {"weight_kg":79.38,"measured_date":"2026-02-25","note":"Single reading available in 6-month window"},
   pushupsManualLog: {
     "note": "Manually tracked; not from Apple Health",

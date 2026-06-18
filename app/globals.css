@@ -144,6 +144,8 @@ body {
 [style*='font-mono'], [style*='font-display'], code, pre {
   font-variant-numeric: tabular-nums;
 }
+/* SVG chart text → tokenized mono + tabular figures (axis labels, value chips). */
+.powo-svg-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
 /* Consistent focus ring */
 :focus-visible {

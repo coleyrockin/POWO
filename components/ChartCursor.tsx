@@ -38,8 +38,8 @@ export default function ChartCursor({ x, y, topY, baseY, label, value, accentCol
       <circle cx={x} cy={y} r={4.5} fill="var(--color-card)" stroke={accentColor} strokeWidth={1.6} />
       <g transform={`translate(${boxX.toFixed(2)}, ${boxY.toFixed(2)})`}>
         <rect x={0} y={0} width={boxW} height={boxH} rx={3} fill="var(--tooltip-bg)" stroke={accentColor} strokeWidth={1} opacity={0.96} />
-        <text x={boxW / 2} y={12} textAnchor="middle" fill="var(--tooltip-label)" fontFamily="DM Mono, monospace" fontSize={10} letterSpacing="0.04em">{label}</text>
-        <text x={boxW / 2} y={24} textAnchor="middle" fill={accentColor} fontFamily="DM Mono, monospace" fontSize={11} fontWeight={700}>{value}</text>
+        <text x={boxW / 2} y={12} textAnchor="middle" fill="var(--tooltip-label)" className="powo-svg-mono" fontSize={10} letterSpacing="0.04em">{label}</text>
+        <text x={boxW / 2} y={24} textAnchor="middle" fill={accentColor} className="powo-svg-mono" fontSize={11} fontWeight={700}>{value}</text>
       </g>
     </>
   )

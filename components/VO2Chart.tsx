@@ -180,7 +180,7 @@ export default function VO2Chart({ trend }: Props) {
               return (
                 <g key={g}>
                   <line x1={PAD_L} x2={W - PAD_R} y1={y} y2={y} stroke="var(--hairline)" strokeWidth="1" strokeDasharray="2 5" />
-                  <text x={PAD_L - 6} y={y + 3} textAnchor="end" fill="var(--color-faint)" fontFamily="DM Mono, monospace" fontSize="9.5">{g}</text>
+                  <text x={PAD_L - 6} y={y + 3} textAnchor="end" fill="var(--color-faint)" className="powo-svg-mono" fontSize="9.5">{g}</text>
                 </g>
               )
             })}
@@ -275,7 +275,7 @@ export default function VO2Chart({ trend }: Props) {
               {/* Label box positioned above the dot, with leader space */}
               <g transform={`translate(${peakCoord.x}, ${peakCoord.y - 20})`}>
                 <rect x={-22} y={-11} width={44} height={15} rx={2} fill="var(--tooltip-bg)" stroke="var(--accent-amber)" strokeWidth="1" opacity="0.95" />
-                <text x={0} y={0} textAnchor="middle" fill="var(--accent-amber)" fontFamily="DM Mono, monospace" fontSize="10" fontWeight="700">{peak.value.toFixed(2)}</text>
+                <text x={0} y={0} textAnchor="middle" fill="var(--accent-amber)" className="powo-svg-mono" fontSize="10" fontWeight="700">{peak.value.toFixed(2)}</text>
               </g>
             </g>
 
@@ -285,13 +285,13 @@ export default function VO2Chart({ trend }: Props) {
               <circle cx={curCoord.x} cy={curCoord.y} r="3.5" fill="var(--tooltip-bg)" stroke="var(--accent-teal)" strokeWidth="2" />
               <g transform={`translate(${Math.min(curCoord.x, W - PAD_R - 2)}, ${curCoord.y + 18})`}>
                 <rect x={-22} y={-10} width={44} height={14} rx={2} fill="var(--tooltip-bg)" stroke="var(--accent-teal)" strokeWidth="1" opacity="0.95" />
-                <text x={0} y={0} textAnchor="middle" fill="var(--accent-teal)" fontFamily="DM Mono, monospace" fontSize="10" fontWeight="600">{current.value.toFixed(2)}</text>
+                <text x={0} y={0} textAnchor="middle" fill="var(--accent-teal)" className="powo-svg-mono" fontSize="10" fontWeight="600">{current.value.toFixed(2)}</text>
               </g>
             </g>
 
             {/* Month labels anchored to first reading of each month */}
             {monthAnchors.map((m, i) => (
-              <text key={`m${i}`} x={m.x} y={H - 8} textAnchor="middle" fill="var(--color-faint)" fontFamily="DM Mono, monospace" fontSize="9.5" letterSpacing="1">{m.label}</text>
+              <text key={`m${i}`} x={m.x} y={H - 8} textAnchor="middle" fill="var(--color-faint)" className="powo-svg-mono" fontSize="9.5" letterSpacing="1">{m.label}</text>
             ))}
 
             {/* Interactive cursor — only present on hover/focus, so the default render is unchanged */}

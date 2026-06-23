@@ -35,10 +35,12 @@ export default function WeeklySummary({ data }: Props) {
     { label: 'Best · Move',      val: b.max_exercise_min.value.toString(),               unit: `min · ${new Date(b.max_exercise_min.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,             delta: `${(b.max_exercise_min.value / 60).toFixed(1)} hrs of exercise`, color: 'var(--accent-purple)' },
   ]
 
-  // Weekly aggregates — bucketed Mon-Sun; pick best & worst by exercise minutes
-  const weekly = buildWeeklyAggregates(data).filter(w => w.daysCovered >= 5)
-  const bestWeek = weekly.reduce((a, b) => (b.activeKcal > a.activeKcal ? b : a))
-  const worstWeek = weekly.reduce((a, b) => (b.activeKcal < a.activeKcal ? b : a))
+  // Weekly aggregates — bucketed Mon-Sun; pick best & worst by active kcal.
+  // Require activeKcal > 0 so watch-off weeks (no data → 0) don't render as empty
+  // bars or get mislabeled "Deload week".
+  const weekly = buildWeeklyAggregates(data).filter(w => w.daysCovered >= 5 && w.activeKcal > 0)
+  const bestWeek = weekly.length ? weekly.reduce((a, b) => (b.activeKcal > a.activeKcal ? b : a)) : null
+  const worstWeek = weekly.length ? weekly.reduce((a, b) => (b.activeKcal < a.activeKcal ? b : a)) : null
   const fmtRange = (s: string, e: string) =>
     `${new Date(s + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${new Date(e + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
 
@@ -92,8 +94,8 @@ export default function WeeklySummary({ data }: Props) {
           {weekly.map((w, i) => {
             const max = Math.max(...weekly.map(x => x.activeKcal))
             const pct = (w.activeKcal / max) * 100
-            const isBest = w.weekStart === bestWeek.weekStart
-            const isWorst = w.weekStart === worstWeek.weekStart
+            const isBest = w.weekStart === bestWeek?.weekStart
+            const isWorst = w.weekStart === worstWeek?.weekStart
             const color = isBest ? 'var(--accent-amber)' : isWorst ? 'var(--accent-coral)' : 'var(--color-mid)'
             return (
               <m.div key={w.weekStart}

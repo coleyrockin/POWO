@@ -102,7 +102,7 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
       </div>
 
       {/* Top single sessions */}
-      <SectionHeader label="Top Sessions" meta={`all ${periodDays} days`} />
+      <SectionHeader label="Top Sessions" meta={`all ${periodDays} days`} level={3} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', alignItems: 'stretch', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)', borderTop: 'none' }}>
         {top.map((w, i) => {
           const highlight = w.calories >= 500

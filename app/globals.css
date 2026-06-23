@@ -53,7 +53,7 @@ html.light {
   --color-panel:  #f6f5ef;
   --color-raised: #eceae2;
   --color-mid:    #57575c;  /* secondary text — AA on white */
-  --color-faint:  #6c6c72;
+  --color-faint:  #69696f;  /* content text — AA (4.5:1) on light raised surfaces */
   --color-dim:    #d6d4cb;  /* dividers / decorative */
   --color-border: rgba(0, 0, 0, 0.08);
   --color-track:  #e9e7df;
@@ -62,16 +62,17 @@ html.light {
   --shadow-card:  0 10px 30px rgba(20, 20, 20, 0.10);
   --ambient-tint:   rgba(10, 132, 255, 0.10);
   --ambient-tint-2: rgba(255, 170, 34, 0.05);
-  /* Accents darkened for ≥3:1 large-text contrast on white surfaces (neon tones
-     read garish + fail WCAG on light). Used for text, strokes, bars, and badge
-     backgrounds (badge text flips to --on-accent below). */
+  /* Accents darkened to clear WCAG AA (≥4.5:1 for normal text) on every light
+     surface — card #fff, panel #f6f5ef, AND raised #eceae2 — and as chip
+     backgrounds under white text (white-on-accent ≥5.4:1). Neon tones read
+     garish on light, so these are the deepest-but-still-vivid AA-safe values. */
   --accent-blue:     #0a6ed1;
   --accent-blue-dim: #0a6ed1;
-  --accent-green:    #1a9e48;
-  --accent-coral:    #e0484a;
-  --accent-amber:    #b87a08;
+  --accent-green:    #147a37;
+  --accent-coral:    #bc3c3e;
+  --accent-amber:    #906006;
   --accent-purple:   #8a3ff0;
-  --accent-teal:     #00917a;
+  --accent-teal:     #007865;
   --on-accent:       #ffffff;
   color-scheme: light;
 }
@@ -591,6 +592,8 @@ section[id] {
 }
 /* Active pill carries the blue bg → blue focus ring vanishes; use white. */
 .powo-nav-btn.is-active:focus-visible { outline-color: var(--color-white); }
+/* Light: active pill is mid-blue → white label (4.97:1) beats dark (--color-black was 3.97:1). */
+html.light .powo-nav-btn.is-active { color: #fff; }
 /* Hover affordance between resting and active (was missing — pills did nothing on hover) */
 .powo-nav-btn:hover:not(.is-active) { background: rgba(255, 255, 255, 0.10); }
 html.light .powo-nav-btn:hover:not(.is-active) { background: rgba(0, 0, 0, 0.06); }

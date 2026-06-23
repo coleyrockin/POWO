@@ -4,9 +4,11 @@ import { m } from 'framer-motion'
 interface Props {
   label: string
   meta?: string
+  level?: 2 | 3
 }
 
-export default function SectionHeader({ label, meta }: Props) {
+export default function SectionHeader({ label, meta, level = 2 }: Props) {
+  const Heading = level === 3 ? 'h3' : 'h2'
   return (
     <m.div
       initial={{ opacity: 0 }}
@@ -41,7 +43,7 @@ export default function SectionHeader({ label, meta }: Props) {
             flexShrink: 0,
           }}
         />
-        <h2
+        <Heading
           style={{
             fontFamily: 'var(--font-mono)',
             // Phone pins to 11px (preferred term < 11 at 390px); scales to 15px on desktop.
@@ -51,10 +53,11 @@ export default function SectionHeader({ label, meta }: Props) {
             textTransform: 'uppercase',
             color: 'var(--color-white)',
             whiteSpace: 'nowrap',
+            margin: 0,
           }}
         >
           {label}
-        </h2>
+        </Heading>
       </span>
       {meta && (
         <span

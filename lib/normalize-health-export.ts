@@ -139,9 +139,12 @@ function buildSummary(daily: DailyMetric[], workouts: Workout[], vo2Max: VO2Poin
   const totalActive = sum(daily.map(day => day.active_kcal))
   const totalExercise = sum(daily.map(day => day.exercise_min))
   const totalDistanceKm = sum(daily.map(day => day.distance_m)) / 1000
-  const first = vo2Max[0]
-  const current = vo2Max[vo2Max.length - 1]
-  const peak = vo2Max.reduce((best, point) => point.value > best.value ? point : best, first)
+  // Guard an empty VO₂ series (a future export could carry no readings) so the
+  // [0] / reduce-seed access can't crash the whole page.
+  const vo2Stub: VO2Point = { date: '', value: 0 }
+  const first = vo2Max[0] ?? vo2Stub
+  const current = vo2Max[vo2Max.length - 1] ?? vo2Stub
+  const peak = vo2Max.length ? vo2Max.reduce((best, point) => point.value > best.value ? point : best, first) : vo2Stub
 
   return {
     period_totals: {

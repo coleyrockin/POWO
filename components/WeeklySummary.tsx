@@ -11,12 +11,12 @@ export default function WeeklySummary({ data }: Props) {
   const a = data.summary.averages
   const b = data.summary.best_days
   const v = data.summary.vo2_max_progression
-  const since = ((v.peak.value - v.first.value) / v.first.value) * 100
+  const since = v.first.value > 0 ? ((v.peak.value - v.first.value) / v.first.value) * 100 : 0
   const esbCount = (t.total_flights_climbed / 102).toFixed(1)
   const totalMi = (t.total_distance_km * 0.621371).toFixed(0)
   const activityTypeCount = data.workout_summary.length
-  const bestStepMultiplier = b.max_steps.value / a.avg_daily_steps
-  const bestBurnMultiplier = b.max_active_kcal.value / a.avg_active_kcal
+  const bestStepMultiplier = a.avg_daily_steps > 0 ? b.max_steps.value / a.avg_daily_steps : 0
+  const bestBurnMultiplier = a.avg_active_kcal > 0 ? b.max_active_kcal.value / a.avg_active_kcal : 0
   const totalExerciseHours = Math.round(t.total_exercise_min / 60)
   const firstVo2Month = new Date(`${v.first.date}T00:00:00`).toLocaleDateString('en-US', { month: 'short' })
 

@@ -29,7 +29,7 @@ export default function Hero({ data }: Props) {
   const t = data.summary.period_totals
   const v = data.summary.vo2_max_progression
   const a = data.summary.averages
-  const since = ((v.peak.value - v.first.value) / v.first.value) * 100
+  const since = v.first.value > 0 ? ((v.peak.value - v.first.value) / v.first.value) * 100 : 0
   const vo2Weeks = Math.max(1, Math.round((new Date(`${v.peak.date}T00:00:00`).getTime() - new Date(`${v.first.date}T00:00:00`).getTime()) / (7 * 86_400_000)))
 
   // Dec–Jan "ramp" → spring resting-HR story (only surfaces on a clear drop).

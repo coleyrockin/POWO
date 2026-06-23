@@ -3,7 +3,7 @@ import { m } from 'framer-motion'
 import SectionHeader from './SectionHeader'
 import Collapsible from './Collapsible'
 import type { HealthData } from '@/lib/types'
-import { buildWorkoutRecommendation } from '@/lib/helpers'
+import { buildWorkoutRecommendation } from '@/lib/workout-recommendation'
 
 interface Props { data: HealthData }
 

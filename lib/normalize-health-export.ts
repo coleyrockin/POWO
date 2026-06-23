@@ -68,7 +68,7 @@ function mapDailyOverride(day: ImportedDailyMetric): DailyMetric {
   }
 }
 
-// The 6-month export is the complete dataset (no base-carry / signal-shift).
+// The merged baseline is the complete dataset (no base-carry / signal-shift).
 function buildDaily(latest: ImportedHealthExport): DailyMetric[] {
   return latest.dailyOverrides
     .map(mapDailyOverride)

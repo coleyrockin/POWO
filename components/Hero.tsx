@@ -42,7 +42,7 @@ export default function Hero({ data }: Props) {
   const rhrStory = rhrEarly != null && rhrLate != null && rhrEarly - rhrLate >= 3
 
   // Sparkline series — smoothed where the raw signal is jagged. Memoized: the
-  // rolling() passes walk the full 183-day set ×6 and the data prop is static.
+  // rolling() passes walk the full dataset ×6 and the data prop is static.
   const { stepsSeries, kcalSeries, distSeries, exMinSeries, vo2Series, workoutSeries } = useMemo(() => {
     const workoutByDay = new Map<string, number>()
     for (const w of data.workouts) workoutByDay.set(w.date, (workoutByDay.get(w.date) ?? 0) + 1)

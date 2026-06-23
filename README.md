@@ -1,6 +1,6 @@
 # POWO — Proof of Workout
 
-Coley's 6-month Apple Health export, turned into a living, editorial-grade training record.
+Coley's Apple Health export, turned into a living, editorial-grade training record.
 
 [**Live →**](https://proof-of-workout-next.vercel.app)
 

@@ -28,7 +28,7 @@ const endDate = o => o?.period?.end ?? o?.meta?.period?.end ?? '' // latest data
 
 // 1) Resolve the source export ────────────────────────────────────────────
 // Rank by the data's latest date (not file mtime — iCloud sync rewrites mtimes,
-// and the old 6-month file is also a valid export we must not pick over a newer
+// and the old baseline file is also a valid export we must not pick over a newer
 // one). Newest data wins; mtime only breaks ties.
 const argPath = process.argv[2]
 let src

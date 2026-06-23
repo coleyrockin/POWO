@@ -16,15 +16,17 @@ If POWO is open on a phone, the reaction should be: *"wait, my health data could
 
 | Feature | What shipped |
 |---|---|
-| 6-month dataset | 183 days · 214 workouts · 57 sleep nights · full RHR/HRV arc via `scripts/convert-export.mjs` |
-| One-command refresh | `npm run refresh` — new export → validated TS module → qa gate → ready to push |
+| Living dataset | 199 days (Dec 2 → Jun 18) · 244 workouts · 65 sleep nights · full RHR/HRV arc |
+| One-command refresh | `npm run refresh` — auto-finds newest export → adapts PULSE schema → merges into a private baseline → sanity-guards impossible values → qa gate |
+| Walking HR | Surfaced in Cardiac Metrics once the PULSE export began including it |
+| Mobile density | Training/Rest day-cards collapse to tap-to-expand rows on phones |
 | Never-blank guard | `@media (scripting:none)` override — content visible even if JS is blocked |
 | Editorial type system | Bebas Neue · DM Mono · DM Sans · Newsreader serif for narrative voice |
 | Hybrid palette | Calm neutral body + vibrant hero KPI strip |
 | 17 sections | Hero · Explore · Period Summary · WoW · Insights · Heatmap · Daily table · VO₂ · Cardiac · Sleep · Workouts · Pushups · Rest rec · Training rec · Awards · Share cards |
-| Sleep redesign | Duration + timing model (57 nights, avg ~8.7h, bedtime/wake consistency) |
+| Sleep redesign | Duration + timing model (65 nights, bedtime/wake consistency; sparse nights shown as normal) |
 | Interactive charts | Keyboard-scrubable SVG charts with chart-cursor hover tooltips |
-| Light/dark themes | Both ship-quality; system preference respected |
+| Light/dark themes | Both ship-quality WCAG-AA; dark is the default, toggleable |
 | Share cards | OG image routes for link previews |
 | QA gate | `npm run qa` — lint · test · typecheck · build · audit · smoke (11 routes) |
 | Desktop layout | 1200px editorial column cap, centered, box-shadow framing |
@@ -151,6 +153,6 @@ Decisions that are closed.
 - **`npm run qa` before every push.** No exceptions.
 - **Visual verify**: iPhone 390 / iPad 768 / desktop 1440, both themes, after any layout change.
 - **The hero is sacred.** H1.5 gets a preview branch and Boyd sign-off before it touches `main`.
-- **Protect the data pipeline**: `convert-export.mjs` → `imported-health-export.ts` → `normalize-health-export.ts`. Pipeline changes need the sanity check (183 days, 214 workouts, 57 sleep nights, VO₂ latest 38.89) + all three test suites green.
+- **Protect the data pipeline**: `convert-export.mjs` → `imported-health-export.ts` → `normalize-health-export.ts`. Pipeline changes need the sanity check (199 days, 244 workouts, 65 sleep nights, VO₂ latest 39.61) + all three test suites green. The converter also enforces value bounds and refuses physically-impossible data.
 - **Static-first**: new server work goes in thin `app/api/*` routes. The page stays SSG.
 - **Tests are required for data changes**: any normalizer change that alters a computed value updates the test expectation in the same commit.

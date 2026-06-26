@@ -18,9 +18,13 @@ export default function SectionHeader({ label, meta, level = 2 }: Props) {
       className="powo-section-header"
       style={{
         display: 'flex',
+        flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '14px',
+        // Column gap when label + meta share a line; tight row gap when a long
+        // meta wraps to its own line on narrow phones (instead of ellipsis-clipping).
+        columnGap: '14px',
+        rowGap: '2px',
         minHeight: '46px',
         padding: '13px 16px',
         position: 'relative',

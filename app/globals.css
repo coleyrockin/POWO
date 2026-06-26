@@ -212,9 +212,10 @@ body::after {
    639px (not 640) so this and the ≥640px shell rules tile with no gap. */
 @media (max-width: 639px) { body::after { opacity: 0.02; } }
 
-/* Consistency heatmap cell sizing — CSS-driven so SSR == client (no #418 flash). */
-.powo-heat { --heat-cell: 10px; --heat-gap: 2px; }
-@media (min-width: 640px) { .powo-heat { --heat-cell: 13px; --heat-gap: 3px; } }
+/* Consistency heatmap gap — cells are fluid (1fr columns + aspect-ratio:1, see
+   ConsistencyHeatmap.tsx); only the inter-cell gap is breakpoint-tuned. */
+.powo-heat { --heat-gap: 2px; }
+@media (min-width: 640px) { .powo-heat { --heat-gap: 3px; } }
 
 /* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar { display: none; }

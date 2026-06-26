@@ -137,12 +137,14 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                   <span>{fmtTime(w.start)}</span>
                 </span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '14px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '6px', color: highlight ? color : 'var(--color-white)' }}>
                   <Icon size={16} />
                   {w.type === 'Weight Training' ? 'Weights' : w.type}
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, padding: '3px 8px', flexShrink: 0,
+                {/* marginLeft:auto keeps the badge right-aligned whether it sits
+                    beside the name or wraps below it on a long-named narrow card. */}
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, padding: '3px 8px', flexShrink: 0, marginLeft: 'auto',
                   ...(highlight ? { background: color, color: 'var(--on-accent)' } : { background: 'var(--color-track)', color: 'var(--color-white)' }) }}>
                   {Math.round(w.calories)} kcal
                 </div>

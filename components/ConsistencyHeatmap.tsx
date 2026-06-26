@@ -5,11 +5,6 @@ import CountUp from './CountUp'
 import { buildConsistency } from '@/lib/helpers'
 import type { DailyMetric, Workout } from '@/lib/types'
 
-interface Props {
-  daily: DailyMetric[]
-  workouts: Workout[]
-}
-
 // Faint-dim → pure-green ramp, GitHub-contributions style.
 const BUCKET_COLORS = [
   'var(--color-dim)',
@@ -19,13 +14,23 @@ const BUCKET_COLORS = [
   'var(--accent-green)',
 ]
 
+interface Props {
+  daily: DailyMetric[]
+  workouts: Workout[]
+}
+
 export default function ConsistencyHeatmap({ daily, workouts }: Props) {
-  // Cell/gap size is CSS-driven (.powo-heat sets --heat-cell / --heat-gap, widened
-  // at >=641px) so SSR and client render identically — no hydration flash.
   if (daily.length === 0) return null
 
   const c = buildConsistency(daily, workouts)
   const firstDow = new Date(daily[0].date + 'T00:00:00').getDay()
+
+  // The grid is fluid: week-columns are 1fr tracks and each cell carries
+  // aspect-ratio:1, so the heatmap always fills its card width exactly — no
+  // overflow in the narrow desktop masonry column, no dead space on iPad. The
+  // week count drives the column track (--heat-weeks); SSR and client agree, so
+  // there's no hydration flash. --heat-gap (set in globals.css) widens >=640px.
+  const weeks = Math.ceil((firstDow + c.days.length) / 7)
 
   // Lead with empty pad cells so day 0 lands on its real weekday row (Sun=top).
   type Cell = { kind: 'pad' } | { kind: 'day'; day: (typeof c.days)[number] }
@@ -57,16 +62,17 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
       <m.div
         className="powo-heat"
         initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-        style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '18px 14px' }}
+        style={{ ['--heat-weeks' as string]: weeks, position: 'relative', background: 'var(--color-card)', border: '1px solid var(--color-border)', borderTop: 'none', padding: '18px 14px' }}
       >
-        {/* Month labels — aligned to the grid columns below */}
-        <div style={{ position: 'relative', height: '12px', marginBottom: '5px' }}>
-          {monthLabels.map(m => (
+        {/* Month labels — placed on the same column track as the grid below, so
+            they stay aligned to the week columns at any fluid cell width. */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(var(--heat-weeks), 1fr)', gap: 'var(--heat-gap)', height: '12px', marginBottom: '5px' }}>
+          {monthLabels.map(label => (
             <span
-              key={m.label}
-              style={{ position: 'absolute', left: `calc(${m.col} * (var(--heat-cell) + var(--heat-gap)))`, top: 0, fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)' }}
+              key={label.label}
+              style={{ gridColumnStart: label.col + 1, fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: 'var(--color-mid)', whiteSpace: 'nowrap' }}
             >
-              {m.label}
+              {label.label}
             </span>
           ))}
         </div>
@@ -75,19 +81,19 @@ export default function ConsistencyHeatmap({ daily, workouts }: Props) {
         <div
           role="img"
           aria-label={`Daily activity heatmap, ${daily.length} days. ${c.totalActiveDays} active days, ${Math.round(c.pctActive)} percent. Current streak ${c.currentStreak} days, longest ${c.longestStreak}.`}
-          style={{ display: 'grid', gridAutoFlow: 'column', gridTemplateRows: 'repeat(7, var(--heat-cell))', gridAutoColumns: 'var(--heat-cell)', gap: 'var(--heat-gap)' }}
+          style={{ display: 'grid', gridAutoFlow: 'column', gridTemplateColumns: 'repeat(var(--heat-weeks), 1fr)', gridTemplateRows: 'repeat(7, auto)', gap: 'var(--heat-gap)' }}
         >
           {cells.map((cell, i) =>
             cell.kind === 'pad' ? (
-              <div key={`p${i}`} aria-hidden style={{ width: 'var(--heat-cell)', height: 'var(--heat-cell)' }} />
+              <div key={`p${i}`} aria-hidden style={{ width: '100%', aspectRatio: '1' }} />
             ) : (
               <div
                 key={cell.day.date}
                 className="powo-heat-cell"
                 title={`${cell.day.date} · ${cell.day.isPartial ? 'no data' : `${cell.day.activeKcal ?? '--'} kcal · ${cell.day.exerciseMin ?? '--'} min${cell.day.workoutCount ? ` · ${cell.day.workoutCount} workout${cell.day.workoutCount > 1 ? 's' : ''}` : ''}`}`}
                 style={cell.day.isPartial
-                  ? { width: 'var(--heat-cell)', height: 'var(--heat-cell)', borderRadius: '2px', background: 'transparent', boxShadow: 'inset 0 0 0 1px var(--hairline)' }
-                  : { width: 'var(--heat-cell)', height: 'var(--heat-cell)', borderRadius: '2px', background: BUCKET_COLORS[cell.day.bucket] }}
+                  ? { width: '100%', aspectRatio: '1', borderRadius: '2px', background: 'transparent', boxShadow: 'inset 0 0 0 1px var(--hairline)' }
+                  : { width: '100%', aspectRatio: '1', borderRadius: '2px', background: BUCKET_COLORS[cell.day.bucket] }}
               />
             ),
           )}

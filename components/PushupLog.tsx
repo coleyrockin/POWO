@@ -30,12 +30,16 @@ export default function PushupLog({ pushups }: Props) {
                 initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
                 style={{ position: 'relative', padding: '14px 14px', border: isBest ? '1px solid rgba(255,170,34,0.42)' : '1px solid var(--color-border)', borderRadius: '6px', background: isBest ? 'linear-gradient(180deg, color-mix(in srgb, var(--accent-amber) 14%, var(--color-card)), color-mix(in srgb, var(--accent-amber) 5%, var(--color-card)))' : 'var(--color-panel)', boxShadow: isBest ? 'inset 0 1px 0 rgba(255,170,34,0.18), 0 0 24px rgba(255,170,34,0.08)' : 'inset 0 1px 0 rgba(255,255,255,0.035)' }}
               >
-                {isBest && (
-                  <span style={{ position: 'absolute', top: '10px', right: '12px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700 }}>PEAK</span>
-                )}
+                {/* PEAK rides inline next to the date (left) so it can't overlap the
+                    right-aligned rep count — was an absolute top-right badge colliding with it. */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{fmtRange(w.week)}</span>
-                  <span className={isBest ? 'powo-glow-amber' : ''} style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: isBest ? 'var(--accent-amber)' : 'var(--color-white)' }}>{w.total}<span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-mid)', marginLeft: '6px', textShadow: 'none' }}>reps</span></span>
+                  <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: '8px', minWidth: 0 }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', color: 'var(--color-mid)', textTransform: 'uppercase' }}>{fmtRange(w.week)}</span>
+                    {isBest && (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700, flexShrink: 0 }}>PEAK</span>
+                    )}
+                  </span>
+                  <span className={isBest ? 'powo-glow-amber' : ''} style={{ fontFamily: 'var(--font-display)', fontSize: '32px', lineHeight: 1, color: isBest ? 'var(--accent-amber)' : 'var(--color-white)', flexShrink: 0 }}>{w.total}<span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-mid)', marginLeft: '6px', textShadow: 'none' }}>reps</span></span>
                 </div>
                 <div style={{ height: '7px', borderRadius: '3px', background: 'var(--color-track)', overflow: 'hidden', boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.5)' }}>
                   <m.div

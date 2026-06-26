@@ -126,11 +126,15 @@ export default function WorkoutLog({ workouts, workoutSummary, periodDays }: Pro
                 ...(highlight ? { boxShadow: `inset 0 1px 0 color-mix(in srgb, ${color} 22%, transparent), 0 0 24px color-mix(in srgb, ${color} 10%, transparent)` } : {}),
               }}
             >
-              {isBest && (
-                <div style={{ position: 'absolute', top: '10px', right: '10px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700 }}>BEST</div>
-              )}
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: 'var(--color-mid)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '6px' }}>
-                <span>{fmtDate(w.date)}</span>
+              {/* BEST rides inline before the date (left) and the row can wrap, so it
+                  never overlaps the right-aligned time — was an absolute corner badge. */}
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: 'var(--color-mid)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'baseline', gap: '6px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: '6px' }}>
+                  {isBest && (
+                    <span style={{ fontSize: '10px', letterSpacing: '0.18em', color: 'var(--on-accent)', background: 'var(--accent-amber)', padding: '2px 6px', borderRadius: '2px', fontWeight: 700, flexShrink: 0 }}>BEST</span>
+                  )}
+                  <span>{fmtDate(w.date)}</span>
+                </span>
                 <span style={{ fontSize: '10px' }}>
                   <span style={{ color: 'var(--color-mid)', letterSpacing: '0.06em' }}>{timeOfDayLabel(new Date(w.start).getHours())}</span>
                   <span style={{ color: 'var(--color-dim)' }}> · </span>
